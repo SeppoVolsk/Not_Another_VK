@@ -196,7 +196,7 @@ class HistoryWidget extends StatelessWidget {
           selectedColor: Theme.of(context).primaryColor,
           onSelected: (bool v) {
             model.newsQuery = element;
-            model.loadPostsFromStorageVerTwo(element);
+            model.loadPostsFromStorageVerTwo(neededStorageKey: element);
           },
           deleteIcon: Icon(Icons.cancel),
           onDeleted: () {
