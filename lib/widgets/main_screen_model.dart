@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:vk_postman/domain/data_providers/history_data_provider.dart';
 import 'package:vk_postman/domain/data_providers/posts_data_provider.dart';
@@ -11,20 +10,19 @@ import '../domain/api_clients/vk_api_client.dart';
 import '../post.dart';
 
 class MainScreenPageModel extends ChangeNotifier {
-  var _post = <Post>[];
-  List<Post> get post => _post;
+  final _posts = <Post>[];
+  List<Post> get post => _posts;
   final postDataProvider = PostsDataProvider();
   final history = HistoryDataProvider();
 
-  final _storage = SharedPreferences.getInstance();
   bool loadingInProgress = true;
   dynamic _json;
 
   String newsQuery = '';
   String errorMessage = "";
 
-  Future<void> loadPostsVerTwo() async {
-    if (newsQuery == null || newsQuery == '') return;
+  Future<void> loadPostsFromServer() async {
+    if (newsQuery == '') return;
     try {
       loadingInProgress = true;
       notifyListeners();
@@ -35,45 +33,40 @@ class MainScreenPageModel extends ChangeNotifier {
           errorMessage =
               'Сервер недоступен. Проверьте подключение к интернету.';
           errorSnackBar(errorMessage: errorMessage);
-          break;
+          return;
         case ExceptionType.failedLoad:
           errorMessage = 'Не удалось загрузить посты. Повторите попытку.';
           errorSnackBar(errorMessage: errorMessage);
-          break;
+          return;
       }
     }
-
-    _post.clear();
+    _posts.clear();
     for (int i = 0; i < VkApiClient().newsCount; i++) {
-      _post.add(Post.postFromJson(_json, i));
+      _posts.add(Post.postFromJson(_json, i));
     }
 
-    if (history.historyWords.length < history.historyLength) {
+    if (history.historyWords.length < history.maxLength) {
       history.historyWords.add(newsQuery);
       await postDataProvider.savePostsToStorageVerTwo(
           key: newsQuery, json: _json);
     } else {
-      await updateHistoryInStorage();
+      history.historyWords.removeAt(0);
+      history.historyWords.add(newsQuery);
+      await postDataProvider
+          .removeHistoryElementAtStorage(history.historyWords[0]);
+      await postDataProvider.savePostsToStorageVerTwo(
+          key: newsQuery, json: _json);
     }
     loadingInProgress = false;
     notifyListeners();
   }
 
-  // Future<void> savePostsToStorageVerTwo() async {
-  //   final storage = await _storage;
-  //   String jsonString = jsonEncode(_json);
-  //   await storage.setString(newsQuery, jsonString);
-  // }
-
-  Future<void> loadPostsFromStorageVerTwo(
-      {String? neededStorageKey = null}) async {
+  Future<void> loadPostsFromStorage({String? neededStorageKey}) async {
     loadingInProgress = true;
-    final storage = await _storage;
-
     String? storageJsonString;
 
     if (neededStorageKey == null) {
-      final storageKeys = storage.getKeys();
+      final storageKeys = await postDataProvider.getStorageKeys();
       if (storageKeys.isEmpty) {
         errorMessage = 'Воспользуйтесь поиском';
         errorSnackBar(errorMessage: errorMessage);
@@ -82,22 +75,21 @@ class MainScreenPageModel extends ChangeNotifier {
         return;
       }
       newsQuery = storageKeys.last;
-      final storageLength = storageKeys.length;
-      history.historyWords
-          .addAll(storageKeys.take(history.historyLength).toList());
-      storageJsonString = storage.getString(storageKeys.last);
+      history.historyWords.addAll(storageKeys.take(history.maxLength).toList());
+      storageJsonString =
+          await postDataProvider.getStringFromStorage(key: storageKeys.last);
     } else {
-      _post.clear();
-      storageJsonString = storage.getString(neededStorageKey);
+      _posts.clear();
+      storageJsonString =
+          await postDataProvider.getStringFromStorage(key: neededStorageKey);
     }
 
     if (storageJsonString != null) {
       try {
         _json = jsonDecode(storageJsonString);
         int jsonFromStorageLength = (_json['response']['items']).length;
-
         for (int i = 0; i < jsonFromStorageLength; i++) {
-          _post.add(Post.postFromJson(_json, i));
+          _posts.add(Post.postFromJson(_json, i));
         }
       } catch (e) {
         errorMessage = 'Не удалось загрузить посты. Воспользуйтесь поиском.';
@@ -109,15 +101,6 @@ class MainScreenPageModel extends ChangeNotifier {
       loadingInProgress = false;
       notifyListeners();
     }
-  }
-
-  Future<void> updateHistoryInStorage() async {
-    final storage = await _storage;
-    String jsonString = jsonEncode(_json);
-    await storage.remove(history.historyWords[0]);
-    history.historyWords.removeAt(0);
-    history.historyWords.add(newsQuery);
-    await storage.setString(newsQuery, jsonString);
   }
 }
 

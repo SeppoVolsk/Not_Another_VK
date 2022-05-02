@@ -1,4 +1,4 @@
 class HistoryDataProvider {
-  final historyLength = 5;
+  final maxLength = 5;
   var historyWords = <String>[];
 }

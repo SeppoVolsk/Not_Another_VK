@@ -17,7 +17,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
   void initState() {
     super.initState();
 
-    MainScreenPageProvider.read(context)?.model.loadPostsFromStorageVerTwo();
+    MainScreenPageProvider.read(context)?.model.loadPostsFromStorage();
     _searchController.addListener(() {
       MainScreenPageProvider.read(context)?.model.newsQuery =
           _searchController.text;
@@ -32,27 +32,29 @@ class _MainScreenPageState extends State<MainScreenPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: TitleWidget(),
+          title: const TitleWidget(),
         ),
         body: SafeArea(
           child: Stack(
             children: [
               !loadingInProgress
-                  ? PostListWidget()
-                  : Center(child: Text('Ищем новости...')),
-              HistoryWidget(),
+                  ? const PostListWidget()
+                  : const Center(child: Text('Ищем новости...')),
+              const HistoryWidget(),
               SearchWidget(_searchController),
             ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
           child: loadingInProgress
-              ? CircularProgressIndicator(color: Colors.white)
+              ? const CircularProgressIndicator(color: Colors.white)
               : const Icon(Icons.autorenew),
           onPressed: !loadingInProgress
               ? () {
                   FocusScope.of(context).unfocus();
-                  MainScreenPageProvider.read(context)?.model.loadPostsVerTwo();
+                  MainScreenPageProvider.read(context)
+                      ?.model
+                      .loadPostsFromServer();
                 }
               : null,
         ),
@@ -67,7 +69,7 @@ class PostListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       itemBuilder: (BuildContext context, int index) {
         return PostCard(index: index);
@@ -107,7 +109,9 @@ class _PostCardState extends State<PostCard> {
           Wrap(
             children: [
               for (var element in post[widget.index].postPhoto)
-                element != null ? Image.network(element) : SizedBox.shrink()
+                element != null
+                    ? Image.network(element)
+                    : const SizedBox.shrink()
             ],
           ),
           ExpansionTile(
@@ -117,7 +121,7 @@ class _PostCardState extends State<PostCard> {
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   )
-                : Text(''),
+                : const Text(''),
             children: [
               Text(post[widget.index].postText),
             ],
@@ -148,8 +152,8 @@ class TitleWidget extends StatelessWidget {
 }
 
 class SearchWidget extends StatefulWidget {
-  TextEditingController controller;
-  SearchWidget(this.controller, {Key? key}) : super(key: key);
+  final TextEditingController controller;
+  const SearchWidget(this.controller, {Key? key}) : super(key: key);
 
   @override
   State<SearchWidget> createState() => _SearchWidgetState();
@@ -196,9 +200,9 @@ class HistoryWidget extends StatelessWidget {
           selectedColor: Theme.of(context).primaryColor,
           onSelected: (bool v) {
             model.newsQuery = element;
-            model.loadPostsFromStorageVerTwo(neededStorageKey: element);
+            model.loadPostsFromStorage(neededStorageKey: element);
           },
-          deleteIcon: Icon(Icons.cancel),
+          deleteIcon: const Icon(Icons.cancel),
           onDeleted: () {
             model.history.historyWords.remove(element);
             model.postDataProvider.removeHistoryElementAtStorage(element);
@@ -208,13 +212,3 @@ class HistoryWidget extends StatelessWidget {
     ]);
   }
 }
-
-// ChoiceChip(
-//           label: Text(element),
-//           selected: model.newsQuery == element,
-//           selectedColor: Theme.of(context).primaryColor,
-//           onSelected: (bool value) {
-//             model.newsQuery = element;
-//             //model.notifyListeners();
-//             model.loadPostsFromStorageVerTwo(element);
-//           },
