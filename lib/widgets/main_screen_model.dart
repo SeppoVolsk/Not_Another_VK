@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vk_postman/domain/api_clients/response_posts/response_posts.dart';
 import 'package:vk_postman/domain/data_providers/posts_data_provider.dart';
-import 'package:vk_postman/domain/show_on_screen.dart';
+// import 'package:vk_postman/domain/show_on_screen.dart';
 import 'package:vk_postman/widgets/error_snack_bar.dart';
 import '../domain/api_clients/vk_api_client.dart';
 import '../post.dart';
@@ -67,50 +66,50 @@ class MainScreenPageModel extends ChangeNotifier {
   //   await storage.setString(newsQuery, jsonString);
   // }
 
-  // Future<void> loadPostsFromStorageVerTwo(
-  //     {String? neededStorageKey = null}) async {
-  //   loadingInProgress = true;
-  //   final storage = await _storage;
+  Future<void> loadPostsFromStorageVerTwo(
+      {String? neededStorageKey = null}) async {
+    loadingInProgress = true;
+    final storage = await _storage;
 
-  //   String? storageJsonString;
+    String? storageJsonString;
 
-  //   if (neededStorageKey == null) {
-  //     final storageKeys = storage.getKeys();
-  //     if (storageKeys.isEmpty) {
-  //       errorMessage = 'Воспользуйтесь поиском';
-  //       errorSnackBar(errorMessage: errorMessage);
-  //       loadingInProgress = false;
-  //       notifyListeners();
-  //       return;
-  //     }
-  //     newsQuery = storageKeys.last;
-  //     final storageLength = storageKeys.length;
-  //     historyWords.addAll(storageKeys.take(historyLength).toList());
-  //     storageJsonString = storage.getString(storageKeys.last);
-  //   } else {
-  //     _post.clear();
-  //     storageJsonString = storage.getString(neededStorageKey);
-  //   }
+    if (neededStorageKey == null) {
+      final storageKeys = storage.getKeys();
+      if (storageKeys.isEmpty) {
+        errorMessage = 'Воспользуйтесь поиском';
+        errorSnackBar(errorMessage: errorMessage);
+        loadingInProgress = false;
+        notifyListeners();
+        return;
+      }
+      newsQuery = storageKeys.last;
+      final storageLength = storageKeys.length;
+      historyWords.addAll(storageKeys.take(historyLength).toList());
+      storageJsonString = storage.getString(storageKeys.last);
+    } else {
+      _post.clear();
+      storageJsonString = storage.getString(neededStorageKey);
+    }
 
-  //   if (storageJsonString != null) {
-  //     try {
-  //       _json = jsonDecode(storageJsonString);
-  //       int jsonFromStorageLength = (_json['response']['items']).length;
+    if (storageJsonString != null) {
+      try {
+        _json = jsonDecode(storageJsonString);
+        int jsonFromStorageLength = (_json['response']['items']).length;
 
-  //       for (int i = 0; i < jsonFromStorageLength; i++) {
-  //         _post.add(Post.postFromJson(_json, i));
-  //       }
-  //     } catch (e) {
-  //       errorMessage = 'Не удалось загрузить посты. Воспользуйтесь поиском.';
-  //       errorSnackBar(errorMessage: errorMessage);
-  //       loadingInProgress = false;
-  //       notifyListeners();
-  //       return;
-  //     }
-  //     loadingInProgress = false;
-  //     notifyListeners();
-  //   }
-  // }
+        for (int i = 0; i < jsonFromStorageLength; i++) {
+          _post.add(Post.postFromJson(_json, i));
+        }
+      } catch (e) {
+        errorMessage = 'Не удалось загрузить посты. Воспользуйтесь поиском.';
+        errorSnackBar(errorMessage: errorMessage);
+        loadingInProgress = false;
+        notifyListeners();
+        return;
+      }
+      loadingInProgress = false;
+      notifyListeners();
+    }
+  }
 
   Future<void> updateHistoryInStorage() async {
     final storage = await _storage;
@@ -119,11 +118,6 @@ class MainScreenPageModel extends ChangeNotifier {
     historyWords.removeAt(0);
     historyWords.add(newsQuery);
     await storage.setString(newsQuery, jsonString);
-  }
-
-  Future<void> removeHistoryElementAtStorage(String element) async {
-    final storage = await _storage;
-    await storage.remove(element);
   }
 }
 

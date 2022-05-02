@@ -201,7 +201,7 @@ class HistoryWidget extends StatelessWidget {
           deleteIcon: Icon(Icons.cancel),
           onDeleted: () {
             model.historyWords.remove(element);
-            model.removeHistoryElementAtStorage(element);
+            model.PostDataProvider.removeHistoryElementAtStorage(element);
             model.notifyListeners();
           },
         ),

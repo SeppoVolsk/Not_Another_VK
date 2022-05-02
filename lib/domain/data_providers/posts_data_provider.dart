@@ -10,4 +10,9 @@ class PostsDataProvider {
     String jsonString = jsonEncode(json);
     await storage.setString(key, jsonString);
   }
+
+  Future<void> removeHistoryElementAtStorage(String element) async {
+    final storage = await _storage;
+    await storage.remove(element);
+  }
 }
