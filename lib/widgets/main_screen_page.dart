@@ -188,7 +188,7 @@ class HistoryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     dynamic model = MainScreenPageProvider.watch(context)?.model;
     return Wrap(children: [
-      for (String element in model.historyWords)
+      for (String element in model.history.historyWords)
         InputChip(
           label: Text(element),
           showCheckmark: false,
@@ -200,8 +200,8 @@ class HistoryWidget extends StatelessWidget {
           },
           deleteIcon: Icon(Icons.cancel),
           onDeleted: () {
-            model.historyWords.remove(element);
-            model.PostDataProvider.removeHistoryElementAtStorage(element);
+            model.history.historyWords.remove(element);
+            model.postDataProvider.removeHistoryElementAtStorage(element);
             model.notifyListeners();
           },
         ),

@@ -1,10 +1,11 @@
 import 'dart:convert';
-import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vk_postman/domain/api_clients/response_posts/response_posts.dart';
+
+import 'package:vk_postman/domain/data_providers/history_data_provider.dart';
 import 'package:vk_postman/domain/data_providers/posts_data_provider.dart';
-// import 'package:vk_postman/domain/show_on_screen.dart';
+
 import 'package:vk_postman/widgets/error_snack_bar.dart';
 import '../domain/api_clients/vk_api_client.dart';
 import '../post.dart';
@@ -12,10 +13,8 @@ import '../post.dart';
 class MainScreenPageModel extends ChangeNotifier {
   var _post = <Post>[];
   List<Post> get post => _post;
-  final PostDataProvider = PostsDataProvider();
-
-  final historyLength = 5;
-  var historyWords = <String>[];
+  final postDataProvider = PostsDataProvider();
+  final history = HistoryDataProvider();
 
   final _storage = SharedPreferences.getInstance();
   bool loadingInProgress = true;
@@ -49,9 +48,9 @@ class MainScreenPageModel extends ChangeNotifier {
       _post.add(Post.postFromJson(_json, i));
     }
 
-    if (historyWords.length < historyLength) {
-      historyWords.add(newsQuery);
-      await PostDataProvider.savePostsToStorageVerTwo(
+    if (history.historyWords.length < history.historyLength) {
+      history.historyWords.add(newsQuery);
+      await postDataProvider.savePostsToStorageVerTwo(
           key: newsQuery, json: _json);
     } else {
       await updateHistoryInStorage();
@@ -84,7 +83,8 @@ class MainScreenPageModel extends ChangeNotifier {
       }
       newsQuery = storageKeys.last;
       final storageLength = storageKeys.length;
-      historyWords.addAll(storageKeys.take(historyLength).toList());
+      history.historyWords
+          .addAll(storageKeys.take(history.historyLength).toList());
       storageJsonString = storage.getString(storageKeys.last);
     } else {
       _post.clear();
@@ -114,9 +114,9 @@ class MainScreenPageModel extends ChangeNotifier {
   Future<void> updateHistoryInStorage() async {
     final storage = await _storage;
     String jsonString = jsonEncode(_json);
-    await storage.remove(historyWords[0]);
-    historyWords.removeAt(0);
-    historyWords.add(newsQuery);
+    await storage.remove(history.historyWords[0]);
+    history.historyWords.removeAt(0);
+    history.historyWords.add(newsQuery);
     await storage.setString(newsQuery, jsonString);
   }
 }
