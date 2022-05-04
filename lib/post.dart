@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart';
+
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: prefer_initializing_formals
 
 class Post {
@@ -6,7 +9,7 @@ class Post {
   String? surName;
   String? userPhoto;
   String? postText;
-  List<String?> postPhoto;
+  List<String?>? postPhoto;
 
   Post(
       {this.userId,
@@ -14,7 +17,7 @@ class Post {
       this.surName,
       this.userPhoto,
       this.postText,
-      required this.postPhoto});
+      this.postPhoto});
 
   factory Post.postFromJson(dynamic json, int index) {
     String? _firstName;
@@ -103,5 +106,46 @@ class Post {
         userPhoto: _userPhoto,
         postText: _postText,
         postPhoto: List.generate(_postPhoto.length, (ind) => _postPhoto[ind]));
+  }
+
+  Post copyWith({
+    int? userId,
+    String? firstName,
+    String? surName,
+    String? userPhoto,
+    String? postText,
+    List<String?>? postPhoto,
+  }) {
+    return Post(
+      userId: userId ?? this.userId,
+      firstName: firstName ?? this.firstName,
+      surName: surName ?? this.surName,
+      userPhoto: userPhoto ?? this.userPhoto,
+      postText: postText ?? this.postText,
+      postPhoto: postPhoto ?? this.postPhoto,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Post &&
+        other.userId == userId &&
+        other.firstName == firstName &&
+        other.surName == surName &&
+        other.userPhoto == userPhoto &&
+        other.postText == postText &&
+        listEquals(other.postPhoto, postPhoto);
+  }
+
+  @override
+  int get hashCode {
+    return userId.hashCode ^
+        firstName.hashCode ^
+        surName.hashCode ^
+        userPhoto.hashCode ^
+        postText.hashCode ^
+        postPhoto.hashCode;
   }
 }
