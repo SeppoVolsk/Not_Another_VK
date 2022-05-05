@@ -32,11 +32,11 @@ class MainScreenPageModel extends ChangeNotifier {
         case ExceptionType.noNetwork:
           errorMessage =
               'Сервер недоступен. Проверьте подключение к интернету.';
-          errorSnackBar(errorMessage: errorMessage);
+          errorSnackBar(errorMessage);
           return;
         case ExceptionType.failedLoad:
           errorMessage = 'Не удалось загрузить посты. Повторите попытку.';
-          errorSnackBar(errorMessage: errorMessage);
+          errorSnackBar(errorMessage);
           return;
       }
     }
@@ -69,7 +69,7 @@ class MainScreenPageModel extends ChangeNotifier {
       final storageKeys = await postDataProvider.getStorageKeys();
       if (storageKeys.isEmpty) {
         errorMessage = 'Воспользуйтесь поиском';
-        errorSnackBar(errorMessage: errorMessage);
+        errorSnackBar(errorMessage);
         loadingInProgress = false;
         notifyListeners();
         return;
@@ -93,7 +93,7 @@ class MainScreenPageModel extends ChangeNotifier {
         }
       } catch (e) {
         errorMessage = 'Не удалось загрузить посты. Воспользуйтесь поиском.';
-        errorSnackBar(errorMessage: errorMessage);
+        errorSnackBar(errorMessage);
         loadingInProgress = false;
         notifyListeners();
         return;
