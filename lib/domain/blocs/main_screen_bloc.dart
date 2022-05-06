@@ -82,10 +82,10 @@ class PostsBloc extends Bloc<PostsEvents, PostsState> {
 
   Future<void> _onPostsLoadFromServer(
       PostsEvents event, Emitter<PostsState> emit) async {
-    final Map<String, dynamic> json;
+    Map<String, dynamic> json = {};
     List<Post> posts = [];
     final history = HistoryDataProvider();
-    const postDataProvider = PostsDataProvider();
+    //const postDataProvider = PostsDataProvider();
     String? newsQuery;
 
     if (event is PostsLoadFromServer && event.newsQuery == null) return;
@@ -93,7 +93,11 @@ class PostsBloc extends Bloc<PostsEvents, PostsState> {
       emit(state.copyWith(loadingInProgress: true));
       //state.loadingInProgress = true;
       //notifyListeners();
-      json = await VkApiClient().getPosts(state.newsQuery);
+
+      if (event is PostsLoadFromServer) {
+        json = await VkApiClient().getPosts(event.newsQuery!);
+        newsQuery = event.newsQuery;
+      }
     } on VkApiClientException catch (e) {
       switch (e.errorType) {
         case ExceptionType.noNetwork:
@@ -110,19 +114,19 @@ class PostsBloc extends Bloc<PostsEvents, PostsState> {
       posts.add(Post.postFromJson(json, i));
     }
 
-    if (state.history.historyWords.length < history.maxLength &&
-        event is PostsLoadFromServer) {
-      history.historyWords.add(event.newsQuery!);
-      await postDataProvider.savePostsToStorageVerTwo(
-          key: event.newsQuery!, json: json);
-    } else {
-      history.historyWords.removeAt(0);
-      history.historyWords.add(state.newsQuery);
-      await postDataProvider
-          .removeHistoryElementAtStorage(history.historyWords[0]);
-      await postDataProvider.savePostsToStorageVerTwo(
-          key: state.newsQuery, json: json);
-    }
+    // if (state.history.historyWords.length < history.maxLength &&
+    //     event is PostsLoadFromServer) {
+    //   history.historyWords.add(event.newsQuery!);
+    //   await postDataProvider.savePostsToStorageVerTwo(
+    //       key: event.newsQuery!, json: json);
+    // } else {
+    //   history.historyWords.removeAt(0);
+    //   history.historyWords.add(state.newsQuery);
+    //   await postDataProvider
+    //       .removeHistoryElementAtStorage(history.historyWords[0]);
+    //   await postDataProvider.savePostsToStorageVerTwo(
+    //       key: state.newsQuery, json: json);
+    // }
     emit(state.copyWith(
       posts: posts,
       history: history,
@@ -153,8 +157,8 @@ class PostsBloc extends Bloc<PostsEvents, PostsState> {
           return;
         }
         newsQuery = storageKeys.last;
-        history.historyWords
-            .addAll(storageKeys.take(state.history.maxLength).toList());
+        // history.historyWords
+        //     .addAll(storageKeys.take(state.history.maxLength).toList());
         storageJsonString =
             await postDataProvider.getStringFromStorage(key: storageKeys.last);
       } else {

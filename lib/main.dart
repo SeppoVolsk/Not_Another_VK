@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vk_postman/widgets/main_screen_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vk_postman/domain/blocs/main_screen_bloc.dart';
 import 'widgets/main_screen_page.dart';
 
 final keyForSnackBar = GlobalKey<ScaffoldMessengerState>();
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = MainScreenPageModel();
+    //final model = MainScreenPageModel();
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -21,8 +22,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
-      home: MainScreenPageProvider(
-          child: const MainScreenPage(title: 'VK api postman'), model: model),
+      home: BlocProvider<PostsBloc>(
+        create: ((_) => PostsBloc()..add(PostsLoadFromStorage())),
+        child: const MainScreenPage(title: 'VK api postman'),
+      ),
     );
   }
 }

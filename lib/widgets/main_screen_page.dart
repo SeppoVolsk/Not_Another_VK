@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vk_postman/widgets/main_screen_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vk_postman/domain/blocs/main_screen_bloc.dart';
 
 class MainScreenPage extends StatefulWidget {
   const MainScreenPage({Key? key, required this.title}) : super(key: key);
@@ -17,50 +18,55 @@ class _MainScreenPageState extends State<MainScreenPage> {
   void initState() {
     super.initState();
 
-    MainScreenPageProvider.read(context)?.model.loadPostsFromStorage();
+    //MainScreenPageProvider.read(context)?.model.loadPostsFromStorage();
     _searchController.addListener(() {
-      MainScreenPageProvider.read(context)?.model.newsQuery =
-          _searchController.text;
+      //   MainScreenPageProvider.read(context)?.model.newsQuery =
+      //       _searchController.text;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    bool loadingInProgress =
-        MainScreenPageProvider.watch(context)!.model.loadingInProgress;
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const TitleWidget(),
-        ),
-        body: SafeArea(
-          child: Stack(
-            children: [
-              !loadingInProgress
-                  ? const PostListWidget()
-                  : const Center(child: Text('Ищем новости...')),
-              const HistoryWidget(),
-              SearchWidget(_searchController),
-            ],
+    final bloc = context.read<PostsBloc>();
+    //bool loadingInProgress =
+    //    MainScreenPageProvider.watch(context)!.model.loadingInProgress;
+    return BlocBuilder<PostsBloc, PostsState>(builder: (context, state) {
+      return GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const TitleWidget(),
           ),
+          body: SafeArea(
+            child: Stack(
+              children: [
+                !state.loadingInProgress
+                    ? const PostListWidget()
+                    : const Center(child: Text('Ищем новости...')),
+                SearchWidget(_searchController),
+              ],
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            child: state.loadingInProgress
+                ? const CircularProgressIndicator(color: Colors.white)
+                : const Icon(Icons.autorenew),
+            onPressed: !state.loadingInProgress
+                ? () {
+                    FocusScope.of(context).unfocus();
+                    bloc.add(
+                        PostsLoadFromServer(newsQuery: _searchController.text));
+
+                    // MainScreenPageProvider.read(context)
+                    //     ?.model
+                    //     .loadPostsFromServer();
+                  }
+                : null,
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         ),
-        floatingActionButton: FloatingActionButton(
-          child: loadingInProgress
-              ? const CircularProgressIndicator(color: Colors.white)
-              : const Icon(Icons.autorenew),
-          onPressed: !loadingInProgress
-              ? () {
-                  FocusScope.of(context).unfocus();
-                  MainScreenPageProvider.read(context)
-                      ?.model
-                      .loadPostsFromServer();
-                }
-              : null,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -74,7 +80,8 @@ class PostListWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return PostCard(index: index);
       },
-      itemCount: MainScreenPageProvider.watch(context)?.model.post.length ?? 0,
+      itemCount: context.select((PostsBloc bloc) => bloc.state.posts
+          .length), //MainScreenPageProvider.watch(context)?.model.post.length ?? 0,
     );
   }
 }
@@ -92,47 +99,53 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    dynamic post = MainScreenPageProvider.read(context)?.model.post;
+    //dynamic post = MainScreenPageProvider.read(context)?.model.post;
 
-    return Card(
-      child: Column(
-        children: [
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(post[widget.index].userPhoto),
-            ),
-            title: Text(post[widget.index].firstName +
-                ' ' +
-                post[widget.index].surName),
-            subtitle: Text('id: ' + post[widget.index].userId.toString()),
-          ),
-          Wrap(
+    return BlocBuilder<PostsBloc, PostsState>(
+      builder: ((context, state) {
+        return Card(
+          child: Column(
             children: [
-              for (var element in post[widget.index].postPhoto)
-                element != null
-                    ? Image.network(element)
-                    : const SizedBox.shrink()
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage(state.posts[widget.index].userPhoto!),
+                ),
+                title: Text(state.posts[widget.index].firstName! +
+                    ' ' +
+                    state.posts[widget.index].surName!),
+                subtitle:
+                    Text('id: ' + state.posts[widget.index].userId.toString()),
+              ),
+              Wrap(
+                children: [
+                  for (var element in state.posts[widget.index].postPhoto!)
+                    element != null
+                        ? Image.network(element)
+                        : const SizedBox.shrink()
+                ],
+              ),
+              ExpansionTile(
+                title: !textTileIsOpen
+                    ? Text(
+                        state.posts[widget.index].postText!,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    : const Text(''),
+                children: [
+                  Text(state.posts[widget.index].postText!),
+                ],
+                onExpansionChanged: (bool v) {
+                  setState(() {
+                    textTileIsOpen = !textTileIsOpen;
+                  });
+                },
+              ),
             ],
           ),
-          ExpansionTile(
-            title: !textTileIsOpen
-                ? Text(
-                    post[widget.index].postText,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  )
-                : const Text(''),
-            children: [
-              Text(post[widget.index].postText),
-            ],
-            onExpansionChanged: (bool v) {
-              setState(() {
-                textTileIsOpen = !textTileIsOpen;
-              });
-            },
-          ),
-        ],
-      ),
+        );
+      }),
     );
 
     // post.userPhoto == ""
@@ -147,7 +160,7 @@ class TitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text('Найдено новостей: ' +
-        MainScreenPageProvider.watch(context)!.model.post.length.toString());
+        context.select((PostsBloc bloc) => bloc.state.posts.length.toString()));
   }
 }
 
@@ -185,30 +198,44 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 }
 
-class HistoryWidget extends StatelessWidget {
+class HistoryWidget extends StatefulWidget {
   const HistoryWidget({Key? key}) : super(key: key);
 
   @override
+  State<HistoryWidget> createState() => _HistoryWidgetState();
+}
+
+class _HistoryWidgetState extends State<HistoryWidget> {
+  bool? isSelected;
+  @override
   Widget build(BuildContext context) {
-    dynamic model = MainScreenPageProvider.watch(context)?.model;
-    return Wrap(children: [
-      for (String element in model.history.historyWords)
-        InputChip(
-          label: Text(element),
-          showCheckmark: false,
-          selected: model.newsQuery == element,
-          selectedColor: Theme.of(context).primaryColor,
-          onSelected: (bool v) {
-            model.newsQuery = element;
-            model.loadPostsFromStorage(neededStorageKey: element);
-          },
-          deleteIcon: const Icon(Icons.cancel),
-          onDeleted: () {
-            model.history.historyWords.remove(element);
-            model.postDataProvider.removeHistoryElementAtStorage(element);
-            model.notifyListeners();
-          },
-        ),
-    ]);
+    //dynamic model = MainScreenPageProvider.watch(context)?.model;
+    return BlocBuilder<PostsBloc, PostsState>(
+      builder: (context, state) {
+        return Wrap(children: [
+          for (String element in state.history.historyWords)
+            InputChip(
+              label: Text(element),
+              showCheckmark: false,
+              selected: isSelected = (state.newsQuery == element),
+              selectedColor: Theme.of(context).primaryColor,
+              onSelected: (bool v) {
+                //state.newsQuery = element;
+                isSelected = true;
+                context
+                    .read<PostsBloc>()
+                    .add(PostsLoadFromStorage(storageKey: element));
+                //model.loadPostsFromStorage(neededStorageKey: element);
+              },
+              deleteIcon: const Icon(Icons.cancel),
+              onDeleted: () {
+                state.history.historyWords.remove(element);
+                //PostsDataProvider().removeHistoryElementAtStorage(element);
+                //model.notifyListeners();
+              },
+            ),
+        ]);
+      },
+    );
   }
 }
