@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-// ignore_for_file: prefer_initializing_formals
+import 'package:vk_postman/domain/entities/full_original_post/full_original_post/response.dart';
 
 class Post {
   int? userId;
@@ -33,9 +32,6 @@ class Post {
 
     bool _postContainsMedia;
 
-    //for (int index = 0; index < newsCount; index++) {
-    //_userId = _itemsList[index]['from_id'];
-    //_postText = _itemsList[index]['text'];
     if (_userId > 0) {
       for (int indexProfile = 0;
           indexProfile < _profilesList.length;
@@ -60,7 +56,6 @@ class Post {
     _postContainsMedia = _itemsList[index].containsKey('attachments');
     if (_postContainsMedia) {
       _attachmentsList = _itemsList[index]['attachments'];
-      //_postPhoto.clear();
       for (int attIndex = 0; attIndex < _attachmentsList.length; attIndex++) {
         switch (_attachmentsList[attIndex]['type']) {
           case 'video':
@@ -93,11 +88,89 @@ class Post {
         }
       }
     } else {
-      //_postPhoto.clear();
       _postPhoto.add(null);
     }
 
-    //}
+    return Post(
+        userId: _userId,
+        firstName: _firstName,
+        surName: _surName,
+        userPhoto: _userPhoto,
+        postText: _postText,
+        postPhoto: List.generate(_postPhoto.length, (ind) => _postPhoto[ind]));
+  }
+  factory Post.fromOriginaltoView(Response originalPost, int index) {
+    // Response fullPost = FullOriginalPostRepository().getFullPost(json)
+    String? _firstName;
+    String? _surName;
+    String? _userPhoto;
+    List<String?> _postPhoto = [];
+    dynamic _profilesList =
+        originalPost.profiles; //json['response']['profiles'];
+    dynamic _groupsList = originalPost.groups; //json['response']['groups'];
+    dynamic _itemsList = originalPost.items; //json['response']['items'];
+    int _userId = _itemsList[index].fromId; //['from_id'];
+    String _postText = _itemsList[index].text; //['text'];
+    List<dynamic> _attachmentsList;
+
+    bool _postContainsMedia;
+
+    if (_userId > 0) {
+      for (int indexProfile = 0;
+          indexProfile < _profilesList.length;
+          indexProfile++) {
+        if (_profilesList[indexProfile]['id'] == _userId) {
+          _firstName = _profilesList[indexProfile].firstName;
+          _surName = _profilesList[indexProfile].lastName;
+          _userPhoto = _profilesList[indexProfile].photo50;
+          break;
+        }
+      }
+    } else {
+      for (int indexGroup = 0; indexGroup < _groupsList.length; indexGroup++) {
+        if (_groupsList[indexGroup].id == (_userId).abs()) {
+          _firstName = _groupsList[indexGroup].name;
+          _surName = _groupsList[indexGroup].screenName;
+          _userPhoto = _groupsList[indexGroup].photo50;
+          break;
+        }
+      }
+    }
+    _postContainsMedia = _itemsList[index].containsKey('attachments');
+    if (_postContainsMedia) {
+      _attachmentsList = _itemsList[index].attachments;
+      for (int attIndex = 0; attIndex < _attachmentsList.length; attIndex++) {
+        switch (_attachmentsList[attIndex].type) {
+          case 'video':
+            {
+              _postPhoto.add(_attachmentsList[attIndex].video.image[0].url);
+            }
+            break;
+          case 'photo':
+            {
+              _postPhoto.add(_attachmentsList[attIndex].photo.sizes[0].url);
+            }
+            break;
+          case 'link':
+            {
+              _postPhoto.add(null);
+            }
+            break;
+          case 'audio':
+            {
+              _postPhoto.add(null);
+            }
+            break;
+          default:
+            {
+              _postPhoto.add(null);
+            }
+            break;
+        }
+      }
+    } else {
+      _postPhoto.add(null);
+    }
 
     return Post(
         userId: _userId,
