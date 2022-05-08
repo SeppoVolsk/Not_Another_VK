@@ -3,12 +3,11 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-
-import 'package:vk_postman/domain/api_clients/vk_api_client.dart';
-import 'package:vk_postman/domain/data_providers/history_data_provider.dart';
-import 'package:vk_postman/domain/data_providers/posts_data_provider.dart';
-import 'package:vk_postman/post.dart';
-import 'package:vk_postman/widgets/error_snack_bar.dart';
+import 'package:vk_postman/data/api_clients/vk_api_client.dart';
+import 'package:vk_postman/data/data_providers/history_data_provider.dart';
+import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
+import 'package:vk_postman/domain/entities/post.dart';
+import 'package:vk_postman/presentation/widgets/error_snack_bar.dart';
 
 abstract class PostsEvents {}
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vk_postman/domain/blocs/main_screen_bloc.dart';
-import 'widgets/main_screen_page.dart';
+import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
+import 'package:vk_postman/presentation/widgets/main_screen_page.dart';
 
 final keyForSnackBar = GlobalKey<ScaffoldMessengerState>();
 

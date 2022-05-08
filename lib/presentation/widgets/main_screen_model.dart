@@ -1,13 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:vk_postman/data/api_clients/vk_api_client.dart';
+import 'package:vk_postman/data/data_providers/history_data_provider.dart';
+import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
 
-import 'package:vk_postman/domain/data_providers/history_data_provider.dart';
-import 'package:vk_postman/domain/data_providers/posts_data_provider.dart';
-
-import 'package:vk_postman/widgets/error_snack_bar.dart';
-import '../domain/api_clients/vk_api_client.dart';
-import '../post.dart';
+import 'package:vk_postman/domain/entities/post.dart';
+import 'package:vk_postman/presentation/widgets/error_snack_bar.dart';
 
 class MainScreenPageModel extends ChangeNotifier {
   final _posts = <Post>[];

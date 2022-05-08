@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vk_postman/domain/blocs/main_screen_bloc.dart';
+
+import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 
 class MainScreenPage extends StatefulWidget {
   const MainScreenPage({Key? key, required this.title}) : super(key: key);
