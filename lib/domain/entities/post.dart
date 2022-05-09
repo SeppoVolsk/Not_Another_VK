@@ -119,7 +119,7 @@ class Post {
       for (int indexProfile = 0;
           indexProfile < _profilesList.length;
           indexProfile++) {
-        if (_profilesList[indexProfile]['id'] == _userId) {
+        if (_profilesList[indexProfile].id == _userId) {
           _firstName = _profilesList[indexProfile].firstName;
           _surName = _profilesList[indexProfile].lastName;
           _userPhoto = _profilesList[indexProfile].photo50;
@@ -136,7 +136,7 @@ class Post {
         }
       }
     }
-    _postContainsMedia = _itemsList[index].containsKey('attachments');
+    _postContainsMedia = _itemsList[index].attachments != null;
     if (_postContainsMedia) {
       _attachmentsList = _itemsList[index].attachments;
       for (int attIndex = 0; attIndex < _attachmentsList.length; attIndex++) {
@@ -148,7 +148,8 @@ class Post {
             break;
           case 'photo':
             {
-              _postPhoto.add(_attachmentsList[attIndex].photo.sizes[0].url);
+              //_postPhoto.add(_attachmentsList[attIndex].photo.sizes[0].url);
+              _postPhoto.add(null);
             }
             break;
           case 'link':

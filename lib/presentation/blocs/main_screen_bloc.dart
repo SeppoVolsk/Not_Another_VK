@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:vk_postman/data/api_clients/vk_api_client.dart';
 import 'package:vk_postman/data/data_providers/history_data_provider.dart';
 import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
+import 'package:vk_postman/domain/entities/full_original_post/full_original_post/response.dart';
 import 'package:vk_postman/domain/entities/post.dart';
 import 'package:vk_postman/presentation/widgets/error_snack_bar.dart';
 
@@ -90,8 +91,6 @@ class PostsBloc extends Bloc<PostsEvents, PostsState> {
     if (event is PostsLoadFromServer && event.newsQuery == null) return;
     try {
       emit(state.copyWith(loadingInProgress: true));
-      //state.loadingInProgress = true;
-      //notifyListeners();
 
       if (event is PostsLoadFromServer) {
         json = await VkApiClient().getPosts(event.newsQuery!);
@@ -108,9 +107,16 @@ class PostsBloc extends Bloc<PostsEvents, PostsState> {
           return;
       }
     }
-    //state.posts.clear();
+    /*
     for (int i = 0; i < VkApiClient().newsCount; i++) {
       posts.add(Post.postFromJson(json, i));
+    }
+    */
+
+    Response originalPost = Response.fromJson(json['response']);
+    print(originalPost.items?[0].id);
+    for (int i = 0; i < VkApiClient().newsCount; i++) {
+      posts.add(Post.fromOriginaltoView(originalPost, i));
     }
 
     // if (state.history.historyWords.length < history.maxLength &&
