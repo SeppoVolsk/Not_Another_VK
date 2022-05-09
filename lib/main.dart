@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vk_postman/domain/entities/full_original_post/full_original_post.dart';
+
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_page.dart';
 
@@ -15,6 +17,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final model = MainScreenPageModel();
+    // var a = FullOriginalPost();
+    // a.response?.items?[0].attachments?.;
+
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,

@@ -6,8 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:vk_postman/data/api_clients/vk_api_client.dart';
 import 'package:vk_postman/data/data_providers/history_data_provider.dart';
 import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
-import 'package:vk_postman/domain/entities/full_original_post/full_original_post/response.dart';
+import 'package:vk_postman/domain/entities/full_original_post/full_original_post.dart';
+
 import 'package:vk_postman/domain/entities/post.dart';
+
 import 'package:vk_postman/presentation/widgets/error_snack_bar.dart';
 
 abstract class PostsEvents {}
@@ -113,8 +115,8 @@ class PostsBloc extends Bloc<PostsEvents, PostsState> {
     }
     */
 
-    Response originalPost = Response.fromJson(json['response']);
-    print(originalPost.items?[0].id);
+    FullOriginalPost originalPost = FullOriginalPost.fromJson(json);
+    //print(originalPost.items?[0].id);
     for (int i = 0; i < VkApiClient().newsCount; i++) {
       posts.add(Post.fromOriginaltoView(originalPost, i));
     }

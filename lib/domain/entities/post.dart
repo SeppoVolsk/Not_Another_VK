@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
-
-import 'package:vk_postman/domain/entities/full_original_post/full_original_post/response.dart';
+import 'package:vk_postman/domain/entities/full_original_post/full_original_post.dart';
 
 class Post {
   int? userId;
@@ -99,19 +98,21 @@ class Post {
         postText: _postText,
         postPhoto: List.generate(_postPhoto.length, (ind) => _postPhoto[ind]));
   }
-  factory Post.fromOriginaltoView(Response originalPost, int index) {
+  factory Post.fromOriginaltoView(FullOriginalPost originalPost, int index) {
     // Response fullPost = FullOriginalPostRepository().getFullPost(json)
     String? _firstName;
     String? _surName;
     String? _userPhoto;
     List<String?> _postPhoto = [];
     dynamic _profilesList =
-        originalPost.profiles; //json['response']['profiles'];
-    dynamic _groupsList = originalPost.groups; //json['response']['groups'];
-    dynamic _itemsList = originalPost.items; //json['response']['items'];
+        originalPost.response?.profiles; //json['response']['profiles'];
+    dynamic _groupsList =
+        originalPost.response?.groups; //json['response']['groups'];
+    dynamic _itemsList =
+        originalPost.response?.items; //json['response']['items'];
     int _userId = _itemsList[index].fromId; //['from_id'];
     String _postText = _itemsList[index].text; //['text'];
-    List<dynamic> _attachmentsList;
+    dynamic _attachmentsList;
 
     bool _postContainsMedia;
 
@@ -143,7 +144,8 @@ class Post {
         switch (_attachmentsList[attIndex].type) {
           case 'video':
             {
-              _postPhoto.add(_attachmentsList[attIndex].video.image[0].url);
+              // _postPhoto.add(_attachmentsList[attIndex].video.image[0].url);
+              _postPhoto.add(null);
             }
             break;
           case 'photo':
