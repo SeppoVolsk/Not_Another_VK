@@ -144,14 +144,15 @@ class Post {
         switch (_attachmentsList[attIndex].type) {
           case 'video':
             {
-              // _postPhoto.add(_attachmentsList[attIndex].video.image[0].url);
-              _postPhoto.add(null);
+              _postPhoto.add(_attachmentsList[attIndex].video.image[0].url);
+              //_postPhoto.add(null);
             }
             break;
           case 'photo':
             {
-              //_postPhoto.add(_attachmentsList[attIndex].photo.sizes[0].url);
-              _postPhoto.add(null);
+              _postPhoto.add(_attachmentsList[attIndex].photo.sizes[0].url);
+              print('Фото: ${_attachmentsList[attIndex].photo.sizes[0].url}');
+              //_postPhoto.add(null);
             }
             break;
           case 'link':

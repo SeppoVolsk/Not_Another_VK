@@ -22,6 +22,7 @@ Attachment _$AttachmentFromJson(Map<String, dynamic> json) {
 mixin _$Attachment {
   String? get type => throw _privateConstructorUsedError;
   Photo? get photo => throw _privateConstructorUsedError;
+  Video? get video => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,9 +35,10 @@ abstract class $AttachmentCopyWith<$Res> {
   factory $AttachmentCopyWith(
           Attachment value, $Res Function(Attachment) then) =
       _$AttachmentCopyWithImpl<$Res>;
-  $Res call({String? type, Photo? photo});
+  $Res call({String? type, Photo? photo, Video? video});
 
   $PhotoCopyWith<$Res>? get photo;
+  $VideoCopyWith<$Res>? get video;
 }
 
 /// @nodoc
@@ -51,6 +53,7 @@ class _$AttachmentCopyWithImpl<$Res> implements $AttachmentCopyWith<$Res> {
   $Res call({
     Object? type = freezed,
     Object? photo = freezed,
+    Object? video = freezed,
   }) {
     return _then(_value.copyWith(
       type: type == freezed
@@ -61,6 +64,10 @@ class _$AttachmentCopyWithImpl<$Res> implements $AttachmentCopyWith<$Res> {
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
               as Photo?,
+      video: video == freezed
+          ? _value.video
+          : video // ignore: cast_nullable_to_non_nullable
+              as Video?,
     ));
   }
 
@@ -74,6 +81,17 @@ class _$AttachmentCopyWithImpl<$Res> implements $AttachmentCopyWith<$Res> {
       return _then(_value.copyWith(photo: value));
     });
   }
+
+  @override
+  $VideoCopyWith<$Res>? get video {
+    if (_value.video == null) {
+      return null;
+    }
+
+    return $VideoCopyWith<$Res>(_value.video!, (value) {
+      return _then(_value.copyWith(video: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -83,10 +101,12 @@ abstract class _$$_AttachmentCopyWith<$Res>
           _$_Attachment value, $Res Function(_$_Attachment) then) =
       __$$_AttachmentCopyWithImpl<$Res>;
   @override
-  $Res call({String? type, Photo? photo});
+  $Res call({String? type, Photo? photo, Video? video});
 
   @override
   $PhotoCopyWith<$Res>? get photo;
+  @override
+  $VideoCopyWith<$Res>? get video;
 }
 
 /// @nodoc
@@ -103,6 +123,7 @@ class __$$_AttachmentCopyWithImpl<$Res> extends _$AttachmentCopyWithImpl<$Res>
   $Res call({
     Object? type = freezed,
     Object? photo = freezed,
+    Object? video = freezed,
   }) {
     return _then(_$_Attachment(
       type: type == freezed
@@ -113,6 +134,10 @@ class __$$_AttachmentCopyWithImpl<$Res> extends _$AttachmentCopyWithImpl<$Res>
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
               as Photo?,
+      video: video == freezed
+          ? _value.video
+          : video // ignore: cast_nullable_to_non_nullable
+              as Video?,
     ));
   }
 }
@@ -120,7 +145,7 @@ class __$$_AttachmentCopyWithImpl<$Res> extends _$AttachmentCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Attachment implements _Attachment {
-  _$_Attachment({this.type, this.photo});
+  _$_Attachment({this.type, this.photo, this.video});
 
   factory _$_Attachment.fromJson(Map<String, dynamic> json) =>
       _$$_AttachmentFromJson(json);
@@ -129,10 +154,12 @@ class _$_Attachment implements _Attachment {
   final String? type;
   @override
   final Photo? photo;
+  @override
+  final Video? video;
 
   @override
   String toString() {
-    return 'Attachment(type: $type, photo: $photo)';
+    return 'Attachment(type: $type, photo: $photo, video: $video)';
   }
 
   @override
@@ -141,7 +168,8 @@ class _$_Attachment implements _Attachment {
         (other.runtimeType == runtimeType &&
             other is _$_Attachment &&
             const DeepCollectionEquality().equals(other.type, type) &&
-            const DeepCollectionEquality().equals(other.photo, photo));
+            const DeepCollectionEquality().equals(other.photo, photo) &&
+            const DeepCollectionEquality().equals(other.video, video));
   }
 
   @JsonKey(ignore: true)
@@ -149,7 +177,8 @@ class _$_Attachment implements _Attachment {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(type),
-      const DeepCollectionEquality().hash(photo));
+      const DeepCollectionEquality().hash(photo),
+      const DeepCollectionEquality().hash(video));
 
   @JsonKey(ignore: true)
   @override
@@ -163,7 +192,10 @@ class _$_Attachment implements _Attachment {
 }
 
 abstract class _Attachment implements Attachment {
-  factory _Attachment({final String? type, final Photo? photo}) = _$_Attachment;
+  factory _Attachment(
+      {final String? type,
+      final Photo? photo,
+      final Video? video}) = _$_Attachment;
 
   factory _Attachment.fromJson(Map<String, dynamic> json) =
       _$_Attachment.fromJson;
@@ -172,6 +204,8 @@ abstract class _Attachment implements Attachment {
   String? get type => throw _privateConstructorUsedError;
   @override
   Photo? get photo => throw _privateConstructorUsedError;
+  @override
+  Video? get video => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_AttachmentCopyWith<_$_Attachment> get copyWith =>
