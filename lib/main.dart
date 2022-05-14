@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vk_postman/domain/entities/full_original_post/full_original_post.dart';
-
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
+import 'package:vk_postman/presentation/blocs/main_screen_repository.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_page.dart';
 
 final keyForSnackBar = GlobalKey<ScaffoldMessengerState>();
@@ -27,9 +26,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
-      home: BlocProvider<PostsBloc>(
-        create: ((_) => PostsBloc()..add(PostsLoadFromStorage())),
-        child: const MainScreenPage(title: 'VK api postman'),
+      home: BlocProvider<MainScreenBLoC>(
+        create: ((_) => MainScreenBLoC(repository: IMainScreenRepository())
+          ..add(MainScreenEvent.read(null))),
+        child: const MainScreenPage(),
       ),
     );
   }

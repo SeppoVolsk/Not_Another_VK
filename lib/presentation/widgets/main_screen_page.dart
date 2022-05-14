@@ -4,9 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 
 class MainScreenPage extends StatefulWidget {
-  const MainScreenPage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const MainScreenPage({Key? key}) : super(key: key);
 
   @override
   State<MainScreenPage> createState() => _MainScreenPageState();
@@ -28,10 +26,8 @@ class _MainScreenPageState extends State<MainScreenPage> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<PostsBloc>();
-    //bool loadingInProgress =
-    //    MainScreenPageProvider.watch(context)!.model.loadingInProgress;
-    return BlocBuilder<PostsBloc, PostsState>(builder: (context, state) {
+    return BlocBuilder<MainScreenBLoC, MainScreenState>(
+        builder: (context, state) {
       return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
@@ -41,22 +37,38 @@ class _MainScreenPageState extends State<MainScreenPage> {
           body: SafeArea(
             child: Stack(
               children: [
-                !state.loadingInProgress
-                    ? const PostListWidget()
-                    : const Center(child: Text('Ищем новости...')),
+                state.when(
+                  idle: (mainScreenEntity, _) =>
+                      const Center(child: const PostListWidget()),
+                  processing: (data, _) =>
+                      const Center(child: Text('Ищем новости...')),
+                  successful: (data, _) => const PostListWidget(),
+                  error: (data, _) => const Center(child: Text('ERROR')),
+                ),
+                //   !state.loadingInProgress
+                //       ? const PostListWidget()
+                //       : const Center(child: Text('Ищем новости...')),
                 SearchWidget(_searchController),
               ],
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            child: state.loadingInProgress
-                ? const CircularProgressIndicator(color: Colors.white)
-                : const Icon(Icons.autorenew),
-            onPressed: !state.loadingInProgress
+            child: state.when(
+              idle: (data, _) => const Icon(Icons.autorenew),
+              processing: (data, _) =>
+                  const CircularProgressIndicator(color: Colors.white),
+              successful: (data, _) => const Icon(Icons.autorenew),
+              error: (data, _) => const Icon(Icons.error_outline),
+            ),
+            //state.loadingInProgress
+            //     ? const CircularProgressIndicator(color: Colors.white)
+            //     : const Icon(Icons.autorenew),
+            onPressed: state is! ProcessingMainScreenState
                 ? () {
                     FocusScope.of(context).unfocus();
-                    bloc.add(
-                        PostsLoadFromServer(newsQuery: _searchController.text));
+                    context
+                        .read<MainScreenBLoC>()
+                        .add(MainScreenEvent.update(_searchController.text));
 
                     // MainScreenPageProvider.read(context)
                     //     ?.model
@@ -81,8 +93,9 @@ class PostListWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return PostCard(index: index);
       },
-      itemCount: context.select((PostsBloc bloc) => bloc.state.posts
-          .length), //MainScreenPageProvider.watch(context)?.model.post.length ?? 0,
+      itemCount: context.select((MainScreenBLoC bloc) =>
+          bloc.state.data.posts?.length ??
+          0), //MainScreenPageProvider.watch(context)?.model.post.length ?? 0,
     );
   }
 }
@@ -102,25 +115,24 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     //dynamic post = MainScreenPageProvider.read(context)?.model.post;
 
-    return BlocBuilder<PostsBloc, PostsState>(
+    return BlocBuilder<MainScreenBLoC, MainScreenState>(
       builder: ((context, state) {
         return Card(
           child: Column(
             children: [
               ListTile(
                 leading: CircleAvatar(
-                  backgroundImage:
-                      NetworkImage(state.posts[widget.index].userPhoto!),
+                  backgroundImage: NetworkImage(
+                      state.data.posts?[widget.index].userPhoto as String),
                 ),
-                title: Text(state.posts[widget.index].firstName! +
-                    ' ' +
-                    state.posts[widget.index].surName!),
-                subtitle:
-                    Text('id: ' + state.posts[widget.index].userId.toString()),
+                title: Text(
+                    '${state.data.posts?[widget.index].firstName} ${state.data.posts?[widget.index].surName}'),
+                subtitle: Text('id: ${state.data.posts?[widget.index].userId}'),
               ),
               Wrap(
                 children: [
-                  for (var element in state.posts[widget.index].postPhoto!)
+                  for (var element
+                      in state.data.posts![widget.index].postPhoto!)
                     element != null
                         ? Image.network(element)
                         : const SizedBox.shrink()
@@ -129,13 +141,13 @@ class _PostCardState extends State<PostCard> {
               ExpansionTile(
                 title: !textTileIsOpen
                     ? Text(
-                        state.posts[widget.index].postText!,
+                        state.data.posts?[widget.index].postText as String,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       )
                     : const Text(''),
                 children: [
-                  Text(state.posts[widget.index].postText!),
+                  Text(state.data.posts?[widget.index].postText as String),
                 ],
                 onExpansionChanged: (bool v) {
                   setState(() {
@@ -161,7 +173,8 @@ class TitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text('Найдено новостей: ' +
-        context.select((PostsBloc bloc) => bloc.state.posts.length.toString()));
+        context.select((MainScreenBLoC bloc) =>
+            bloc.state.data.posts?.length.toString() ?? '0'));
   }
 }
 
@@ -211,26 +224,26 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   @override
   Widget build(BuildContext context) {
     //dynamic model = MainScreenPageProvider.watch(context)?.model;
-    return BlocBuilder<PostsBloc, PostsState>(
+    return BlocBuilder<MainScreenBLoC, MainScreenState>(
       builder: (context, state) {
         return Wrap(children: [
-          for (String element in state.history.historyWords)
+          for (String element in state.data.history!.historyWords)
             InputChip(
               label: Text(element),
               showCheckmark: false,
-              selected: isSelected = (state.newsQuery == element),
+              selected: isSelected = (state.data.newsQuery == element),
               selectedColor: Theme.of(context).primaryColor,
               onSelected: (bool v) {
                 //state.newsQuery = element;
                 isSelected = true;
                 context
-                    .read<PostsBloc>()
-                    .add(PostsLoadFromStorage(storageKey: element));
+                    .read<MainScreenBLoC>()
+                    .add(MainScreenEvent.read(element));
                 //model.loadPostsFromStorage(neededStorageKey: element);
               },
               deleteIcon: const Icon(Icons.cancel),
               onDeleted: () {
-                state.history.historyWords.remove(element);
+                state.data.history?.historyWords.remove(element);
                 //PostsDataProvider().removeHistoryElementAtStorage(element);
                 //model.notifyListeners();
               },
