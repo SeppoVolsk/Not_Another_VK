@@ -98,23 +98,20 @@ class Post {
         postText: _postText,
         postPhoto: List.generate(_postPhoto.length, (ind) => _postPhoto[ind]));
   }
+
   factory Post.fromOriginaltoView(FullOriginalPost originalPost, int index) {
-    // Response fullPost = FullOriginalPostRepository().getFullPost(json)
     String? _firstName;
     String? _surName;
     String? _userPhoto;
     List<String?> _postPhoto = [];
-    dynamic _profilesList =
-        originalPost.response?.profiles; //json['response']['profiles'];
-    dynamic _groupsList =
-        originalPost.response?.groups; //json['response']['groups'];
-    dynamic _itemsList =
-        originalPost.response?.items; //json['response']['items'];
-    int _userId = _itemsList[index].fromId; //['from_id'];
-    String _postText = _itemsList[index].text; //['text'];
+    dynamic _profilesList = originalPost.response?.profiles;
+    dynamic _groupsList = originalPost.response?.groups;
+    dynamic _itemsList = originalPost.response?.items;
     dynamic _attachmentsList;
-
     bool _postContainsMedia;
+
+    int _userId = _itemsList[index].fromId;
+    String _postText = _itemsList[index].text;
 
     if (_userId > 0) {
       for (int indexProfile = 0;
@@ -145,14 +142,11 @@ class Post {
           case 'video':
             {
               _postPhoto.add(_attachmentsList[attIndex].video.image[0].url);
-              //_postPhoto.add(null);
             }
             break;
           case 'photo':
             {
               _postPhoto.add(_attachmentsList[attIndex].photo.sizes[0].url);
-              print('Фото: ${_attachmentsList[attIndex].photo.sizes[0].url}');
-              //_postPhoto.add(null);
             }
             break;
           case 'link':

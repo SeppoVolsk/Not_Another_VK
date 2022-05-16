@@ -9,25 +9,27 @@ import 'package:vk_postman/presentation/blocs/mainscreenentity.dart';
 import 'package:vk_postman/presentation/widgets/error_snack_bar.dart';
 
 class IMainScreenRepository {
+  final history = HistoryDataProvider();
+
   Future<MainScreenEntity> readPostsFromStorage(String? storageKey) async {
     String? storageJsonString;
     String? newsQuery;
     const postDataProvider = PostsDataProvider();
-    final history = HistoryDataProvider();
+
     final Map<String, dynamic> json;
     List<Post> posts = [];
-    //if (event is PostsLoadFromStorage) {
+
     if (storageKey == null) {
-      final storageKeys = await postDataProvider.getStorageKeys();
-      if (storageKeys.isEmpty) {
+      final allStorageKeys = await postDataProvider.getStorageKeys();
+      if (allStorageKeys.isEmpty) {
         errorSnackBar('Воспользуйтесь поиском');
         return MainScreenEntity();
       }
-      newsQuery = storageKeys.last;
-      // history.historyWords
-      //     .addAll(storageKeys.take(state.history.maxLength).toList());
+      newsQuery = allStorageKeys.last;
+      history.historyWords
+          .addAll(allStorageKeys.take(history.maxLength).toList());
       storageJsonString =
-          await postDataProvider.getStringFromStorage(key: storageKeys.last);
+          await postDataProvider.getStringFromStorage(key: allStorageKeys.last);
     } else {
       storageJsonString =
           await postDataProvider.getStringFromStorage(key: storageKey);
@@ -45,6 +47,7 @@ class IMainScreenRepository {
         return MainScreenEntity();
       }
     }
+    print('readFromStorage ${history.historyWords}');
     return MainScreenEntity(
       posts: posts,
       history: history,
@@ -54,20 +57,12 @@ class IMainScreenRepository {
   }
 
   Future<MainScreenEntity> updatePostsFromNet(String newsQuery) async {
-    print('update');
-    Map<String, dynamic> json = {};
+    Map<String, dynamic> json;
     List<Post> posts = [];
-    final history = HistoryDataProvider();
-    //const postDataProvider = PostsDataProvider();
+    //final history = HistoryDataProvider();
 
-    //if (event is PostsLoadFromServer && event.newsQuery == null) return;
     try {
-      //emit(state.copyWith(loadingInProgress: true));
-
-      //if (event is PostsLoadFromServer) {
       json = await VkApiClient().getPosts(newsQuery);
-
-      //}
     } on VkApiClientException catch (e) {
       switch (e.errorType) {
         case ExceptionType.noNetwork:
@@ -85,6 +80,8 @@ class IMainScreenRepository {
     for (int i = 0; i < VkApiClient().newsCount; i++) {
       posts.add(Post.fromOriginaltoView(originalPost, i));
     }
+
+    history.markInHistory(newsQuery: newsQuery, json: json);
 
     return MainScreenEntity(
         posts: posts,

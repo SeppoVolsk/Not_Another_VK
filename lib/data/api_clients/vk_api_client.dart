@@ -25,9 +25,9 @@ class VkApiClient {
   int userId = 0;
 
   final client = HttpClient();
-  int newsCount = 200; //по умолчанию 30, максимум 200
+  int newsCount = 10; //по умолчанию 30, максимум 200
 
-  Future<dynamic> getPosts(String newsQuery) async {
+  Future<dynamic> getPosts(String? newsQuery) async {
     final url = Uri.parse(
         '$apiAddress/newsfeed.search?&q=$newsQuery&extended=1&count=$newsCount&$apiVer&access_token=$clientCredentialsFlowToken');
     final request = await client.getUrl(url);

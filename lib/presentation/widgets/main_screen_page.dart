@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,22 +40,29 @@ class _MainScreenPageState extends State<MainScreenPage> {
               children: [
                 state.when(
                   idle: (mainScreenEntity, _) =>
-                      const Center(child: const PostListWidget()),
+                      const Center(child: Text('Ищем новости...')),
                   processing: (data, _) =>
                       const Center(child: Text('Ищем новости...')),
-                  successful: (data, _) => const PostListWidget(),
+                  successful: (data, _) => Stack(children: [
+                    PostListWidget(),
+                    HistoryWidget(),
+                  ]),
                   error: (data, _) => const Center(child: Text('ERROR')),
                 ),
                 //   !state.loadingInProgress
                 //       ? const PostListWidget()
                 //       : const Center(child: Text('Ищем новости...')),
+
+                //state.data.history?.historyWords
+
                 SearchWidget(_searchController),
               ],
             ),
           ),
           floatingActionButton: FloatingActionButton(
             child: state.when(
-              idle: (data, _) => const Icon(Icons.autorenew),
+              idle: (data, _) =>
+                  const CircularProgressIndicator(color: Colors.white),
               processing: (data, _) =>
                   const CircularProgressIndicator(color: Colors.white),
               successful: (data, _) => const Icon(Icons.autorenew),
@@ -63,12 +71,13 @@ class _MainScreenPageState extends State<MainScreenPage> {
             //state.loadingInProgress
             //     ? const CircularProgressIndicator(color: Colors.white)
             //     : const Icon(Icons.autorenew),
-            onPressed: state is! ProcessingMainScreenState
+            onPressed: state is SuccessfulMainScreenState
                 ? () {
                     FocusScope.of(context).unfocus();
-                    context
-                        .read<MainScreenBLoC>()
-                        .add(MainScreenEvent.update(_searchController.text));
+                    if (_searchController.text.isNotEmpty)
+                      context
+                          .read<MainScreenBLoC>()
+                          .add(MainScreenEvent.update(_searchController.text));
 
                     // MainScreenPageProvider.read(context)
                     //     ?.model
@@ -117,6 +126,9 @@ class _PostCardState extends State<PostCard> {
 
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
       builder: ((context, state) {
+        // state.data.posts?.forEach((element) {
+        //   print(element.firstName);
+        // });
         return Card(
           child: Column(
             children: [
@@ -213,16 +225,27 @@ class _SearchWidgetState extends State<SearchWidget> {
 }
 
 class HistoryWidget extends StatefulWidget {
-  const HistoryWidget({Key? key}) : super(key: key);
+  const HistoryWidget({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<HistoryWidget> createState() => _HistoryWidgetState();
 }
 
 class _HistoryWidgetState extends State<HistoryWidget> {
-  bool? isSelected;
+  String element = 'aaa';
+  bool isSelected = false;
+  String? currentWord;
+
   @override
   Widget build(BuildContext context) {
+    //final state = context.watch<MainScreenBLoC>().state;
+    //newsQuery =
+    // context.select((MainScreenBLoC bloc) => bloc.state.data.newsQuery);
+    //print('HW read historyWords: ${state.data.history?.historyWords}');
+    //print('HW historyList: ${widget.historyList}');
+    //if (state.data.history?.historyWords == null) return SizedBox.shrink();
     //dynamic model = MainScreenPageProvider.watch(context)?.model;
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
       builder: (context, state) {
@@ -231,23 +254,31 @@ class _HistoryWidgetState extends State<HistoryWidget> {
             InputChip(
               label: Text(element),
               showCheckmark: false,
-              selected: isSelected = (state.data.newsQuery == element),
+              selected:
+                  (state.data.newsQuery == element || currentWord == element),
               selectedColor: Theme.of(context).primaryColor,
-              onSelected: (bool v) {
-                //state.newsQuery = element;
-                isSelected = true;
+              onPressed: () {
+                setState(() {
+                  currentWord = element;
+                });
+                //setState(() => isSelected = v);
+
                 context
                     .read<MainScreenBLoC>()
                     .add(MainScreenEvent.read(element));
                 //model.loadPostsFromStorage(neededStorageKey: element);
               },
+              //onSelected: (bool v) {},
               deleteIcon: const Icon(Icons.cancel),
               onDeleted: () {
                 state.data.history?.historyWords.remove(element);
+                state.data.history?.postDataProvider
+                    .removeHistoryElementAtStorage(element);
+
                 //PostsDataProvider().removeHistoryElementAtStorage(element);
                 //model.notifyListeners();
               },
-            ),
+            )
         ]);
       },
     );
