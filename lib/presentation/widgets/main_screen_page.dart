@@ -71,13 +71,15 @@ class _MainScreenPageState extends State<MainScreenPage> {
             //state.loadingInProgress
             //     ? const CircularProgressIndicator(color: Colors.white)
             //     : const Icon(Icons.autorenew),
-            onPressed: state is SuccessfulMainScreenState
+            onPressed: state is SuccessfulMainScreenState ||
+                    state is ErrorMainScreenState
                 ? () {
                     FocusScope.of(context).unfocus();
-                    if (_searchController.text.isNotEmpty)
+                    if (_searchController.text.isNotEmpty) {
                       context
                           .read<MainScreenBLoC>()
                           .add(MainScreenEvent.update(_searchController.text));
+                    }
 
                     // MainScreenPageProvider.read(context)
                     //     ?.model
@@ -133,13 +135,15 @@ class _PostCardState extends State<PostCard> {
           child: Column(
             children: [
               ListTile(
+                isThreeLine: true,
                 leading: CircleAvatar(
                   backgroundImage: NetworkImage(
                       state.data.posts?[widget.index].userPhoto as String),
                 ),
                 title: Text(
                     '${state.data.posts?[widget.index].firstName} ${state.data.posts?[widget.index].surName}'),
-                subtitle: Text('id: ${state.data.posts?[widget.index].userId}'),
+                subtitle: Text(
+                    'id: ${state.data.posts?[widget.index].userId}\n${state.data.posts?[widget.index].dateTime}'),
               ),
               Wrap(
                 children: [
@@ -240,13 +244,6 @@ class _HistoryWidgetState extends State<HistoryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    //final state = context.watch<MainScreenBLoC>().state;
-    //newsQuery =
-    // context.select((MainScreenBLoC bloc) => bloc.state.data.newsQuery);
-    //print('HW read historyWords: ${state.data.history?.historyWords}');
-    //print('HW historyList: ${widget.historyList}');
-    //if (state.data.history?.historyWords == null) return SizedBox.shrink();
-    //dynamic model = MainScreenPageProvider.watch(context)?.model;
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
       builder: (context, state) {
         return Wrap(children: [
@@ -274,9 +271,6 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                 state.data.history?.historyWords.remove(element);
                 state.data.history?.postDataProvider
                     .removeHistoryElementAtStorage(element);
-
-                //PostsDataProvider().removeHistoryElementAtStorage(element);
-                //model.notifyListeners();
               },
             )
         ]);

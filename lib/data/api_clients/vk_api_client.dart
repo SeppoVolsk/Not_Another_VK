@@ -32,6 +32,8 @@ class VkApiClient {
         '$apiAddress/newsfeed.search?&q=$newsQuery&extended=1&count=$newsCount&$apiVer&access_token=$clientCredentialsFlowToken');
     final request = await client.getUrl(url);
     final response = await request.close();
+    print('Status Code: ${response.statusCode}');
+
     final jsonStrings = await response
         .transform(utf8.decoder)
         .toList(); //Ответ приходит частями. Переводим байты(цифры) в строки и создаем массив строк.

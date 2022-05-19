@@ -3,6 +3,7 @@ import 'package:vk_postman/domain/entities/full_original_post/full_original_post
 
 class Post {
   int? userId;
+  String? dateTime;
   String? firstName;
   String? surName;
   String? userPhoto;
@@ -11,6 +12,7 @@ class Post {
 
   Post(
       {this.userId,
+      this.dateTime,
       this.firstName,
       this.surName,
       this.userPhoto,
@@ -26,6 +28,8 @@ class Post {
     List<dynamic> _groupsList = json['response']['groups'];
     List<dynamic> _itemsList = json['response']['items'];
     int _userId = _itemsList[index]['from_id'];
+    DateTime? _dateTime =
+        DateTime.fromMillisecondsSinceEpoch(_itemsList[index]['date'] * 1000);
     String _postText = _itemsList[index]['text'];
     List<dynamic> _attachmentsList;
 
@@ -44,7 +48,7 @@ class Post {
       }
     } else {
       for (int indexGroup = 0; indexGroup < _groupsList.length; indexGroup++) {
-        if (_groupsList[indexGroup]['id'] == (_userId).abs()) {
+        if (_groupsList[indexGroup]['id'] == _userId.abs()) {
           _firstName = _groupsList[indexGroup]['name'];
           _surName = _groupsList[indexGroup]['screen_name'];
           _userPhoto = _groupsList[indexGroup]['photo_50'];
@@ -92,6 +96,7 @@ class Post {
 
     return Post(
         userId: _userId,
+        dateTime: _dateTime.toString(),
         firstName: _firstName,
         surName: _surName,
         userPhoto: _userPhoto,
@@ -111,60 +116,76 @@ class Post {
     bool _postContainsMedia;
 
     int _userId = _itemsList[index].fromId;
+    DateTime _dateTime =
+        DateTime.fromMillisecondsSinceEpoch(_itemsList[index].date * 1000);
     String _postText = _itemsList[index].text;
 
     if (_userId > 0) {
       for (int indexProfile = 0;
           indexProfile < _profilesList.length;
           indexProfile++) {
-        if (_profilesList[indexProfile].id == _userId) {
-          _firstName = _profilesList[indexProfile].firstName;
-          _surName = _profilesList[indexProfile].lastName;
-          _userPhoto = _profilesList[indexProfile].photo50;
-          break;
+        try {
+          if (_profilesList[indexProfile].id == _userId) {
+            _firstName = _profilesList[indexProfile].firstName;
+            _surName = _profilesList[indexProfile].lastName;
+            _userPhoto = _profilesList[indexProfile].photo50;
+            break;
+          }
+        } catch (e) {
+          print('Ошибка при заполнении id из profilesList $e');
         }
       }
     } else {
-      for (int indexGroup = 0; indexGroup < _groupsList.length; indexGroup++) {
-        if (_groupsList[indexGroup].id == (_userId).abs()) {
-          _firstName = _groupsList[indexGroup].name;
-          _surName = _groupsList[indexGroup].screenName;
-          _userPhoto = _groupsList[indexGroup].photo50;
-          break;
+      try {
+        for (int indexGroup = 0;
+            indexGroup < _groupsList.length;
+            indexGroup++) {
+          if (_groupsList[indexGroup].id == (_userId).abs()) {
+            _firstName = _groupsList[indexGroup].name;
+            _surName = _groupsList[indexGroup].screenName;
+            _userPhoto = _groupsList[indexGroup].photo50;
+            break;
+          }
         }
+      } catch (e) {
+        print('Ошибка при заполнении id из groupList $e');
       }
     }
     _postContainsMedia = _itemsList[index].attachments != null;
     if (_postContainsMedia) {
       _attachmentsList = _itemsList[index].attachments;
-      for (int attIndex = 0; attIndex < _attachmentsList.length; attIndex++) {
-        switch (_attachmentsList[attIndex].type) {
-          case 'video':
-            {
-              _postPhoto.add(_attachmentsList[attIndex].video.image[0].url);
-            }
-            break;
-          case 'photo':
-            {
-              _postPhoto.add(_attachmentsList[attIndex].photo.sizes[0].url);
-            }
-            break;
-          case 'link':
-            {
-              _postPhoto.add(null);
-            }
-            break;
-          case 'audio':
-            {
-              _postPhoto.add(null);
-            }
-            break;
-          default:
-            {
-              _postPhoto.add(null);
-            }
-            break;
+      try {
+        for (int attIndex = 0; attIndex < _attachmentsList.length; attIndex++) {
+          switch (_attachmentsList[attIndex].type) {
+            case 'video':
+              {
+                _postPhoto.add(_attachmentsList[attIndex].video.image[0].url);
+              }
+              break;
+            case 'photo':
+              {
+                _postPhoto.add(_attachmentsList[attIndex].photo.sizes[0].url);
+              }
+              break;
+            case 'link':
+              {
+                _postPhoto.add(null);
+              }
+              break;
+            case 'audio':
+              {
+                _postPhoto.add(null);
+              }
+              break;
+            default:
+              {
+                _postPhoto.add(null);
+              }
+              break;
+          }
         }
+      } catch (e) {
+        print('Ошибка заполнения photo/video $e');
       }
     } else {
       _postPhoto.add(null);
@@ -172,6 +193,7 @@ class Post {
 
     return Post(
         userId: _userId,
+        dateTime: _dateTime.toString(),
         firstName: _firstName,
         surName: _surName,
         userPhoto: _userPhoto,
@@ -181,6 +203,7 @@ class Post {
 
   Post copyWith({
     int? userId,
+    String? dateTime,
     String? firstName,
     String? surName,
     String? userPhoto,
@@ -189,6 +212,7 @@ class Post {
   }) {
     return Post(
       userId: userId ?? this.userId,
+      dateTime: dateTime ?? this.dateTime,
       firstName: firstName ?? this.firstName,
       surName: surName ?? this.surName,
       userPhoto: userPhoto ?? this.userPhoto,
@@ -203,6 +227,7 @@ class Post {
 
     return other is Post &&
         other.userId == userId &&
+        other.dateTime == dateTime &&
         other.firstName == firstName &&
         other.surName == surName &&
         other.userPhoto == userPhoto &&
@@ -213,6 +238,7 @@ class Post {
   @override
   int get hashCode {
     return userId.hashCode ^
+        dateTime.hashCode ^
         firstName.hashCode ^
         surName.hashCode ^
         userPhoto.hashCode ^
