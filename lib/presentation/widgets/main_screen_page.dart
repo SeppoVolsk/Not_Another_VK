@@ -161,7 +161,7 @@ class _PostCardState extends State<PostCard> {
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       )
-                    : const Text(''),
+                    : const SizedBox.shrink(),
                 children: [
                   Text(state.data.posts?[widget.index].postText as String),
                 ],

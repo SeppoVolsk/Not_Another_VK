@@ -93,10 +93,11 @@ class Post {
     } else {
       _postPhoto.add(null);
     }
+    String _dateString = _dateTime.toString().substring(0, 19);
 
     return Post(
         userId: _userId,
-        dateTime: _dateTime.toString(),
+        dateTime: _dateString,
         firstName: _firstName,
         surName: _surName,
         userPhoto: _userPhoto,
@@ -190,10 +191,11 @@ class Post {
     } else {
       _postPhoto.add(null);
     }
+    String _dateString = _dateTime.toString().substring(0, 19);
 
     return Post(
         userId: _userId,
-        dateTime: _dateTime.toString(),
+        dateTime: _dateString,
         firstName: _firstName,
         surName: _surName,
         userPhoto: _userPhoto,
