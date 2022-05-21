@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:vk_postman/presentation/widgets/history_widget.dart';
 import 'package:vk_postman/presentation/widgets/post_list_card_widget.dart';
 import 'package:vk_postman/presentation/widgets/search_widget.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 
 class MainScreenSetWidgets extends StatefulWidget {

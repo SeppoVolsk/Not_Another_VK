@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_repository.dart';
+import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_page.dart';
 import 'package:vk_postman/simple_bloc_observer.dart';
 
@@ -16,13 +17,10 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+  static final mainNavigation = MainNavigation();
 
   @override
   Widget build(BuildContext context) {
-    //final model = MainScreenPageModel();
-    // var a = FullOriginalPost();
-    // a.response?.items?[0].attachments?.;
-
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -35,6 +33,9 @@ class MyApp extends StatelessWidget {
           ..add(MainScreenEvent.read(null))),
         child: const MainScreenPage(),
       ),
+      routes: mainNavigation.routes,
+      onGenerateRoute: mainNavigation.onGenerateRoute,
+      //initialRoute: mainNavigation.initialRoute,
     );
   }
 }

@@ -1,13 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
-import 'package:vk_postman/presentation/widgets/history_widget.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_set_widgets.dart';
-import 'package:vk_postman/presentation/widgets/post_list_card_widget.dart';
 import 'package:vk_postman/presentation/widgets/saved_media_warhouse_widget.dart';
-import 'package:vk_postman/presentation/widgets/search_widget.dart';
 
 class MainScreenPage extends StatefulWidget {
   const MainScreenPage({Key? key}) : super(key: key);
@@ -23,12 +19,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
   @override
   void initState() {
     super.initState();
-
-    //MainScreenPageProvider.read(context)?.model.loadPostsFromStorage();
-    _searchController.addListener(() {
-      //   MainScreenPageProvider.read(context)?.model.newsQuery =
-      //       _searchController.text;
-    });
+    _searchController.addListener(() {});
   }
 
   @override
@@ -54,9 +45,6 @@ class _MainScreenPageState extends State<MainScreenPage> {
               successful: (data, _) => const Icon(Icons.autorenew),
               error: (data, _) => const Icon(Icons.error_outline),
             ),
-            //state.loadingInProgress
-            //     ? const CircularProgressIndicator(color: Colors.white)
-            //     : const Icon(Icons.autorenew),
             onPressed: state is SuccessfulMainScreenState ||
                     state is ErrorMainScreenState
                 ? () {
@@ -66,10 +54,6 @@ class _MainScreenPageState extends State<MainScreenPage> {
                           .read<MainScreenBLoC>()
                           .add(MainScreenEvent.update(_searchController.text));
                     }
-
-                    // MainScreenPageProvider.read(context)
-                    //     ?.model
-                    //     .loadPostsFromServer();
                   }
                 : null,
           ),
