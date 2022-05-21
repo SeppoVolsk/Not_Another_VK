@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
+import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 
 class PostListWidget extends StatelessWidget {
   const PostListWidget({Key? key}) : super(key: key);
@@ -58,7 +59,16 @@ class _PostCardState extends State<PostCard> {
                   for (var element
                       in state.data.posts![widget.index].postPhoto!)
                     element != null
-                        ? Image.network(element)
+                        ? InkWell(
+                            child: Image.network(element),
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                MainNavigationRoutesNames.detailScreen,
+                                arguments: state.data.posts?[widget.index]
+                                    .postLargePhoto?[0],
+                              );
+                            },
+                          )
                         : const SizedBox.shrink()
                 ],
               ),

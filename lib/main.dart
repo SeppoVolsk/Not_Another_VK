@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         child: const MainScreenPage(),
       ),
       routes: mainNavigation.routes,
-      onGenerateRoute: mainNavigation.onGenerateRoute,
+      //onGenerateRoute: mainNavigation.onGenerateRoute,
       //initialRoute: mainNavigation.initialRoute,
     );
   }

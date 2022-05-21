@@ -9,6 +9,7 @@ class Post {
   String? userPhoto;
   String? postText;
   List<String?>? postPhoto;
+  List<String?>? postLargePhoto;
 
   Post(
       {this.userId,
@@ -17,13 +18,15 @@ class Post {
       this.surName,
       this.userPhoto,
       this.postText,
-      this.postPhoto});
+      this.postPhoto,
+      this.postLargePhoto});
 
   factory Post.postFromJson(dynamic json, int index) {
     String? _firstName;
     String? _surName;
     String? _userPhoto;
     List<String?> _postPhoto = [];
+    List<String?> _postLargePhoto = [];
     List<dynamic> _profilesList = json['response']['profiles'];
     List<dynamic> _groupsList = json['response']['groups'];
     List<dynamic> _itemsList = json['response']['items'];
@@ -65,33 +68,41 @@ class Post {
             {
               _postPhoto
                   .add(_attachmentsList[attIndex]['video']['image'][0]['url']);
+              _postLargePhoto
+                  .add(_attachmentsList[attIndex]['video']['image'][3]['url']);
             }
             break;
           case 'photo':
             {
               _postPhoto
                   .add(_attachmentsList[attIndex]['photo']['sizes'][0]['url']);
+              _postLargePhoto
+                  .add(_attachmentsList[attIndex]['video']['sizes'][5]['url']);
             }
             break;
           case 'link':
             {
               _postPhoto.add(null);
+              _postLargePhoto.add(null);
             }
             break;
           case 'audio':
             {
               _postPhoto.add(null);
+              _postLargePhoto.add(null);
             }
             break;
           default:
             {
               _postPhoto.add(null);
+              _postLargePhoto.add(null);
             }
             break;
         }
       }
     } else {
       _postPhoto.add(null);
+      _postLargePhoto.add(null);
     }
     String _dateString = _dateTime.toString().substring(0, 19);
 
@@ -102,7 +113,9 @@ class Post {
         surName: _surName,
         userPhoto: _userPhoto,
         postText: _postText,
-        postPhoto: List.generate(_postPhoto.length, (ind) => _postPhoto[ind]));
+        postPhoto: List.generate(_postPhoto.length, (ind) => _postPhoto[ind]),
+        postLargePhoto: List.generate(
+            _postLargePhoto.length, (ind) => _postLargePhoto[ind]));
   }
 
   factory Post.fromOriginaltoView(FullOriginalPost originalPost, int index) {
@@ -110,6 +123,7 @@ class Post {
     String? _surName;
     String? _userPhoto;
     List<String?> _postPhoto = [];
+    List<String?> _postLargePhoto = [];
     dynamic _profilesList = originalPost.response?.profiles;
     dynamic _groupsList = originalPost.response?.groups;
     dynamic _itemsList = originalPost.response?.items;
@@ -161,26 +175,33 @@ class Post {
             case 'video':
               {
                 _postPhoto.add(_attachmentsList[attIndex].video.image[0].url);
+                _postLargePhoto
+                    .add(_attachmentsList[attIndex].video.image[3].url);
               }
               break;
             case 'photo':
               {
                 _postPhoto.add(_attachmentsList[attIndex].photo.sizes[0].url);
+                _postLargePhoto
+                    .add(_attachmentsList[attIndex].photo.sizes[5].url);
               }
               break;
             case 'link':
               {
                 _postPhoto.add(null);
+                _postLargePhoto.add(null);
               }
               break;
             case 'audio':
               {
                 _postPhoto.add(null);
+                _postLargePhoto.add(null);
               }
               break;
             default:
               {
                 _postPhoto.add(null);
+                _postLargePhoto.add(null);
               }
               break;
           }
@@ -190,6 +211,7 @@ class Post {
       }
     } else {
       _postPhoto.add(null);
+      _postLargePhoto.add(null);
     }
     String _dateString = _dateTime.toString().substring(0, 19);
 
@@ -200,7 +222,9 @@ class Post {
         surName: _surName,
         userPhoto: _userPhoto,
         postText: _postText,
-        postPhoto: List.generate(_postPhoto.length, (ind) => _postPhoto[ind]));
+        postPhoto: List.generate(_postPhoto.length, (ind) => _postPhoto[ind]),
+        postLargePhoto: List.generate(
+            _postLargePhoto.length, (ind) => _postLargePhoto[ind]));
   }
 
   Post copyWith({
@@ -211,6 +235,7 @@ class Post {
     String? userPhoto,
     String? postText,
     List<String?>? postPhoto,
+    List<String?>? postLargePhoto,
   }) {
     return Post(
       userId: userId ?? this.userId,
@@ -220,6 +245,7 @@ class Post {
       userPhoto: userPhoto ?? this.userPhoto,
       postText: postText ?? this.postText,
       postPhoto: postPhoto ?? this.postPhoto,
+      postLargePhoto: postLargePhoto ?? this.postLargePhoto,
     );
   }
 
@@ -234,7 +260,8 @@ class Post {
         other.surName == surName &&
         other.userPhoto == userPhoto &&
         other.postText == postText &&
-        listEquals(other.postPhoto, postPhoto);
+        listEquals(other.postPhoto, postPhoto) &&
+        listEquals(other.postLargePhoto, postLargePhoto);
   }
 
   @override
@@ -245,6 +272,7 @@ class Post {
         surName.hashCode ^
         userPhoto.hashCode ^
         postText.hashCode ^
-        postPhoto.hashCode;
+        postPhoto.hashCode ^
+        postLargePhoto.hashCode;
   }
 }

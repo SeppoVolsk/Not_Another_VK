@@ -10,6 +10,7 @@ class DetailScreenPage extends StatefulWidget {
 class _DetailScreenPageState extends State<DetailScreenPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    String? url = ModalRoute.of(context)?.settings.arguments as String;
+    return Scaffold(appBar: AppBar(), body: Center(child: Image.network(url)));
   }
 }

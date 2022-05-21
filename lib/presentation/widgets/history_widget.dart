@@ -20,34 +20,39 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
       builder: (context, state) {
-        return Wrap(children: [
-          for (String element in state.data.history!.historyWords)
-            InputChip(
-              label: Text(element),
-              showCheckmark: false,
-              selected:
-                  (state.data.newsQuery == element || currentWord == element),
-              selectedColor: Theme.of(context).primaryColor,
-              onPressed: () {
-                setState(() {
-                  currentWord = element;
-                });
-                //setState(() => isSelected = v);
+        var a = state.data.history;
+        if (a != null) {
+          return Wrap(children: [
+            for (String element in a.historyWords)
+              InputChip(
+                label: Text(element),
+                showCheckmark: false,
+                selected:
+                    (state.data.newsQuery == element || currentWord == element),
+                selectedColor: Theme.of(context).primaryColor,
+                onPressed: () {
+                  setState(() {
+                    currentWord = element;
+                  });
+                  //setState(() => isSelected = v);
 
-                context
-                    .read<MainScreenBLoC>()
-                    .add(MainScreenEvent.read(element));
-                //model.loadPostsFromStorage(neededStorageKey: element);
-              },
-              //onSelected: (bool v) {},
-              deleteIcon: const Icon(Icons.cancel),
-              onDeleted: () {
-                state.data.history?.historyWords.remove(element);
-                state.data.history?.postDataProvider
-                    .removeHistoryElementAtStorage(element);
-              },
-            )
-        ]);
+                  context
+                      .read<MainScreenBLoC>()
+                      .add(MainScreenEvent.read(element));
+                  //model.loadPostsFromStorage(neededStorageKey: element);
+                },
+                //onSelected: (bool v) {},
+                deleteIcon: const Icon(Icons.cancel),
+                onDeleted: () {
+                  state.data.history?.historyWords.remove(element);
+                  state.data.history?.postDataProvider
+                      .removeHistoryElementAtStorage(element);
+                },
+              )
+          ]);
+        } else {
+          return SizedBox.shrink();
+        }
       },
     );
   }
