@@ -54,24 +54,45 @@ class _PostCardState extends State<PostCard> {
                 subtitle: Text(
                     'id: ${state.data.posts?[widget.index].userId}\n${state.data.posts?[widget.index].dateTime}'),
               ),
+              // Wrap(
+              //   children: [
+              //     for (var element
+              //         in state.data.posts![widget.index].postPhoto!)
+              //       element != null
+              //           ? InkWell(
+              //               child: Image.network(element),
+              //               onTap: () {
+
+              //                 Navigator.of(context).pushNamed(
+              //                     MainNavigationRoutesNames.detailScreen,
+              //                     arguments: state.data.posts?[widget.index]
+              //                         .postLargePhoto?[1]);
+              //               },
+              //             )
+              //           : const SizedBox.shrink()
+              //   ],
+              // ),
               Wrap(
                 children: [
-                  for (var element
-                      in state.data.posts![widget.index].postPhoto!)
-                    element != null
+                  for (int i = 0;
+                      i < state.data.posts![widget.index].postPhoto!.length;
+                      i++)
+                    state.data.posts![widget.index].postPhoto![i] != null
                         ? InkWell(
-                            child: Image.network(element),
+                            child: Image.network(state
+                                .data.posts![widget.index].postPhoto![i]
+                                .toString()),
                             onTap: () {
                               Navigator.of(context).pushNamed(
-                                MainNavigationRoutesNames.detailScreen,
-                                arguments: state.data.posts?[widget.index]
-                                    .postLargePhoto?[0],
-                              );
+                                  MainNavigationRoutesNames.detailScreen,
+                                  arguments: state.data.posts?[widget.index]
+                                      .postLargePhoto?[i]);
                             },
                           )
                         : const SizedBox.shrink()
                 ],
               ),
+
               ExpansionTile(
                 title: !textTileIsOpen
                     ? Text(

@@ -77,7 +77,7 @@ class Post {
               _postPhoto
                   .add(_attachmentsList[attIndex]['photo']['sizes'][0]['url']);
               _postLargePhoto
-                  .add(_attachmentsList[attIndex]['video']['sizes'][5]['url']);
+                  .add(_attachmentsList[attIndex]['photo']['sizes'][5]['url']);
             }
             break;
           case 'link':

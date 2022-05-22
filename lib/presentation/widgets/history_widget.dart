@@ -47,6 +47,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                   state.data.history?.historyWords.remove(element);
                   state.data.history?.postDataProvider
                       .removeHistoryElementAtStorage(element);
+                  setState(() {});
                 },
               )
           ]);

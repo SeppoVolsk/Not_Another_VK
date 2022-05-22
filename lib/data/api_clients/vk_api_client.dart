@@ -19,7 +19,7 @@ class VkApiClientException implements Exception {
 class VkApiClient {
   final String apiAddress = 'https://api.vk.com/method';
   final String apiVer = 'v=5.131';
-  final String clientCredentialsFlowToken =
+  static const String clientCredentialsFlowToken =
       '600104d1600104d1600104d1d5607a891866001600104d10229e437a43114591ecf962f';
   //final int totalVkUsers = 45000000;
   int userId = 0;

@@ -43,6 +43,7 @@ class IMainScreenRepository {
         }
       } catch (e) {
         errorSnackBar('Не удалось загрузить посты. Воспользуйтесь поиском.');
+        print('Ошибка readPostsFromStorage $e');
         return MainScreenEntity();
       }
     }
