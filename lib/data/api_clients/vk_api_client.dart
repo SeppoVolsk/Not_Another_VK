@@ -25,7 +25,7 @@ class VkApiClient {
   int userId = 0;
 
   final client = HttpClient();
-  int newsCount = 10; //по умолчанию 30, максимум 200
+  int newsCount = 50; //по умолчанию 30, максимум 200
 
   Future<dynamic> getPosts(String? newsQuery) async {
     final url = Uri.parse(

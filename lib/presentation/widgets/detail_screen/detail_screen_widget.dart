@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
 
 class DetailScreenPage extends StatefulWidget {
   DetailScreenPage({Key? key}) : super(key: key);
@@ -14,7 +15,11 @@ class _DetailScreenPageState extends State<DetailScreenPage> {
     return Scaffold(
         appBar: AppBar(
           actions: [
-            IconButton(icon: Icon(Icons.save_alt), onPressed: () {}),
+            IconButton(
+                icon: Icon(Icons.save_alt),
+                onPressed: () async {
+                  final readyFile = await PostsDataProvider().urlToFile(url);
+                }),
           ],
         ),
         body: Center(child: Image.network(url)));

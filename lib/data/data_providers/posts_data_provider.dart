@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
 
 class PostsDataProvider {
   const PostsDataProvider();
@@ -25,5 +28,32 @@ class PostsDataProvider {
   Future<void> removeHistoryElementAtStorage(String element) async {
     final storage = await SharedPreferences.getInstance();
     await storage.remove(element);
+  }
+
+  Future<File> urlToFile(String imageUrl) async {
+    Directory downloadDir = await getApplicationDocumentsDirectory();
+    //final downloadDir = Directory("C:\Users\Sergey.Kuznetsov\Desktop\VKs");
+    print(downloadDir);
+
+    File file =
+        File('${downloadDir.path}' + '/' + '${imageUrl.substring(37, 45)}.jpg');
+    print(file.path);
+
+    final url = Uri.parse(imageUrl);
+    final request = await get(url);
+
+    await file.writeAsBytes(request.bodyBytes);
+    return file;
+  }
+
+  Future<Iterable<File>> getFilesInDir() async {
+    final Directory downloadDir = await getApplicationDocumentsDirectory();
+    final List<FileSystemEntity> dirEntities =
+        await downloadDir.list().toList();
+
+    final files = dirEntities.whereType<File>();
+    print('GET FILES IN DIR FUNC: ');
+    print(files);
+    return files;
   }
 }
