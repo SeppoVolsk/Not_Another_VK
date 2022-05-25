@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_set_widgets.dart';
 import 'package:vk_postman/presentation/widgets/saved_media_warhouse_widget.dart';
@@ -12,9 +13,12 @@ class MainScreenPage extends StatefulWidget {
   State<MainScreenPage> createState() => _MainScreenPageState();
 }
 
+enum _select { news, saved }
+
 class _MainScreenPageState extends State<MainScreenPage> {
   final _searchController = TextEditingController();
-  int _selectedTab = 0;
+
+  var _selectedTab = _select.news;
 
   @override
   void initState() {
@@ -30,9 +34,21 @@ class _MainScreenPageState extends State<MainScreenPage> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           appBar: AppBar(
-            title: const TitleWidget(),
+            title: _selectedTab == _select.news
+                ? const TitleWidget()
+                : Text('Сохранённые медиа'),
+            actions: [
+              _selectedTab == _select.saved
+                  ? IconButton(
+                      icon: Icon(Icons.delete_forever),
+                      onPressed: () async {
+                        await PostsDataProvider().clearDirectory();
+                      },
+                    )
+                  : SizedBox.shrink()
+            ],
           ),
-          body: _selectedTab == 0
+          body: _selectedTab == _select.news
               ? MainScreenSetWidgets(
                   state: state, searchController: _searchController)
               : SavedMediaWarehouse(),
@@ -59,7 +75,9 @@ class _MainScreenPageState extends State<MainScreenPage> {
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _selectedTab,
+            currentIndex: _selectedTab.index == 0
+                ? _select.news.index
+                : _select.saved.index,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.fiber_new_rounded),
@@ -69,10 +87,12 @@ class _MainScreenPageState extends State<MainScreenPage> {
                   icon: Icon(Icons.now_wallpaper_sharp), label: 'Сохраненные')
             ],
             onTap: (index) {
-              _selectedTab == index
+              _selectedTab.index == index
                   ? null
                   : setState(() {
-                      _selectedTab = index;
+                      index == 0
+                          ? _selectedTab = _select.news
+                          : _selectedTab = _select.saved;
                     });
             },
           ),

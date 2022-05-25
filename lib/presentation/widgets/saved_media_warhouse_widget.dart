@@ -15,11 +15,11 @@ class _SavedMediaWarehouseState extends State<SavedMediaWarehouse> {
   @override
   void initState() {
     super.initState();
-    _filesList = PostsDataProvider().getFilesInDir();
+    _filesList = PostsDataProvider().getFilesInDirectory();
   }
 
   Future<void> getFilesNames() async {
-    _filesList = await PostsDataProvider().getFilesInDir();
+    _filesList = await PostsDataProvider().getFilesInDirectory();
     print('Get Files Names   ');
     print(_filesList);
   }
@@ -31,9 +31,18 @@ class _SavedMediaWarehouseState extends State<SavedMediaWarehouse> {
           future: _filesList,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
-              return Text({snapshot.data}.toString());
+              return SingleChildScrollView(
+                  child: Column(
+                children: [
+                  for (int i = 0; i < snapshot.data.length; i++)
+                    Image.file(
+                        snapshot.data?.elementAt(i) ??
+                            'C:/Users/Sergey.Kuznetsov/Desktop/drago5.png',
+                        fit: BoxFit.fill)
+                ],
+              ));
             } else {
-              return Text('Нет данных');
+              return Center(child: Text('Нет данных'));
             }
           }),
     ]);
