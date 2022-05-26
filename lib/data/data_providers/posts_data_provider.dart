@@ -42,15 +42,21 @@ class PostsDataProvider {
     return file;
   }
 
-  Future<Iterable<File>> getFilesInDirectory() async {
+  Future<Iterable<File>?> getFilesInDirectory() async {
     final Directory downloadDir = await getApplicationDocumentsDirectory();
     final List<FileSystemEntity> dirEntities =
         await downloadDir.list().toList();
     final files = dirEntities.whereType<File>();
     print('GET FILES IN DIR FUNC: ');
+    print('all files paths:');
     print(files);
-    return files.skipWhile(
-        (file) => file.path.substring(file.path.length - 3) != 'jpg');
+    //final jpgFiles = files.skipWhile(
+    //    (file) => file.path.substring(file.path.length - 3) != 'jpg');
+    final jpgFiles = files.where((file) {
+      return file.path.substring(file.path.length - 3) == 'jpg';
+    });
+
+    return jpgFiles.isNotEmpty ? jpgFiles : null;
   }
 
   Future<void> clearDirectory() async {

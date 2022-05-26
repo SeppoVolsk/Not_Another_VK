@@ -30,17 +30,24 @@ class _SavedMediaWarehouseState extends State<SavedMediaWarehouse> {
       FutureBuilder(
           future: _filesList,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              return SingleChildScrollView(
-                  child: Column(
-                children: [
-                  for (int i = 0; i < snapshot.data.length; i++)
-                    Image.file(
-                        snapshot.data?.elementAt(i) ??
-                            'C:/Users/Sergey.Kuznetsov/Desktop/drago5.png',
-                        fit: BoxFit.fill)
-                ],
-              ));
+            if (snapshot.data != null) {
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: (snapshot.data.length),
+                  itemBuilder: (context, index) {
+                    return
+                        //for (int i = 0; i < snapshot.data.length; i++)
+                        Column(
+                      children: [
+                        Text(snapshot.data.elementAt(index).path),
+                        Image.file(
+                          snapshot.data.elementAt(index),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              );
             } else {
               return Center(child: Text('Нет данных'));
             }
