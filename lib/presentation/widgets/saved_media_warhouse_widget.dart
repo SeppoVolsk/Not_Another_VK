@@ -18,11 +18,11 @@ class _SavedMediaWarehouseState extends State<SavedMediaWarehouse> {
     _filesList = PostsDataProvider().getFilesInDirectory();
   }
 
-  Future<void> getFilesNames() async {
-    _filesList = await PostsDataProvider().getFilesInDirectory();
-    print('Get Files Names   ');
-    print(_filesList);
-  }
+  // Future<void> getFilesNames() async {
+  //   _filesList = await PostsDataProvider().getFilesInDirectory();
+  //   print('Get Files Names   ');
+  //   print(_filesList);
+  // }
 
   @override
   Widget build(BuildContext context) {

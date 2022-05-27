@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
+import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_set_widgets.dart';
 import 'package:vk_postman/presentation/widgets/saved_media_warhouse_widget.dart';
 
@@ -45,7 +46,13 @@ class _MainScreenPageState extends State<MainScreenPage> {
                         await PostsDataProvider().clearDirectory();
                       },
                     )
-                  : SizedBox.shrink()
+                  : IconButton(
+                      icon: Icon(Icons.exit_to_app),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushNamed(MainNavigation().authRoute);
+                      },
+                    ),
             ],
           ),
           body: _selectedTab == _select.news

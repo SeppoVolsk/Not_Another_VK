@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:webview_flutter/webview_flutter.dart';
 // import 'dart:math';
 // import 'package:vk_postman/domain/api_clients/response_posts/response_posts.dart';
 
@@ -22,7 +24,7 @@ class VkApiClient {
   static const String clientCredentialsFlowToken =
       '600104d1600104d1600104d1d5607a891866001600104d10229e437a43114591ecf962f';
   //final int totalVkUsers = 45000000;
-  int userId = 0;
+  //int userId = 0;
 
   final client = HttpClient();
   int newsCount = 50; //по умолчанию 30, максимум 200
@@ -42,5 +44,23 @@ class VkApiClient {
     final json = jsonDecode(jsonString); //превращаем строку в json
 
     return json;
+  }
+
+  Future<dynamic> openAuthDialog() async {
+    final String authAddress = 'https://oauth.vk.com/authorize';
+    final String clientId = '8097225';
+    final String displayType = 'mobile';
+    final String redirectUri = 'https://oauth.vk.com/blank.html';
+    final String scope = 'friends';
+    final String state =
+        'some_arguments'; //Произвольная строка, которая будет возвращена вместе с результатом авторизации.
+
+    final url = Uri.parse(
+        '$authAddress?client_id=$clientId&display=$displayType&redirect_uri=$redirectUri&scope=$scope&response_type=token&v=$apiVer&state=$state');
+    // final request = await client.getUrl(url);
+    // final response = await request.close();
+    // print('Auth response status Code: ${response.statusCode}');
+    // return response;
+    return url.data;
   }
 }
