@@ -46,21 +46,17 @@ class VkApiClient {
     return json;
   }
 
-  Future<dynamic> openAuthDialog() async {
+  String getAuthDialogLink() {
     final String authAddress = 'https://oauth.vk.com/authorize';
     final String clientId = '8097225';
     final String displayType = 'mobile';
     final String redirectUri = 'https://oauth.vk.com/blank.html';
-    final String scope = 'friends';
+    final String scope = 'friends'; //'offline' - бесконечный токен
     final String state =
         'some_arguments'; //Произвольная строка, которая будет возвращена вместе с результатом авторизации.
-
+    //'https://oauth.vk.com/authorize?client_id=8097225&display=mobile&redirect_uri=https://oauth.vk.com/blank.html&scope=friends&response_type=token&v=5.131&state=123456',
     final url = Uri.parse(
         '$authAddress?client_id=$clientId&display=$displayType&redirect_uri=$redirectUri&scope=$scope&response_type=token&v=$apiVer&state=$state');
-    // final request = await client.getUrl(url);
-    // final response = await request.close();
-    // print('Auth response status Code: ${response.statusCode}');
-    // return response;
-    return url.data;
+    return url.toString();
   }
 }
