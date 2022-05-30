@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+//import 'package:webview_flutter/webview_flutter.dart';
 // import 'dart:math';
 // import 'package:vk_postman/domain/api_clients/response_posts/response_posts.dart';
 
@@ -51,12 +53,23 @@ class VkApiClient {
     final String clientId = '8097225';
     final String displayType = 'mobile';
     final String redirectUri = 'https://oauth.vk.com/blank.html';
-    final String scope = 'friends'; //'offline' - бесконечный токен
+    final String scope = 'offline'; //'offline' - бесконечный токен
     final String state =
         'some_arguments'; //Произвольная строка, которая будет возвращена вместе с результатом авторизации.
     //'https://oauth.vk.com/authorize?client_id=8097225&display=mobile&redirect_uri=https://oauth.vk.com/blank.html&scope=friends&response_type=token&v=5.131&state=123456',
     final url = Uri.parse(
         '$authAddress?client_id=$clientId&display=$displayType&redirect_uri=$redirectUri&scope=$scope&response_type=token&v=$apiVer&state=$state');
     return url.toString();
+  }
+
+  Future<void> _saveAccessToken(String accessToken) async {
+    final secureStorage = FlutterSecureStorage();
+    await secureStorage.write(key: 'token', value: accessToken);
+  }
+
+  Future<String?> _getAccessToken() async {
+    final secureStorage = FlutterSecureStorage();
+    String? accessToken = await secureStorage.read(key: 'token');
+    return accessToken;
   }
 }

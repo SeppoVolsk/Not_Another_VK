@@ -18,19 +18,19 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AuthenticationEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() logIn,
+    required TResult Function(NavigationRequest navigation) logIn,
     required TResult Function() logOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? logIn,
+    TResult Function(NavigationRequest navigation)? logIn,
     TResult Function()? logOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? logIn,
+    TResult Function(NavigationRequest navigation)? logIn,
     TResult Function()? logOut,
     required TResult orElse(),
   }) =>
@@ -78,6 +78,7 @@ abstract class _$$LogInAuthenticationEventCopyWith<$Res> {
   factory _$$LogInAuthenticationEventCopyWith(_$LogInAuthenticationEvent value,
           $Res Function(_$LogInAuthenticationEvent) then) =
       __$$LogInAuthenticationEventCopyWithImpl<$Res>;
+  $Res call({NavigationRequest navigation});
 }
 
 /// @nodoc
@@ -91,55 +92,80 @@ class __$$LogInAuthenticationEventCopyWithImpl<$Res>
   @override
   _$LogInAuthenticationEvent get _value =>
       super._value as _$LogInAuthenticationEvent;
+
+  @override
+  $Res call({
+    Object? navigation = freezed,
+  }) {
+    return _then(_$LogInAuthenticationEvent(
+      navigation == freezed
+          ? _value.navigation
+          : navigation // ignore: cast_nullable_to_non_nullable
+              as NavigationRequest,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$LogInAuthenticationEvent extends LogInAuthenticationEvent {
-  const _$LogInAuthenticationEvent() : super._();
+  const _$LogInAuthenticationEvent(this.navigation) : super._();
+
+  @override
+  final NavigationRequest navigation;
 
   @override
   String toString() {
-    return 'AuthenticationEvent.logIn()';
+    return 'AuthenticationEvent.logIn(navigation: $navigation)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LogInAuthenticationEvent);
+            other is _$LogInAuthenticationEvent &&
+            const DeepCollectionEquality()
+                .equals(other.navigation, navigation));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(navigation));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$LogInAuthenticationEventCopyWith<_$LogInAuthenticationEvent>
+      get copyWith =>
+          __$$LogInAuthenticationEventCopyWithImpl<_$LogInAuthenticationEvent>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() logIn,
+    required TResult Function(NavigationRequest navigation) logIn,
     required TResult Function() logOut,
   }) {
-    return logIn();
+    return logIn(navigation);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? logIn,
+    TResult Function(NavigationRequest navigation)? logIn,
     TResult Function()? logOut,
   }) {
-    return logIn?.call();
+    return logIn?.call(navigation);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? logIn,
+    TResult Function(NavigationRequest navigation)? logIn,
     TResult Function()? logOut,
     required TResult orElse(),
   }) {
     if (logIn != null) {
-      return logIn();
+      return logIn(navigation);
     }
     return orElse();
   }
@@ -177,8 +203,14 @@ class _$LogInAuthenticationEvent extends LogInAuthenticationEvent {
 }
 
 abstract class LogInAuthenticationEvent extends AuthenticationEvent {
-  const factory LogInAuthenticationEvent() = _$LogInAuthenticationEvent;
+  const factory LogInAuthenticationEvent(final NavigationRequest navigation) =
+      _$LogInAuthenticationEvent;
   const LogInAuthenticationEvent._() : super._();
+
+  NavigationRequest get navigation => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$$LogInAuthenticationEventCopyWith<_$LogInAuthenticationEvent>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -225,7 +257,7 @@ class _$LogOutAuthenticationEvent extends LogOutAuthenticationEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() logIn,
+    required TResult Function(NavigationRequest navigation) logIn,
     required TResult Function() logOut,
   }) {
     return logOut();
@@ -234,7 +266,7 @@ class _$LogOutAuthenticationEvent extends LogOutAuthenticationEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? logIn,
+    TResult Function(NavigationRequest navigation)? logIn,
     TResult Function()? logOut,
   }) {
     return logOut?.call();
@@ -243,7 +275,7 @@ class _$LogOutAuthenticationEvent extends LogOutAuthenticationEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? logIn,
+    TResult Function(NavigationRequest navigation)? logIn,
     TResult Function()? logOut,
     required TResult orElse(),
   }) {
@@ -361,6 +393,8 @@ abstract class $AuthenticationStateCopyWith<$Res> {
           AuthenticationState value, $Res Function(AuthenticationState) then) =
       _$AuthenticationStateCopyWithImpl<$Res>;
   $Res call({AuthenticationEntity data, String message});
+
+  $AuthenticationEntityCopyWith<$Res> get data;
 }
 
 /// @nodoc
@@ -388,6 +422,13 @@ class _$AuthenticationStateCopyWithImpl<$Res>
               as String,
     ));
   }
+
+  @override
+  $AuthenticationEntityCopyWith<$Res> get data {
+    return $AuthenticationEntityCopyWith<$Res>(_value.data, (value) {
+      return _then(_value.copyWith(data: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -398,6 +439,9 @@ abstract class _$$AuthenticatedStateCopyWith<$Res>
       __$$AuthenticatedStateCopyWithImpl<$Res>;
   @override
   $Res call({AuthenticationEntity data, String message});
+
+  @override
+  $AuthenticationEntityCopyWith<$Res> get data;
 }
 
 /// @nodoc
@@ -432,7 +476,7 @@ class __$$AuthenticatedStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AuthenticatedState extends AuthenticatedState {
-  const _$AuthenticatedState({required this.data, this.message = 'Idle'})
+  const _$AuthenticatedState({required this.data, this.message = 'AUTH'})
       : super._();
 
   @override
@@ -572,6 +616,9 @@ abstract class _$$InProgressAuthenticationStateCopyWith<$Res>
       __$$InProgressAuthenticationStateCopyWithImpl<$Res>;
   @override
   $Res call({AuthenticationEntity data, String message});
+
+  @override
+  $AuthenticationEntityCopyWith<$Res> get data;
 }
 
 /// @nodoc
@@ -609,7 +656,7 @@ class __$$InProgressAuthenticationStateCopyWithImpl<$Res>
 
 class _$InProgressAuthenticationState extends InProgressAuthenticationState {
   const _$InProgressAuthenticationState(
-      {required this.data, this.message = 'Processing'})
+      {required this.data, this.message = 'IN PROGRESS'})
       : super._();
 
   @override
@@ -748,6 +795,9 @@ abstract class _$$NotAuthenticatedStateCopyWith<$Res>
       __$$NotAuthenticatedStateCopyWithImpl<$Res>;
   @override
   $Res call({AuthenticationEntity data, String message});
+
+  @override
+  $AuthenticationEntityCopyWith<$Res> get data;
 }
 
 /// @nodoc
@@ -783,7 +833,7 @@ class __$$NotAuthenticatedStateCopyWithImpl<$Res>
 
 class _$NotAuthenticatedState extends NotAuthenticatedState {
   const _$NotAuthenticatedState(
-      {required this.data, this.message = 'Successful'})
+      {required this.data, this.message = 'NOT AUTHENTICATED'})
       : super._();
 
   @override
@@ -922,6 +972,9 @@ abstract class _$$ErrorAuthenticationStateCopyWith<$Res>
       __$$ErrorAuthenticationStateCopyWithImpl<$Res>;
   @override
   $Res call({AuthenticationEntity data, String message});
+
+  @override
+  $AuthenticationEntityCopyWith<$Res> get data;
 }
 
 /// @nodoc

@@ -5,6 +5,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vk_postman/presentation/blocs/auth/auth_repository.dart';
 import 'package:vk_postman/presentation/blocs/auth/authenticationentity.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 part 'auth_bloc.freezed.dart';
 
@@ -14,7 +15,8 @@ part 'auth_bloc.freezed.dart';
 class AuthenticationEvent with _$AuthenticationEvent {
   const AuthenticationEvent._();
 
-  const factory AuthenticationEvent.logIn() = LogInAuthenticationEvent;
+  const factory AuthenticationEvent.logIn(NavigationRequest navigation) =
+      LogInAuthenticationEvent;
 
   const factory AuthenticationEvent.logOut() = LogOutAuthenticationEvent;
 }
@@ -95,15 +97,15 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
       LogInAuthenticationEvent event, Emitter<AuthenticationState> emit) async {
     try {
       emit(AuthenticationState.inProgress(data: state.data));
-      final newData = _repository.logInRepFunc();
+      final newData = _repository.logInRepFunc(navigation: event.navigation);
       emit(AuthenticationState.authenticated(data: newData));
     } on Object catch (err, stackTrace) {
       print('В AuthenticationBLoC произошла ошибка: $err, $stackTrace');
       emit(AuthenticationState.error(data: state.data));
       rethrow;
-    } finally {
-      emit(AuthenticationState.authenticated(data: state.data));
-    }
+    } //finally {
+    //   emit(AuthenticationState.authenticated(data: state.data));
+    // }
   }
 
   /// Read event handler

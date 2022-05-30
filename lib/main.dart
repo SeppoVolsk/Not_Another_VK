@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
+import 'package:vk_postman/presentation/blocs/auth/auth_repository.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_repository.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
@@ -21,19 +23,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      scaffoldMessengerKey: keyForSnackBar,
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<MainScreenBLoC>(
+            create: ((_) => MainScreenBLoC(repository: IMainScreenRepository())
+              ..add(MainScreenEvent.read(null)))),
+        BlocProvider<AuthenticationBLoC>(
+            create: (_) =>
+                AuthenticationBLoC(repository: IAuthenticationRepository())),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        scaffoldMessengerKey: keyForSnackBar,
+        theme: ThemeData(
+          primarySwatch: Colors.indigo,
+        ),
+        home: const MainScreenPage(),
+        routes: mainNavigation.routes,
       ),
-      home: BlocProvider<MainScreenBLoC>(
-        create: ((_) => MainScreenBLoC(repository: IMainScreenRepository())
-          ..add(MainScreenEvent.read(null))),
-        child: const MainScreenPage(),
-      ),
-      routes: mainNavigation.routes,
       //onGenerateRoute: mainNavigation.onGenerateRoute,
       //initialRoute: mainNavigation.initialRoute,
     );
