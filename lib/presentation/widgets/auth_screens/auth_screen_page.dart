@@ -27,36 +27,10 @@ class _AuthScreenPageState extends State<AuthScreenPage> {
             onWebViewCreated: (WebViewController controller) {
               _webViewController = controller;
             },
-            // onPageStarted: (url) {
-            //   print('ON PAGE START: ' + url);
-            // },
-            // onPageFinished: (url) {
-            //   print('ON PAGE FINISHED: ' + url);
-            //   final uri = Uri.parse(url);
-            //   if (uri.fragment.contains('access_code')) {
-            //     _accessToken = uri.fragment.characters.toString();
-            //     print('Access Token' + _accessToken.toString());
-            //   }
-            // },
             navigationDelegate: (NavigationRequest navigation) {
-              // final redirectLink = Uri.parse(navigation.url);
-              // print('DELEGATE redirectLink' + redirectLink.toString());
-              // print('FRAGMENT: ' + redirectLink.fragment);
               context
                   .read<AuthenticationBLoC>()
                   .add(AuthenticationEvent.logIn(navigation));
-
-              // final parts =
-              //     Uri.decodeFull(redirectLink.toString()).replaceAll('#', '?');
-              // print('PARTS: ' + parts);
-              // final pureUri = Uri.parse(parts);
-              // print('QUERY PARAMETERS: ' + pureUri.queryParameters.toString());
-
-              // setState(() {
-              //   _accessToken = pureUri.queryParameters['access_token'];
-              // });
-
-              // print('ACCESS TOKEN: ' + _accessToken.toString());
 
               return NavigationDecision.navigate;
             },

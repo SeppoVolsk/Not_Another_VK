@@ -20,18 +20,21 @@ mixin _$AuthenticationEvent {
   TResult when<TResult extends Object?>({
     required TResult Function(NavigationRequest navigation) logIn,
     required TResult Function() logOut,
+    required TResult Function() checkAuth,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(NavigationRequest navigation)? logIn,
     TResult Function()? logOut,
+    TResult Function()? checkAuth,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(NavigationRequest navigation)? logIn,
     TResult Function()? logOut,
+    TResult Function()? checkAuth,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -39,18 +42,21 @@ mixin _$AuthenticationEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(LogInAuthenticationEvent value) logIn,
     required TResult Function(LogOutAuthenticationEvent value) logOut,
+    required TResult Function(CheckAuthAuthenticationEvent value) checkAuth,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(LogInAuthenticationEvent value)? logIn,
     TResult Function(LogOutAuthenticationEvent value)? logOut,
+    TResult Function(CheckAuthAuthenticationEvent value)? checkAuth,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LogInAuthenticationEvent value)? logIn,
     TResult Function(LogOutAuthenticationEvent value)? logOut,
+    TResult Function(CheckAuthAuthenticationEvent value)? checkAuth,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -144,6 +150,7 @@ class _$LogInAuthenticationEvent extends LogInAuthenticationEvent {
   TResult when<TResult extends Object?>({
     required TResult Function(NavigationRequest navigation) logIn,
     required TResult Function() logOut,
+    required TResult Function() checkAuth,
   }) {
     return logIn(navigation);
   }
@@ -153,6 +160,7 @@ class _$LogInAuthenticationEvent extends LogInAuthenticationEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(NavigationRequest navigation)? logIn,
     TResult Function()? logOut,
+    TResult Function()? checkAuth,
   }) {
     return logIn?.call(navigation);
   }
@@ -162,6 +170,7 @@ class _$LogInAuthenticationEvent extends LogInAuthenticationEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(NavigationRequest navigation)? logIn,
     TResult Function()? logOut,
+    TResult Function()? checkAuth,
     required TResult orElse(),
   }) {
     if (logIn != null) {
@@ -175,6 +184,7 @@ class _$LogInAuthenticationEvent extends LogInAuthenticationEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(LogInAuthenticationEvent value) logIn,
     required TResult Function(LogOutAuthenticationEvent value) logOut,
+    required TResult Function(CheckAuthAuthenticationEvent value) checkAuth,
   }) {
     return logIn(this);
   }
@@ -184,6 +194,7 @@ class _$LogInAuthenticationEvent extends LogInAuthenticationEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(LogInAuthenticationEvent value)? logIn,
     TResult Function(LogOutAuthenticationEvent value)? logOut,
+    TResult Function(CheckAuthAuthenticationEvent value)? checkAuth,
   }) {
     return logIn?.call(this);
   }
@@ -193,6 +204,7 @@ class _$LogInAuthenticationEvent extends LogInAuthenticationEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LogInAuthenticationEvent value)? logIn,
     TResult Function(LogOutAuthenticationEvent value)? logOut,
+    TResult Function(CheckAuthAuthenticationEvent value)? checkAuth,
     required TResult orElse(),
   }) {
     if (logIn != null) {
@@ -259,6 +271,7 @@ class _$LogOutAuthenticationEvent extends LogOutAuthenticationEvent {
   TResult when<TResult extends Object?>({
     required TResult Function(NavigationRequest navigation) logIn,
     required TResult Function() logOut,
+    required TResult Function() checkAuth,
   }) {
     return logOut();
   }
@@ -268,6 +281,7 @@ class _$LogOutAuthenticationEvent extends LogOutAuthenticationEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(NavigationRequest navigation)? logIn,
     TResult Function()? logOut,
+    TResult Function()? checkAuth,
   }) {
     return logOut?.call();
   }
@@ -277,6 +291,7 @@ class _$LogOutAuthenticationEvent extends LogOutAuthenticationEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(NavigationRequest navigation)? logIn,
     TResult Function()? logOut,
+    TResult Function()? checkAuth,
     required TResult orElse(),
   }) {
     if (logOut != null) {
@@ -290,6 +305,7 @@ class _$LogOutAuthenticationEvent extends LogOutAuthenticationEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(LogInAuthenticationEvent value) logIn,
     required TResult Function(LogOutAuthenticationEvent value) logOut,
+    required TResult Function(CheckAuthAuthenticationEvent value) checkAuth,
   }) {
     return logOut(this);
   }
@@ -299,6 +315,7 @@ class _$LogOutAuthenticationEvent extends LogOutAuthenticationEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(LogInAuthenticationEvent value)? logIn,
     TResult Function(LogOutAuthenticationEvent value)? logOut,
+    TResult Function(CheckAuthAuthenticationEvent value)? checkAuth,
   }) {
     return logOut?.call(this);
   }
@@ -308,6 +325,7 @@ class _$LogOutAuthenticationEvent extends LogOutAuthenticationEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LogInAuthenticationEvent value)? logIn,
     TResult Function(LogOutAuthenticationEvent value)? logOut,
+    TResult Function(CheckAuthAuthenticationEvent value)? checkAuth,
     required TResult orElse(),
   }) {
     if (logOut != null) {
@@ -323,6 +341,122 @@ abstract class LogOutAuthenticationEvent extends AuthenticationEvent {
 }
 
 /// @nodoc
+abstract class _$$CheckAuthAuthenticationEventCopyWith<$Res> {
+  factory _$$CheckAuthAuthenticationEventCopyWith(
+          _$CheckAuthAuthenticationEvent value,
+          $Res Function(_$CheckAuthAuthenticationEvent) then) =
+      __$$CheckAuthAuthenticationEventCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$CheckAuthAuthenticationEventCopyWithImpl<$Res>
+    extends _$AuthenticationEventCopyWithImpl<$Res>
+    implements _$$CheckAuthAuthenticationEventCopyWith<$Res> {
+  __$$CheckAuthAuthenticationEventCopyWithImpl(
+      _$CheckAuthAuthenticationEvent _value,
+      $Res Function(_$CheckAuthAuthenticationEvent) _then)
+      : super(_value, (v) => _then(v as _$CheckAuthAuthenticationEvent));
+
+  @override
+  _$CheckAuthAuthenticationEvent get _value =>
+      super._value as _$CheckAuthAuthenticationEvent;
+}
+
+/// @nodoc
+
+class _$CheckAuthAuthenticationEvent extends CheckAuthAuthenticationEvent {
+  const _$CheckAuthAuthenticationEvent() : super._();
+
+  @override
+  String toString() {
+    return 'AuthenticationEvent.checkAuth()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CheckAuthAuthenticationEvent);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(NavigationRequest navigation) logIn,
+    required TResult Function() logOut,
+    required TResult Function() checkAuth,
+  }) {
+    return checkAuth();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(NavigationRequest navigation)? logIn,
+    TResult Function()? logOut,
+    TResult Function()? checkAuth,
+  }) {
+    return checkAuth?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(NavigationRequest navigation)? logIn,
+    TResult Function()? logOut,
+    TResult Function()? checkAuth,
+    required TResult orElse(),
+  }) {
+    if (checkAuth != null) {
+      return checkAuth();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LogInAuthenticationEvent value) logIn,
+    required TResult Function(LogOutAuthenticationEvent value) logOut,
+    required TResult Function(CheckAuthAuthenticationEvent value) checkAuth,
+  }) {
+    return checkAuth(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(LogInAuthenticationEvent value)? logIn,
+    TResult Function(LogOutAuthenticationEvent value)? logOut,
+    TResult Function(CheckAuthAuthenticationEvent value)? checkAuth,
+  }) {
+    return checkAuth?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LogInAuthenticationEvent value)? logIn,
+    TResult Function(LogOutAuthenticationEvent value)? logOut,
+    TResult Function(CheckAuthAuthenticationEvent value)? checkAuth,
+    required TResult orElse(),
+  }) {
+    if (checkAuth != null) {
+      return checkAuth(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class CheckAuthAuthenticationEvent extends AuthenticationEvent {
+  const factory CheckAuthAuthenticationEvent() = _$CheckAuthAuthenticationEvent;
+  const CheckAuthAuthenticationEvent._() : super._();
+}
+
+/// @nodoc
 mixin _$AuthenticationState {
   AuthenticationEntity get data => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
@@ -330,8 +464,7 @@ mixin _$AuthenticationState {
   TResult when<TResult extends Object?>({
     required TResult Function(AuthenticationEntity data, String message)
         authenticated,
-    required TResult Function(AuthenticationEntity data, String message)
-        inProgress,
+    required TResult Function(AuthenticationEntity data, String message) unknow,
     required TResult Function(AuthenticationEntity data, String message)
         notAuthenticated,
     required TResult Function(AuthenticationEntity data, String message) error,
@@ -340,7 +473,7 @@ mixin _$AuthenticationState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(AuthenticationEntity data, String message)? authenticated,
-    TResult Function(AuthenticationEntity data, String message)? inProgress,
+    TResult Function(AuthenticationEntity data, String message)? unknow,
     TResult Function(AuthenticationEntity data, String message)?
         notAuthenticated,
     TResult Function(AuthenticationEntity data, String message)? error,
@@ -349,7 +482,7 @@ mixin _$AuthenticationState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(AuthenticationEntity data, String message)? authenticated,
-    TResult Function(AuthenticationEntity data, String message)? inProgress,
+    TResult Function(AuthenticationEntity data, String message)? unknow,
     TResult Function(AuthenticationEntity data, String message)?
         notAuthenticated,
     TResult Function(AuthenticationEntity data, String message)? error,
@@ -359,7 +492,7 @@ mixin _$AuthenticationState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AuthenticatedState value) authenticated,
-    required TResult Function(InProgressAuthenticationState value) inProgress,
+    required TResult Function(InProgressAuthenticationState value) unknow,
     required TResult Function(NotAuthenticatedState value) notAuthenticated,
     required TResult Function(ErrorAuthenticationState value) error,
   }) =>
@@ -367,7 +500,7 @@ mixin _$AuthenticationState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthenticatedState value)? authenticated,
-    TResult Function(InProgressAuthenticationState value)? inProgress,
+    TResult Function(InProgressAuthenticationState value)? unknow,
     TResult Function(NotAuthenticatedState value)? notAuthenticated,
     TResult Function(ErrorAuthenticationState value)? error,
   }) =>
@@ -375,7 +508,7 @@ mixin _$AuthenticationState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthenticatedState value)? authenticated,
-    TResult Function(InProgressAuthenticationState value)? inProgress,
+    TResult Function(InProgressAuthenticationState value)? unknow,
     TResult Function(NotAuthenticatedState value)? notAuthenticated,
     TResult Function(ErrorAuthenticationState value)? error,
     required TResult orElse(),
@@ -516,8 +649,7 @@ class _$AuthenticatedState extends AuthenticatedState {
   TResult when<TResult extends Object?>({
     required TResult Function(AuthenticationEntity data, String message)
         authenticated,
-    required TResult Function(AuthenticationEntity data, String message)
-        inProgress,
+    required TResult Function(AuthenticationEntity data, String message) unknow,
     required TResult Function(AuthenticationEntity data, String message)
         notAuthenticated,
     required TResult Function(AuthenticationEntity data, String message) error,
@@ -529,7 +661,7 @@ class _$AuthenticatedState extends AuthenticatedState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(AuthenticationEntity data, String message)? authenticated,
-    TResult Function(AuthenticationEntity data, String message)? inProgress,
+    TResult Function(AuthenticationEntity data, String message)? unknow,
     TResult Function(AuthenticationEntity data, String message)?
         notAuthenticated,
     TResult Function(AuthenticationEntity data, String message)? error,
@@ -541,7 +673,7 @@ class _$AuthenticatedState extends AuthenticatedState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(AuthenticationEntity data, String message)? authenticated,
-    TResult Function(AuthenticationEntity data, String message)? inProgress,
+    TResult Function(AuthenticationEntity data, String message)? unknow,
     TResult Function(AuthenticationEntity data, String message)?
         notAuthenticated,
     TResult Function(AuthenticationEntity data, String message)? error,
@@ -557,7 +689,7 @@ class _$AuthenticatedState extends AuthenticatedState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AuthenticatedState value) authenticated,
-    required TResult Function(InProgressAuthenticationState value) inProgress,
+    required TResult Function(InProgressAuthenticationState value) unknow,
     required TResult Function(NotAuthenticatedState value) notAuthenticated,
     required TResult Function(ErrorAuthenticationState value) error,
   }) {
@@ -568,7 +700,7 @@ class _$AuthenticatedState extends AuthenticatedState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthenticatedState value)? authenticated,
-    TResult Function(InProgressAuthenticationState value)? inProgress,
+    TResult Function(InProgressAuthenticationState value)? unknow,
     TResult Function(NotAuthenticatedState value)? notAuthenticated,
     TResult Function(ErrorAuthenticationState value)? error,
   }) {
@@ -579,7 +711,7 @@ class _$AuthenticatedState extends AuthenticatedState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthenticatedState value)? authenticated,
-    TResult Function(InProgressAuthenticationState value)? inProgress,
+    TResult Function(InProgressAuthenticationState value)? unknow,
     TResult Function(NotAuthenticatedState value)? notAuthenticated,
     TResult Function(ErrorAuthenticationState value)? error,
     required TResult orElse(),
@@ -667,7 +799,7 @@ class _$InProgressAuthenticationState extends InProgressAuthenticationState {
 
   @override
   String toString() {
-    return 'AuthenticationState.inProgress(data: $data, message: $message)';
+    return 'AuthenticationState.unknow(data: $data, message: $message)';
   }
 
   @override
@@ -696,39 +828,38 @@ class _$InProgressAuthenticationState extends InProgressAuthenticationState {
   TResult when<TResult extends Object?>({
     required TResult Function(AuthenticationEntity data, String message)
         authenticated,
-    required TResult Function(AuthenticationEntity data, String message)
-        inProgress,
+    required TResult Function(AuthenticationEntity data, String message) unknow,
     required TResult Function(AuthenticationEntity data, String message)
         notAuthenticated,
     required TResult Function(AuthenticationEntity data, String message) error,
   }) {
-    return inProgress(data, message);
+    return unknow(data, message);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(AuthenticationEntity data, String message)? authenticated,
-    TResult Function(AuthenticationEntity data, String message)? inProgress,
+    TResult Function(AuthenticationEntity data, String message)? unknow,
     TResult Function(AuthenticationEntity data, String message)?
         notAuthenticated,
     TResult Function(AuthenticationEntity data, String message)? error,
   }) {
-    return inProgress?.call(data, message);
+    return unknow?.call(data, message);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(AuthenticationEntity data, String message)? authenticated,
-    TResult Function(AuthenticationEntity data, String message)? inProgress,
+    TResult Function(AuthenticationEntity data, String message)? unknow,
     TResult Function(AuthenticationEntity data, String message)?
         notAuthenticated,
     TResult Function(AuthenticationEntity data, String message)? error,
     required TResult orElse(),
   }) {
-    if (inProgress != null) {
-      return inProgress(data, message);
+    if (unknow != null) {
+      return unknow(data, message);
     }
     return orElse();
   }
@@ -737,35 +868,35 @@ class _$InProgressAuthenticationState extends InProgressAuthenticationState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AuthenticatedState value) authenticated,
-    required TResult Function(InProgressAuthenticationState value) inProgress,
+    required TResult Function(InProgressAuthenticationState value) unknow,
     required TResult Function(NotAuthenticatedState value) notAuthenticated,
     required TResult Function(ErrorAuthenticationState value) error,
   }) {
-    return inProgress(this);
+    return unknow(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthenticatedState value)? authenticated,
-    TResult Function(InProgressAuthenticationState value)? inProgress,
+    TResult Function(InProgressAuthenticationState value)? unknow,
     TResult Function(NotAuthenticatedState value)? notAuthenticated,
     TResult Function(ErrorAuthenticationState value)? error,
   }) {
-    return inProgress?.call(this);
+    return unknow?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthenticatedState value)? authenticated,
-    TResult Function(InProgressAuthenticationState value)? inProgress,
+    TResult Function(InProgressAuthenticationState value)? unknow,
     TResult Function(NotAuthenticatedState value)? notAuthenticated,
     TResult Function(ErrorAuthenticationState value)? error,
     required TResult orElse(),
   }) {
-    if (inProgress != null) {
-      return inProgress(this);
+    if (unknow != null) {
+      return unknow(this);
     }
     return orElse();
   }
@@ -873,8 +1004,7 @@ class _$NotAuthenticatedState extends NotAuthenticatedState {
   TResult when<TResult extends Object?>({
     required TResult Function(AuthenticationEntity data, String message)
         authenticated,
-    required TResult Function(AuthenticationEntity data, String message)
-        inProgress,
+    required TResult Function(AuthenticationEntity data, String message) unknow,
     required TResult Function(AuthenticationEntity data, String message)
         notAuthenticated,
     required TResult Function(AuthenticationEntity data, String message) error,
@@ -886,7 +1016,7 @@ class _$NotAuthenticatedState extends NotAuthenticatedState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(AuthenticationEntity data, String message)? authenticated,
-    TResult Function(AuthenticationEntity data, String message)? inProgress,
+    TResult Function(AuthenticationEntity data, String message)? unknow,
     TResult Function(AuthenticationEntity data, String message)?
         notAuthenticated,
     TResult Function(AuthenticationEntity data, String message)? error,
@@ -898,7 +1028,7 @@ class _$NotAuthenticatedState extends NotAuthenticatedState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(AuthenticationEntity data, String message)? authenticated,
-    TResult Function(AuthenticationEntity data, String message)? inProgress,
+    TResult Function(AuthenticationEntity data, String message)? unknow,
     TResult Function(AuthenticationEntity data, String message)?
         notAuthenticated,
     TResult Function(AuthenticationEntity data, String message)? error,
@@ -914,7 +1044,7 @@ class _$NotAuthenticatedState extends NotAuthenticatedState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AuthenticatedState value) authenticated,
-    required TResult Function(InProgressAuthenticationState value) inProgress,
+    required TResult Function(InProgressAuthenticationState value) unknow,
     required TResult Function(NotAuthenticatedState value) notAuthenticated,
     required TResult Function(ErrorAuthenticationState value) error,
   }) {
@@ -925,7 +1055,7 @@ class _$NotAuthenticatedState extends NotAuthenticatedState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthenticatedState value)? authenticated,
-    TResult Function(InProgressAuthenticationState value)? inProgress,
+    TResult Function(InProgressAuthenticationState value)? unknow,
     TResult Function(NotAuthenticatedState value)? notAuthenticated,
     TResult Function(ErrorAuthenticationState value)? error,
   }) {
@@ -936,7 +1066,7 @@ class _$NotAuthenticatedState extends NotAuthenticatedState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthenticatedState value)? authenticated,
-    TResult Function(InProgressAuthenticationState value)? inProgress,
+    TResult Function(InProgressAuthenticationState value)? unknow,
     TResult Function(NotAuthenticatedState value)? notAuthenticated,
     TResult Function(ErrorAuthenticationState value)? error,
     required TResult orElse(),
@@ -1052,8 +1182,7 @@ class _$ErrorAuthenticationState extends ErrorAuthenticationState {
   TResult when<TResult extends Object?>({
     required TResult Function(AuthenticationEntity data, String message)
         authenticated,
-    required TResult Function(AuthenticationEntity data, String message)
-        inProgress,
+    required TResult Function(AuthenticationEntity data, String message) unknow,
     required TResult Function(AuthenticationEntity data, String message)
         notAuthenticated,
     required TResult Function(AuthenticationEntity data, String message) error,
@@ -1065,7 +1194,7 @@ class _$ErrorAuthenticationState extends ErrorAuthenticationState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(AuthenticationEntity data, String message)? authenticated,
-    TResult Function(AuthenticationEntity data, String message)? inProgress,
+    TResult Function(AuthenticationEntity data, String message)? unknow,
     TResult Function(AuthenticationEntity data, String message)?
         notAuthenticated,
     TResult Function(AuthenticationEntity data, String message)? error,
@@ -1077,7 +1206,7 @@ class _$ErrorAuthenticationState extends ErrorAuthenticationState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(AuthenticationEntity data, String message)? authenticated,
-    TResult Function(AuthenticationEntity data, String message)? inProgress,
+    TResult Function(AuthenticationEntity data, String message)? unknow,
     TResult Function(AuthenticationEntity data, String message)?
         notAuthenticated,
     TResult Function(AuthenticationEntity data, String message)? error,
@@ -1093,7 +1222,7 @@ class _$ErrorAuthenticationState extends ErrorAuthenticationState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AuthenticatedState value) authenticated,
-    required TResult Function(InProgressAuthenticationState value) inProgress,
+    required TResult Function(InProgressAuthenticationState value) unknow,
     required TResult Function(NotAuthenticatedState value) notAuthenticated,
     required TResult Function(ErrorAuthenticationState value) error,
   }) {
@@ -1104,7 +1233,7 @@ class _$ErrorAuthenticationState extends ErrorAuthenticationState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthenticatedState value)? authenticated,
-    TResult Function(InProgressAuthenticationState value)? inProgress,
+    TResult Function(InProgressAuthenticationState value)? unknow,
     TResult Function(NotAuthenticatedState value)? notAuthenticated,
     TResult Function(ErrorAuthenticationState value)? error,
   }) {
@@ -1115,7 +1244,7 @@ class _$ErrorAuthenticationState extends ErrorAuthenticationState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthenticatedState value)? authenticated,
-    TResult Function(InProgressAuthenticationState value)? inProgress,
+    TResult Function(InProgressAuthenticationState value)? unknow,
     TResult Function(NotAuthenticatedState value)? notAuthenticated,
     TResult Function(ErrorAuthenticationState value)? error,
     required TResult orElse(),

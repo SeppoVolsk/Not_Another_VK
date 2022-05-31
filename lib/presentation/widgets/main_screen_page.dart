@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
+import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_set_widgets.dart';
@@ -29,6 +30,10 @@ class _MainScreenPageState extends State<MainScreenPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userIsAuth =
+        context.watch<AuthenticationBLoC>().state.data.accessToken == null
+            ? false
+            : true;
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
         builder: (context, state) {
       return GestureDetector(
@@ -47,10 +52,16 @@ class _MainScreenPageState extends State<MainScreenPage> {
                       },
                     )
                   : IconButton(
-                      icon: Icon(Icons.exit_to_app),
+                      icon: userIsAuth
+                          ? Icon(Icons.face_retouching_natural)
+                          : Icon(Icons.login),
                       onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed(MainNavigation().authRoute);
+                        userIsAuth
+                            ? context
+                                .read<AuthenticationBLoC>()
+                                .add(AuthenticationEvent.logOut())
+                            : Navigator.of(context)
+                                .pushNamed(MainNavigation().authRoute);
                       },
                     ),
             ],

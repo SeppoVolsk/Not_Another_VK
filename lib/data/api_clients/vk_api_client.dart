@@ -25,8 +25,21 @@ class VkApiClient {
   final String apiVer = 'v=5.131';
   static const String clientCredentialsFlowToken =
       '600104d1600104d1600104d1d5607a891866001600104d10229e437a43114591ecf962f';
-  //final int totalVkUsers = 45000000;
-  //int userId = 0;
+  static String? accessToken;
+  set setToken(String? token) {
+    accessToken = token;
+    _saveAccessTokenToStorage(accessToken);
+  }
+
+  get tokenExists async {
+    await _getAccessTokenFromStorage();
+    return accessToken != null ? true : false;
+  }
+
+  get clearTokenInfo async {
+    await _cleanSecureStorage();
+    accessToken = null;
+  }
 
   final client = HttpClient();
   int newsCount = 50; //по умолчанию 30, максимум 200
@@ -62,14 +75,18 @@ class VkApiClient {
     return url.toString();
   }
 
-  Future<void> _saveAccessToken(String accessToken) async {
-    final secureStorage = FlutterSecureStorage();
-    await secureStorage.write(key: 'token', value: accessToken);
+  Future<void> _saveAccessTokenToStorage(String? accessToken) async {
+    await FlutterSecureStorage().write(key: 'token', value: accessToken);
   }
 
-  Future<String?> _getAccessToken() async {
-    final secureStorage = FlutterSecureStorage();
-    String? accessToken = await secureStorage.read(key: 'token');
-    return accessToken;
+  Future<void> _getAccessTokenFromStorage() async {
+    String? _accessToken = await FlutterSecureStorage().read(key: 'token');
+    print('Access Token received from Secure Storage: $_accessToken');
+    accessToken = _accessToken;
+  }
+
+  Future<void> _cleanSecureStorage() async {
+    VkApiClient.accessToken = null;
+    await FlutterSecureStorage().deleteAll();
   }
 }

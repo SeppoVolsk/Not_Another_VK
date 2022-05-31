@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:vk_postman/data/api_clients/vk_api_client.dart';
 import 'package:vk_postman/presentation/blocs/auth/auth_repository.dart';
 import 'package:vk_postman/presentation/blocs/auth/authenticationentity.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -19,6 +20,8 @@ class AuthenticationEvent with _$AuthenticationEvent {
       LogInAuthenticationEvent;
 
   const factory AuthenticationEvent.logOut() = LogOutAuthenticationEvent;
+
+  const factory AuthenticationEvent.checkAuth() = CheckAuthAuthenticationEvent;
 }
 
 /* Authentication States */
@@ -28,13 +31,13 @@ class AuthenticationState with _$AuthenticationState {
   const AuthenticationState._();
 
   /// Is in idle state
-  bool get idling => !isProcessing;
+  // bool get idling => !isProcessing;
 
   /// Is in progress state
-  bool get isProcessing => maybeMap<bool>(
-        orElse: () => true,
-        inProgress: (_) => false,
-      );
+  // bool get isProcessing => maybeMap<bool>(
+  //       orElse: () => true,
+  //       inProgress: (_) => false,
+  //     );
 
   /// If an error has occurred
   bool get hasError => maybeMap<bool>(orElse: () => false, error: (_) => true);
@@ -46,7 +49,7 @@ class AuthenticationState with _$AuthenticationState {
   }) = AuthenticatedState;
 
   /// Processing
-  const factory AuthenticationState.inProgress({
+  const factory AuthenticationState.unknow({
     required final AuthenticationEntity data,
     @Default('IN PROGRESS') final String message,
   }) = InProgressAuthenticationState;
@@ -73,7 +76,7 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
   })  : _repository = repository,
         super(
           initialState ??
-              AuthenticationState.notAuthenticated(
+              AuthenticationState.unknow(
                 data: AuthenticationEntity(),
                 message: 'Initial idle state',
               ),
@@ -82,6 +85,7 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
       (event, emit) => event.map<Future<void>>(
         logIn: (event) => _logIn(event, emit),
         logOut: (event) => _logOut(event, emit),
+        checkAuth: (event) => _checkAuth(event, emit),
       ),
       transformer: bloc_concurrency.sequential(),
       //transformer: bloc_concurrency.restartable(),
@@ -92,12 +96,12 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
 
   final IAuthenticationRepository _repository;
 
-  /// Create event handler
+  /// LogIn event handler
   Future<void> _logIn(
       LogInAuthenticationEvent event, Emitter<AuthenticationState> emit) async {
     try {
-      emit(AuthenticationState.inProgress(data: state.data));
       final newData = _repository.logInRepFunc(navigation: event.navigation);
+      VkApiClient().setToken = newData.accessToken;
       emit(AuthenticationState.authenticated(data: newData));
     } on Object catch (err, stackTrace) {
       print('В AuthenticationBLoC произошла ошибка: $err, $stackTrace');
@@ -108,11 +112,11 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
     // }
   }
 
-  /// Read event handler
+  /// LogOut event handler
   Future<void> _logOut(LogOutAuthenticationEvent event,
       Emitter<AuthenticationState> emit) async {
     try {
-      emit(AuthenticationState.inProgress(data: state.data));
+      emit(AuthenticationState.unknow(data: state.data));
       final newData = await _repository.logOutRepFunc();
       emit(AuthenticationState.notAuthenticated(data: newData));
     } on Object catch (err, stackTrace) {
@@ -122,5 +126,14 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
     } finally {
       emit(AuthenticationState.notAuthenticated(data: state.data));
     }
+  }
+
+  /// Check Auth event handler
+  Future<void> _checkAuth(CheckAuthAuthenticationEvent event,
+      Emitter<AuthenticationState> emit) async {
+    final newData = await _repository.checkAuthRepFunc();
+    newData.accessToken != null
+        ? emit(AuthenticationState.authenticated(data: newData))
+        : emit(AuthenticationState.notAuthenticated(data: state.data));
   }
 }

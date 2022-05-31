@@ -26,11 +26,12 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<MainScreenBLoC>(
-            create: ((_) => MainScreenBLoC(repository: IMainScreenRepository())
-              ..add(MainScreenEvent.read(null)))),
+            create: (_) => MainScreenBLoC(repository: IMainScreenRepository())
+              ..add(MainScreenEvent.read(null))),
         BlocProvider<AuthenticationBLoC>(
             create: (_) =>
-                AuthenticationBLoC(repository: IAuthenticationRepository())),
+                AuthenticationBLoC(repository: IAuthenticationRepository())
+                  ..add(AuthenticationEvent.checkAuth())),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
