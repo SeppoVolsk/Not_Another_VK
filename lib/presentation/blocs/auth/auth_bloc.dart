@@ -101,8 +101,12 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
       LogInAuthenticationEvent event, Emitter<AuthenticationState> emit) async {
     try {
       final newData = _repository.logInRepFunc(navigation: event.navigation);
-      VkApiClient().setToken = newData.accessToken;
-      emit(AuthenticationState.authenticated(data: newData));
+      if (newData.accessToken != null) {
+        VkApiClient().setToken = newData.accessToken;
+        emit(AuthenticationState.authenticated(data: newData));
+      } else {
+        emit(AuthenticationState.notAuthenticated(data: state.data));
+      }
     } on Object catch (err, stackTrace) {
       print('В AuthenticationBLoC произошла ошибка: $err, $stackTrace');
       emit(AuthenticationState.error(data: state.data));
@@ -131,9 +135,15 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
   /// Check Auth event handler
   Future<void> _checkAuth(CheckAuthAuthenticationEvent event,
       Emitter<AuthenticationState> emit) async {
-    final newData = await _repository.checkAuthRepFunc();
-    newData.accessToken != null
-        ? emit(AuthenticationState.authenticated(data: newData))
-        : emit(AuthenticationState.notAuthenticated(data: state.data));
+    try {
+      final newData = await _repository.checkAuthRepFunc();
+      newData.accessToken != null
+          ? emit(AuthenticationState.authenticated(data: newData))
+          : emit(AuthenticationState.notAuthenticated(data: state.data));
+    } on Object catch (err, stackTrace) {
+      print('В AuthenticationBLoC произошла ошибка: $err, $stackTrace');
+      emit(AuthenticationState.error(data: state.data));
+      rethrow;
+    }
   }
 }

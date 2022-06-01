@@ -31,7 +31,7 @@ class VkApiClient {
     _saveAccessTokenToStorage(accessToken);
   }
 
-  get tokenExists async {
+  Future<bool> get tokenExists async {
     await _getAccessTokenFromStorage();
     return accessToken != null ? true : false;
   }
@@ -63,7 +63,7 @@ class VkApiClient {
 
   String getAuthDialogLink() {
     final String authAddress = 'https://oauth.vk.com/authorize';
-    final String clientId = '8097225';
+    final String clientId = '8097225'; // Идентификатор приложения
     final String displayType = 'mobile';
     final String redirectUri = 'https://oauth.vk.com/blank.html';
     final String scope = 'offline'; //'offline' - бесконечный токен

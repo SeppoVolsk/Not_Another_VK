@@ -5,13 +5,15 @@ import 'package:webview_flutter/webview_flutter.dart';
 class IAuthenticationRepository {
   AuthenticationEntity logInRepFunc({required NavigationRequest navigation}) {
     final redirectLink = Uri.parse(navigation.url);
+    if (redirectLink.fragment.contains('error')) {
+      print('Ошибка авторизации $redirectLink');
+      return AuthenticationEntity(accessToken: null);
+    }
+
     final parts = Uri.decodeFull(redirectLink.toString()).replaceAll('#', '?');
     final pureUri = Uri.parse(parts);
-
     print('QUERY PARAMETERS: ' + pureUri.queryParameters.toString());
-
     final _accessToken = pureUri.queryParameters['access_token'];
-
     print('ACCESS TOKEN: ' + _accessToken.toString());
 
     return AuthenticationEntity(accessToken: _accessToken);
@@ -22,8 +24,8 @@ class IAuthenticationRepository {
     return AuthenticationEntity();
   }
 
-  AuthenticationEntity checkAuthRepFunc() {
-    return VkApiClient().tokenExists
+  Future<AuthenticationEntity> checkAuthRepFunc() async {
+    return await VkApiClient().tokenExists
         ? AuthenticationEntity(accessToken: VkApiClient.accessToken)
         : AuthenticationEntity();
   }

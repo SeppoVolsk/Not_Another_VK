@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
                   ..add(AuthenticationEvent.checkAuth())),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Not Another VK',
         debugShowCheckedModeBanner: false,
         scaffoldMessengerKey: keyForSnackBar,
         theme: ThemeData(

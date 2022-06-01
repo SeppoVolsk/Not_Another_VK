@@ -33,8 +33,10 @@ class PostsDataProvider {
   Future<File> urlToFile(String imageUrl) async {
     Directory downloadDir = await getApplicationDocumentsDirectory();
     print(downloadDir);
-    File file =
-        File('${downloadDir.path}' + '/' + '${imageUrl.substring(37, 45)}.jpg');
+    File file = File('${downloadDir.path}' +
+        '/' +
+        '${imageUrl.substring(37, 45)}_${DateTime.now().toString()}.jpg');
+
     print(file.path);
     final url = Uri.parse(imageUrl);
     final request = await get(url);
@@ -50,8 +52,7 @@ class PostsDataProvider {
     print('GET FILES IN DIR FUNC: ');
     print('all files paths:');
     print(files);
-    //final jpgFiles = files.skipWhile(
-    //    (file) => file.path.substring(file.path.length - 3) != 'jpg');
+
     final jpgFiles = files.where((file) {
       return file.path.substring(file.path.length - 3) == 'jpg';
     });

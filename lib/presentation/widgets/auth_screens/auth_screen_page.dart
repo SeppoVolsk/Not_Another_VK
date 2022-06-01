@@ -12,7 +12,7 @@ class AuthScreenPage extends StatefulWidget {
 }
 
 class _AuthScreenPageState extends State<AuthScreenPage> {
-  WebViewController? _webViewController;
+  //WebViewController? _webViewController;
   String? _accessToken;
 
   @override
@@ -24,9 +24,9 @@ class _AuthScreenPageState extends State<AuthScreenPage> {
         body: Stack(children: [
           WebView(
             initialUrl: VkApiClient().getAuthDialogLink(),
-            onWebViewCreated: (WebViewController controller) {
-              _webViewController = controller;
-            },
+            // onWebViewCreated: (WebViewController controller) {
+            //   _webViewController = controller;
+            // },
             navigationDelegate: (NavigationRequest navigation) {
               context
                   .read<AuthenticationBLoC>()

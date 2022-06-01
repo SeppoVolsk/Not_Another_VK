@@ -31,9 +31,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
   @override
   Widget build(BuildContext context) {
     final userIsAuth =
-        context.watch<AuthenticationBLoC>().state.data.accessToken == null
-            ? false
-            : true;
+        context.watch<AuthenticationBLoC>().state is AuthenticatedState;
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
         builder: (context, state) {
       return GestureDetector(
@@ -44,6 +42,9 @@ class _MainScreenPageState extends State<MainScreenPage> {
                 ? const TitleWidget()
                 : Text('Сохранённые медиа'),
             actions: [
+              userIsAuth
+                  ? IconButton(onPressed: () {}, icon: Icon(Icons.face_sharp))
+                  : SizedBox.shrink(),
               _selectedTab == _select.saved
                   ? IconButton(
                       icon: Icon(Icons.delete_forever),
@@ -52,9 +53,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
                       },
                     )
                   : IconButton(
-                      icon: userIsAuth
-                          ? Icon(Icons.face_retouching_natural)
-                          : Icon(Icons.login),
+                      icon: userIsAuth ? Icon(Icons.logout) : Icon(Icons.login),
                       onPressed: () {
                         userIsAuth
                             ? context

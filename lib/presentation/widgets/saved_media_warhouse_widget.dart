@@ -31,6 +31,7 @@ class _SavedMediaWarehouseState extends State<SavedMediaWarehouse> {
           future: _filesList,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.data != null) {
+              final filesAmountIndex = snapshot.data.length - 1;
               return Expanded(
                 child: ListView.builder(
                   itemCount: (snapshot.data.length),
@@ -39,9 +40,11 @@ class _SavedMediaWarehouseState extends State<SavedMediaWarehouse> {
                         //for (int i = 0; i < snapshot.data.length; i++)
                         Column(
                       children: [
-                        Text(snapshot.data.elementAt(index).path),
+                        Text(snapshot.data
+                            .elementAt(filesAmountIndex - index)
+                            .path),
                         Image.file(
-                          snapshot.data.elementAt(index),
+                          snapshot.data.elementAt(filesAmountIndex - index),
                         ),
                       ],
                     );
