@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
+import 'package:vk_postman/presentation/blocs/app_theme/app_theme_bloc.dart';
 import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
@@ -63,6 +64,10 @@ class _MainScreenPageState extends State<MainScreenPage> {
                                 .pushNamed(MainNavigation().authRoute);
                       },
                     ),
+              IconButton(
+                  icon: Icon(Icons.dark_mode),
+                  onPressed: () =>
+                      context.read<AppThemeBLoC>().add(AppThemeEvent.change())),
             ],
           ),
           body: _selectedTab == _select.news

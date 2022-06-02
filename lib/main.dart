@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vk_postman/presentation/blocs/app_theme/app_theme_bloc.dart';
+import 'package:vk_postman/presentation/blocs/app_theme/app_theme_repository.dart';
 import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:vk_postman/presentation/blocs/auth/auth_repository.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
@@ -32,14 +34,15 @@ class MyApp extends StatelessWidget {
             create: (_) =>
                 AuthenticationBLoC(repository: IAuthenticationRepository())
                   ..add(AuthenticationEvent.checkAuth())),
+        BlocProvider<AppThemeBLoC>(
+            create: (_) => AppThemeBLoC(repository: IAppThemeRepository())
+              ..add(AppThemeEvent.read()))
       ],
       child: MaterialApp(
         title: 'Not Another VK',
         debugShowCheckedModeBanner: false,
         scaffoldMessengerKey: keyForSnackBar,
-        theme: ThemeData(
-          primarySwatch: Colors.indigo,
-        ),
+        theme: context.watch<AppThemeBLoC>().state.data.appTheme,
         home: const MainScreenPage(),
         routes: mainNavigation.routes,
       ),
