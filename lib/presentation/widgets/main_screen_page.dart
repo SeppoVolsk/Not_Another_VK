@@ -33,6 +33,8 @@ class _MainScreenPageState extends State<MainScreenPage> {
   Widget build(BuildContext context) {
     final userIsAuth =
         context.watch<AuthenticationBLoC>().state is AuthenticatedState;
+    final lightTheme =
+        context.watch<AppThemeBLoC>().state is LightAppThemeState;
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
         builder: (context, state) {
       return GestureDetector(
@@ -65,7 +67,9 @@ class _MainScreenPageState extends State<MainScreenPage> {
                       },
                     ),
               IconButton(
-                  icon: Icon(Icons.dark_mode),
+                  icon: lightTheme
+                      ? Icon(Icons.dark_mode)
+                      : Icon(Icons.wb_sunny_rounded),
                   onPressed: () =>
                       context.read<AppThemeBLoC>().add(AppThemeEvent.change())),
             ],

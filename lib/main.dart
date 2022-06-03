@@ -14,9 +14,20 @@ final keyForSnackBar = GlobalKey<ScaffoldMessengerState>();
 
 void main() {
   BlocOverrides.runZoned(
-    () => runApp(const MyApp()),
+    () => runApp(const AppThemeWidget()),
     blocObserver: SimpleBlocObserver(),
   );
+}
+
+class AppThemeWidget extends StatelessWidget {
+  const AppThemeWidget({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<AppThemeBLoC>(
+        create: (_) => AppThemeBLoC(repository: IAppThemeRepository())
+          ..add(AppThemeEvent.read()),
+        child: const MyApp());
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -34,9 +45,6 @@ class MyApp extends StatelessWidget {
             create: (_) =>
                 AuthenticationBLoC(repository: IAuthenticationRepository())
                   ..add(AuthenticationEvent.checkAuth())),
-        BlocProvider<AppThemeBLoC>(
-            create: (_) => AppThemeBLoC(repository: IAppThemeRepository())
-              ..add(AppThemeEvent.read()))
       ],
       child: MaterialApp(
         title: 'Not Another VK',

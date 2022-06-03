@@ -35,7 +35,7 @@ class AppThemeState with _$AppThemeState {
   /// Processing
   const factory AppThemeState.light({
     required final AppThemeEntity data,
-    @Default('Lighr theme') final String message,
+    @Default('Light theme') final String message,
   }) = LightAppThemeState;
 
   /// Successful
@@ -104,8 +104,7 @@ class AppThemeBLoC extends Bloc<AppThemeEvent, AppThemeState>
   Future<void> _update(
       ChangeAppThemeEvent event, Emitter<AppThemeState> emit) async {
     try {
-      final newData =
-          await _repository.changeTheme(_themeType ?? ThemeType.light);
+      final newData = await _repository.changeTheme(_themeType!);
       if (_themeType == ThemeType.light) {
         emit(AppThemeState.dark(data: newData));
         _themeType = ThemeType.dark;
