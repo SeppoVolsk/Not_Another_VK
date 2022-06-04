@@ -134,6 +134,9 @@ class Post {
     DateTime _dateTime =
         DateTime.fromMillisecondsSinceEpoch(_itemsList[index].date * 1000);
     String _postText = _itemsList[index].text;
+    if (_itemsList.isEmpty) {
+      return Post();
+    }
 
     if (_userId > 0) {
       for (int indexProfile = 0;
@@ -148,6 +151,7 @@ class Post {
           }
         } catch (e) {
           print('Ошибка при заполнении id из profilesList $e');
+          rethrow;
         }
       }
     } else {
@@ -164,6 +168,7 @@ class Post {
         }
       } catch (e) {
         print('Ошибка при заполнении id из groupList $e');
+        rethrow;
       }
     }
     _postContainsMedia = _itemsList[index].attachments != null;

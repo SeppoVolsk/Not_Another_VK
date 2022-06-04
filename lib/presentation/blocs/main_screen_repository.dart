@@ -77,8 +77,14 @@ class IMainScreenRepository {
 
     FullOriginalPost originalPost = FullOriginalPost.fromJson(json);
 
-    for (int i = 0; i < VkApiClient().newsCount; i++) {
-      posts.add(Post.fromOriginaltoView(originalPost, i));
+    try {
+      for (int i = 0; i < VkApiClient().newsCount; i++) {
+        posts.add(Post.fromOriginaltoView(originalPost, i));
+      }
+    } catch (e) {
+      errorSnackBar(
+          'Недопустимый формат запроса. Попробуйте изменить текст запроса');
+      return MainScreenEntity();
     }
 
     history.markInHistory(newsQuery: newsQuery, json: json);

@@ -14,9 +14,11 @@ class IAuthenticationRepository {
     final pureUri = Uri.parse(parts);
     print('QUERY PARAMETERS: ' + pureUri.queryParameters.toString());
     final _accessToken = pureUri.queryParameters['access_token'];
+    final _userId = pureUri.queryParameters['user_id'];
     print('ACCESS TOKEN: ' + _accessToken.toString());
+    print('USER ID: $_userId');
 
-    return AuthenticationEntity(accessToken: _accessToken);
+    return AuthenticationEntity(accessToken: _accessToken, userId: _userId);
   }
 
   AuthenticationEntity logOutRepFunc() {

@@ -39,9 +39,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                   context
                       .read<MainScreenBLoC>()
                       .add(MainScreenEvent.read(element));
-                  //model.loadPostsFromStorage(neededStorageKey: element);
                 },
-                //onSelected: (bool v) {},
                 deleteIcon: const Icon(Icons.cancel),
                 onDeleted: () {
                   state.data.history?.historyWords.remove(element);

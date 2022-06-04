@@ -41,12 +41,26 @@ class _MainScreenPageState extends State<MainScreenPage> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           appBar: AppBar(
+            toolbarHeight: 65,
             title: _selectedTab == _select.news
                 ? const TitleWidget()
                 : Text('Сохранённые медиа'),
             actions: [
               userIsAuth
-                  ? IconButton(onPressed: () {}, icon: Icon(Icons.face_sharp))
+                  ? Column(
+                      children: [
+                        IconButton(
+                            onPressed: () {}, icon: Icon(Icons.face_sharp)),
+                        Text(
+                          context
+                              .read<AuthenticationBLoC>()
+                              .state
+                              .data
+                              .userId
+                              .toString(),
+                        ),
+                      ],
+                    )
                   : SizedBox.shrink(),
               _selectedTab == _select.saved
                   ? IconButton(

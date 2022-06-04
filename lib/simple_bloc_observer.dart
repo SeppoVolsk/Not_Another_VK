@@ -13,9 +13,10 @@ class SimpleBlocObserver extends BlocObserver {
     print(error);
   }
 
+  @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    print(change.currentState);
-    print(change.nextState);
+    print('CURRENT STATE: \n ${change.currentState}');
+    print('NEXT STATE: \n ${change.nextState}');
   }
 }

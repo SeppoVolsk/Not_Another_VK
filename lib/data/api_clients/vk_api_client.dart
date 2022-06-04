@@ -42,7 +42,7 @@ class VkApiClient {
   }
 
   final client = HttpClient();
-  int newsCount = 50; //по умолчанию 30, максимум 200
+  int newsCount = 200; //по умолчанию 30, максимум 200
 
   Future<dynamic> getPosts(String? newsQuery) async {
     final url = Uri.parse(
@@ -87,6 +87,6 @@ class VkApiClient {
 
   Future<void> _cleanSecureStorage() async {
     VkApiClient.accessToken = null;
-    await FlutterSecureStorage().deleteAll();
+    await FlutterSecureStorage().delete(key: 'token');
   }
 }

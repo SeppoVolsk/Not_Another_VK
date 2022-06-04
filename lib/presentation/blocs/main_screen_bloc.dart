@@ -318,8 +318,6 @@ class MainScreenBLoC extends Bloc<MainScreenEvent, MainScreenState>
       print('В MainScreenBLoC произошла ошибка: $err $stackTrace');
       emit(MainScreenState.error(data: state.data));
       rethrow;
-    } finally {
-      //emit(MainScreenState.idle(data: state.data));
     }
   }
 
@@ -334,8 +332,6 @@ class MainScreenBLoC extends Bloc<MainScreenEvent, MainScreenState>
       print('В MainScreenBLoC произошла ошибка: $err $stackTrace');
       emit(MainScreenState.error(data: state.data));
       rethrow;
-    } finally {
-      //emit(MainScreenState.idle(data: state.data));
     }
   }
 

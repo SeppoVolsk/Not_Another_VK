@@ -12,7 +12,7 @@ class AuthScreenPage extends StatefulWidget {
 }
 
 class _AuthScreenPageState extends State<AuthScreenPage> {
-  //WebViewController? _webViewController;
+  //WebViewController? _controller;
   String? _accessToken;
 
   @override
@@ -21,22 +21,21 @@ class _AuthScreenPageState extends State<AuthScreenPage> {
         .select((AuthenticationBLoC bloc) => bloc.state.data.accessToken);
     return Scaffold(
         appBar: AppBar(title: Text('Вход VK')),
-        body: Stack(children: [
-          WebView(
-            initialUrl: VkApiClient().getAuthDialogLink(),
-            // onWebViewCreated: (WebViewController controller) {
-            //   _webViewController = controller;
-            // },
-            navigationDelegate: (NavigationRequest navigation) {
-              context
-                  .read<AuthenticationBLoC>()
-                  .add(AuthenticationEvent.logIn(navigation));
+        body: Center(
+          child: Stack(children: [
+            WebView(
+              initialUrl: VkApiClient().getAuthDialogLink(),
+              navigationDelegate: (NavigationRequest navigation) {
+                context
+                    .read<AuthenticationBLoC>()
+                    .add(AuthenticationEvent.logIn(navigation));
 
-              return NavigationDecision.navigate;
-            },
-          ),
-          if (_accessToken != null) ConfirmedAuthWidget(_accessToken),
-        ]));
+                return NavigationDecision.navigate;
+              },
+            ),
+            if (_accessToken != null) ConfirmedAuthWidget(_accessToken),
+          ]),
+        ));
   }
 }
 
@@ -49,7 +48,8 @@ class ConfirmedAuthWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(children: [
-        Text('ВАШ ТОКЕН $accessToken'),
+        Text('Вы авторизированы.'),
+        Text('Ваш токен $accessToken'),
         CloseButton(
           onPressed: () => Navigator.of(context).pop(),
         )
