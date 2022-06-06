@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:vk_postman/domain/entities/full_original_post/full_original_post.dart';
+import 'dart:math';
+
+import 'package:vk_postman/domain/entities/full_original_post/size.dart';
 
 class Post {
   int? userId;
@@ -230,6 +233,19 @@ class Post {
         postPhoto: List.generate(_postPhoto.length, (ind) => _postPhoto[ind]),
         postLargePhoto: List.generate(
             _postLargePhoto.length, (ind) => _postLargePhoto[ind]));
+  }
+
+  String largeVkPhoto(List<dynamic> attachments) {
+    bool isSize = attachments.first is Size;
+    List<int> photoHeights = [];
+    for (var element in attachments) {
+      photoHeights.add(isSize ? element.height : element['height']);
+    }
+    final maxPhotoHeight = photoHeights.reduce(max);
+    final result = attachments.singleWhere((element) => isSize
+        ? element.height == maxPhotoHeight
+        : element['height'] == maxPhotoHeight);
+    return isSize ? result.url : result['url'];
   }
 
   Post copyWith({
