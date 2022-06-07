@@ -71,16 +71,16 @@ class Post {
             {
               _postPhoto
                   .add(_attachmentsList[attIndex]['video']['image'][0]['url']);
-              _postLargePhoto
-                  .add(_attachmentsList[attIndex]['video']['image'][3]['url']);
+              _postLargePhoto.add(PostMethods.largeVkPhoto(
+                  _attachmentsList[attIndex]['video']['image']));
             }
             break;
           case 'photo':
             {
               _postPhoto
                   .add(_attachmentsList[attIndex]['photo']['sizes'][0]['url']);
-              _postLargePhoto
-                  .add(_attachmentsList[attIndex]['photo']['sizes'][5]['url']);
+              _postLargePhoto.add(PostMethods.largeVkPhoto(
+                  _attachmentsList[attIndex]['photo']['sizes']));
             }
             break;
           case 'link':
@@ -183,15 +183,16 @@ class Post {
             case 'video':
               {
                 _postPhoto.add(_attachmentsList[attIndex].video.image[0].url);
-                _postLargePhoto
-                    .add(_attachmentsList[attIndex].video.image[3].url);
+                _postLargePhoto.add(PostMethods.largeVkPhoto(
+                    _attachmentsList[attIndex].video.image));
               }
               break;
             case 'photo':
               {
                 _postPhoto.add(_attachmentsList[attIndex].photo.sizes[0].url);
-                _postLargePhoto
-                    .add(_attachmentsList[attIndex].photo.sizes[5].url);
+
+                _postLargePhoto.add(PostMethods.largeVkPhoto(
+                    _attachmentsList[attIndex].photo.sizes));
               }
               break;
             case 'link':
@@ -233,19 +234,6 @@ class Post {
         postPhoto: List.generate(_postPhoto.length, (ind) => _postPhoto[ind]),
         postLargePhoto: List.generate(
             _postLargePhoto.length, (ind) => _postLargePhoto[ind]));
-  }
-
-  String largeVkPhoto(List<dynamic> attachments) {
-    bool isSize = attachments.first is Size;
-    List<int> photoHeights = [];
-    for (var element in attachments) {
-      photoHeights.add(isSize ? element.height : element['height']);
-    }
-    final maxPhotoHeight = photoHeights.reduce(max);
-    final result = attachments.singleWhere((element) => isSize
-        ? element.height == maxPhotoHeight
-        : element['height'] == maxPhotoHeight);
-    return isSize ? result.url : result['url'];
   }
 
   Post copyWith({
@@ -295,5 +283,20 @@ class Post {
         postText.hashCode ^
         postPhoto.hashCode ^
         postLargePhoto.hashCode;
+  }
+}
+
+class PostMethods {
+  static String largeVkPhoto(List<dynamic> sizesList) {
+    bool isSize = sizesList.first is Size;
+    List<int> photoHeights = [];
+    for (var element in sizesList) {
+      photoHeights.add(isSize ? element.height : element['height']);
+    }
+    final maxPhotoHeight = photoHeights.reduce(max);
+    final result = sizesList.firstWhere((element) => isSize
+        ? element.height == maxPhotoHeight
+        : element['height'] == maxPhotoHeight);
+    return isSize ? result.url : result['url'];
   }
 }

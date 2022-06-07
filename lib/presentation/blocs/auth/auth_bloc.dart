@@ -102,7 +102,7 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
     try {
       final newData = _repository.logInRepFunc(navigation: event.navigation);
       if (newData.accessToken != null) {
-        VkApiClient().setToken = newData.accessToken;
+        VkApiClient().setAuthData(newData.accessToken, newData.userId);
         emit(AuthenticationState.authenticated(data: newData));
       } else {
         emit(AuthenticationState.notAuthenticated(data: state.data));

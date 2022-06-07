@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 //import 'package:webview_flutter/webview_flutter.dart';
@@ -26,19 +25,21 @@ class VkApiClient {
   static const String clientCredentialsFlowToken =
       '600104d1600104d1600104d1d5607a891866001600104d10229e437a43114591ecf962f';
   static String? accessToken;
-  set setToken(String? token) {
+  static String? userId;
+
+  void setAuthData(String? token, String? id) {
     accessToken = token;
-    _saveAccessTokenToStorage(accessToken);
+    userId = id;
+    _saveAuthDataToStorage(accessToken: accessToken, userId: userId);
   }
 
-  Future<bool> get tokenExists async {
-    await _getAccessTokenFromStorage();
-    return accessToken != null ? true : false;
+  Future<bool> get authDataExists async {
+    await _getAuthDataFromStorage();
+    return accessToken != null && userId != null ? true : false;
   }
 
   get clearTokenInfo async {
     await _cleanSecureStorage();
-    accessToken = null;
   }
 
   final client = HttpClient();
@@ -75,18 +76,22 @@ class VkApiClient {
     return url.toString();
   }
 
-  Future<void> _saveAccessTokenToStorage(String? accessToken) async {
-    await FlutterSecureStorage().write(key: 'token', value: accessToken);
+  Future<void> _saveAuthDataToStorage(
+      {String? accessToken, String? userId}) async {
+    final storage = FlutterSecureStorage();
+    await storage.write(key: 'token', value: accessToken);
+    await storage.write(key: 'id', value: userId);
   }
 
-  Future<void> _getAccessTokenFromStorage() async {
-    String? _accessToken = await FlutterSecureStorage().read(key: 'token');
-    print('Access Token received from Secure Storage: $_accessToken');
-    accessToken = _accessToken;
+  Future<void> _getAuthDataFromStorage() async {
+    accessToken = await FlutterSecureStorage().read(key: 'token');
+    userId = await FlutterSecureStorage().read(key: 'id');
+    print('Access Data received from Secure Storage: $userId $accessToken');
   }
 
   Future<void> _cleanSecureStorage() async {
-    VkApiClient.accessToken = null;
-    await FlutterSecureStorage().delete(key: 'token');
+    accessToken = null;
+    userId = null;
+    await FlutterSecureStorage().deleteAll();
   }
 }

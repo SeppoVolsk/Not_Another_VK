@@ -27,8 +27,9 @@ class IAuthenticationRepository {
   }
 
   Future<AuthenticationEntity> checkAuthRepFunc() async {
-    return await VkApiClient().tokenExists
-        ? AuthenticationEntity(accessToken: VkApiClient.accessToken)
+    return await VkApiClient().authDataExists
+        ? AuthenticationEntity(
+            accessToken: VkApiClient.accessToken, userId: VkApiClient.userId)
         : AuthenticationEntity();
   }
 }
