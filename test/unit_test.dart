@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vk_postman/data/api_clients/vk_api_client.dart';
-import 'package:vk_postman/domain/entities/full_original_post/photo.dart';
 import 'package:vk_postman/domain/entities/full_original_post/size.dart';
 import 'package:vk_postman/domain/entities/post.dart';
 
@@ -13,6 +12,11 @@ void main() {
   test('Проверка id в JSON от VK', () async {
     final result = await VkApiClient().getPosts('Тестовый запрос');
     expect(result['response']['items'][0]['id'].runtimeType, int);
+  });
+
+  test('Проверка метода getUserInfo', () async {
+    final result = await VkApiClient().getUserInfo();
+    print(result);
   });
 
   final testList = [
@@ -33,7 +37,7 @@ void main() {
   ];
 
   test('Проверка функции _largeVkPhoto Map', () {
-    String result = largeVkPhoto(testList);
+    String result = PostMethods.largeVkPhoto(testList);
     expect(result,
         'https://sun9-52.userapi.com/s/v1/ig2/R01brrhBgpvV-FRYMokQ4yr4ySo_KOoIQL5xnDCeWHQdDk4FCIi1MXdnNidKFxiYs1x3qgN9nE_zIJd7njREftaZ.jpg?size=130x97&quality=95&type=album');
   });
@@ -44,7 +48,7 @@ void main() {
       testSizeArr.add(Size.fromJson(element));
     }
 
-    String result = largeVkPhoto(testSizeArr);
+    String result = PostMethods.largeVkPhoto(testSizeArr);
     expect(result,
         'https://sun9-52.userapi.com/s/v1/ig2/R01brrhBgpvV-FRYMokQ4yr4ySo_KOoIQL5xnDCeWHQdDk4FCIi1MXdnNidKFxiYs1x3qgN9nE_zIJd7njREftaZ.jpg?size=130x97&quality=95&type=album');
   });

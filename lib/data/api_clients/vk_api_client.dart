@@ -18,6 +18,7 @@ class VkApiClientException implements Exception {
 // Сервисный ключ доступа 600104d1600104d1600104d1d5607a891866001600104d10229e437a43114591ecf962f
 // Получить "вечный" токен:
 // https://oauth.vk.com/authorize?client_id=8097225&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=offline&response_type=token&v=5.131
+//vk1.a.NwAa9aFgj5pi-3BH4Oef3PDDg4I0VFbo082ecybn_lbLW2d9firjEnjqZ57x9a_onYyv9KJGyhclZ0mo3Uo6z7MviQ7ndotoVmaAbUmaNjVsFQyEayDjHrtMNGBivqsSrGMxSsdK8KtBjy-REYh06p7Sw3B3sGdiJp54seLMVa9Jr6SdwlMhjPV4JRO8uh_F
 
 class VkApiClient {
   final String apiAddress = 'https://api.vk.com/method';
@@ -51,14 +52,28 @@ class VkApiClient {
     final request = await client.getUrl(url);
     final response = await request.close();
     print('Status Code: ${response.statusCode}');
-
     final jsonStrings = await response
         .transform(utf8.decoder)
         .toList(); //Ответ приходит частями. Переводим байты(цифры) в строки и создаем массив строк.
     final jsonString =
         jsonStrings.join(); //Объединяем строки из массива в одну строку
     final json = jsonDecode(jsonString); //превращаем строку в json
+    return json;
+  }
 
+  Future<dynamic> getUserInfo() async {
+    final url = Uri.parse(
+        '$apiAddress/users.get?&user_ids=$userId&fields=photo_50&$apiVer&access_token=$accessToken');
+    print(url);
+    final request = await client.getUrl(url);
+    final response = await request.close();
+    print('Status Code: ${response.statusCode}');
+    final jsonStrings = await response
+        .transform(utf8.decoder)
+        .toList(); //Ответ приходит частями. Переводим байты(цифры) в строки и создаем массив строк.
+    final jsonString =
+        jsonStrings.join(); //Объединяем строки из массива в одну строку
+    final json = jsonDecode(jsonString); //превращаем строку в json
     return json;
   }
 

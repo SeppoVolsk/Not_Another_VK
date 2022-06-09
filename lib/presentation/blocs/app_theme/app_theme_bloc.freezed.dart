@@ -606,7 +606,7 @@ class __$$LightAppThemeStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LightAppThemeState extends LightAppThemeState {
-  const _$LightAppThemeState({required this.data, this.message = 'Lighr theme'})
+  const _$LightAppThemeState({required this.data, this.message = 'Light theme'})
       : super._();
 
   @override
