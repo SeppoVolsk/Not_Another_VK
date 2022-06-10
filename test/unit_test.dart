@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vk_postman/data/api_clients/vk_api_client.dart';
+import 'package:vk_postman/data/persistent_storage.dart';
 import 'package:vk_postman/domain/entities/full_original_post/size.dart';
 import 'package:vk_postman/domain/entities/post.dart';
 
@@ -51,5 +52,15 @@ void main() {
     String result = PostMethods.largeVkPhoto(testSizeArr);
     expect(result,
         'https://sun9-52.userapi.com/s/v1/ig2/R01brrhBgpvV-FRYMokQ4yr4ySo_KOoIQL5xnDCeWHQdDk4FCIi1MXdnNidKFxiYs1x3qgN9nE_zIJd7njREftaZ.jpg?size=130x97&quality=95&type=album');
+  });
+
+  test('Тест синглтон-хранилища', () async {
+    final storage = PersistentStorage();
+    await storage.init();
+    const key = 'key_name';
+    const value = 'Test value for persistent storage';
+    await storage.write(key: key, value: value);
+    print(storage.read(key: key));
+    //expect(storage.read(key: key), value);
   });
 }

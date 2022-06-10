@@ -1,9 +1,11 @@
 import 'package:vk_postman/data/api_clients/vk_api_client.dart';
+import 'package:vk_postman/domain/entities/profile_info/profile_info/profile_info.dart';
 import 'package:vk_postman/presentation/blocs/auth/authenticationentity.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class IAuthenticationRepository {
-  AuthenticationEntity logInRepFunc({required NavigationRequest navigation}) {
+  Future<AuthenticationEntity> logInRepFunc(
+      {required NavigationRequest navigation}) async {
     final redirectLink = Uri.parse(navigation.url);
     if (redirectLink.fragment.contains('error')) {
       print('Ошибка авторизации $redirectLink');
@@ -17,8 +19,19 @@ class IAuthenticationRepository {
     final _userId = pureUri.queryParameters['user_id'];
     print('ACCESS TOKEN: ' + _accessToken.toString());
     print('USER ID: $_userId');
+    final userInfoJson =
+        await VkApiClient().getUserInfo(token: _accessToken, id: _userId);
+    final profileInfo = ProfileInfo.fromJson(userInfoJson);
+    final _name = profileInfo.response?.first.firstName;
+    final _surName = profileInfo.response?.first.lastName;
+    final _photo = profileInfo.response?.first.photo50;
 
-    return AuthenticationEntity(accessToken: _accessToken, userId: _userId);
+    return AuthenticationEntity(
+        accessToken: _accessToken,
+        userId: _userId,
+        name: _name,
+        surname: _surName,
+        photo: _photo);
   }
 
   AuthenticationEntity logOutRepFunc() {

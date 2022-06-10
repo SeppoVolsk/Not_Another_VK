@@ -19,6 +19,7 @@ class _AuthScreenPageState extends State<AuthScreenPage> {
   Widget build(BuildContext context) {
     _accessToken = context
         .select((AuthenticationBLoC bloc) => bloc.state.data.accessToken);
+
     return Scaffold(
         appBar: AppBar(title: Text('Вход VK')),
         body: Center(
@@ -33,27 +34,34 @@ class _AuthScreenPageState extends State<AuthScreenPage> {
                 return NavigationDecision.navigate;
               },
             ),
-            if (_accessToken != null) ConfirmedAuthWidget(_accessToken),
+            if (_accessToken != null) ConfirmedAuthWidget(),
           ]),
         ));
   }
 }
 
 class ConfirmedAuthWidget extends StatelessWidget {
-  const ConfirmedAuthWidget(String? this.accessToken, {Key? key})
-      : super(key: key);
-  final String? accessToken;
+  ConfirmedAuthWidget({Key? key}) : super(key: key);
+  String? name, surName, photo;
 
   @override
   Widget build(BuildContext context) {
+    final userData = context.read<AuthenticationBLoC>().state.data;
+    name = userData.name;
+    surName = userData.surname;
+    photo = userData.photo;
     return Center(
-      child: Column(children: [
-        Text('Вы авторизированы.'),
-        Text('Ваш токен $accessToken'),
-        CloseButton(
-          onPressed: () => Navigator.of(context).pop(),
-        )
-      ]),
+      child: ColoredBox(
+        color: Theme.of(context).primaryColor,
+        child: Column(children: [
+          Text('Вы авторизированы как: '),
+          Image.network(photo.toString()),
+          Text('$name $surName'),
+          CloseButton(
+            onPressed: () => Navigator.of(context).pop(),
+          )
+        ]),
+      ),
     );
   }
 }

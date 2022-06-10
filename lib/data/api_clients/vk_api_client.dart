@@ -61,9 +61,9 @@ class VkApiClient {
     return json;
   }
 
-  Future<dynamic> getUserInfo() async {
+  Future<dynamic> getUserInfo({String? token, String? id}) async {
     final url = Uri.parse(
-        '$apiAddress/users.get?&user_ids=$userId&fields=photo_50&$apiVer&access_token=$accessToken');
+        '$apiAddress/users.get?&user_ids=$id&fields=photo_50&$apiVer&access_token=$token');
     print(url);
     final request = await client.getUrl(url);
     final response = await request.close();
@@ -74,6 +74,7 @@ class VkApiClient {
     final jsonString =
         jsonStrings.join(); //Объединяем строки из массива в одну строку
     final json = jsonDecode(jsonString); //превращаем строку в json
+    print(json);
     return json;
   }
 

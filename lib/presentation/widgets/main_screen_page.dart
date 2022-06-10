@@ -46,22 +46,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
                 ? const TitleWidget()
                 : Text('Сохранённые медиа'),
             actions: [
-              userIsAuth
-                  ? Column(
-                      children: [
-                        IconButton(
-                            onPressed: () {}, icon: Icon(Icons.face_sharp)),
-                        Text(
-                          context
-                              .read<AuthenticationBLoC>()
-                              .state
-                              .data
-                              .userId
-                              .toString(),
-                        ),
-                      ],
-                    )
-                  : SizedBox.shrink(),
+              userIsAuth ? ProfileInfoWidget() : SizedBox.shrink(),
               _selectedTab == _select.saved
                   ? IconButton(
                       icon: Icon(Icons.delete_forever),
@@ -149,5 +134,21 @@ class TitleWidget extends StatelessWidget {
     return Text('Найдено новостей: ' +
         context.select((MainScreenBLoC bloc) =>
             bloc.state.data.posts?.length.toString() ?? '0'));
+  }
+}
+
+class ProfileInfoWidget extends StatelessWidget {
+  const ProfileInfoWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        IconButton(onPressed: () {}, icon: Icon(Icons.face_sharp)),
+        Text(
+          context.read<AuthenticationBLoC>().state.data.userId.toString(),
+        ),
+      ],
+    );
   }
 }

@@ -100,7 +100,8 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
   Future<void> _logIn(
       LogInAuthenticationEvent event, Emitter<AuthenticationState> emit) async {
     try {
-      final newData = _repository.logInRepFunc(navigation: event.navigation);
+      final newData =
+          await _repository.logInRepFunc(navigation: event.navigation);
       if (newData.accessToken != null) {
         VkApiClient().setAuthData(newData.accessToken, newData.userId);
         emit(AuthenticationState.authenticated(data: newData));
