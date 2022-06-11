@@ -4,7 +4,7 @@ import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
 class HistoryDataProvider {
   final int maxLength = 5;
   final historyWords = <String>[];
-  final postDataProvider = const PostsDataProvider();
+  final postDataProvider = PostsDataProvider();
 
   // final HistoryDataProvider _history = HistoryDataProvider._();
 

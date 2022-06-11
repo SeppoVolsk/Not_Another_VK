@@ -4,7 +4,7 @@ import 'package:vk_postman/data/persistent_storage.dart';
 import 'package:vk_postman/domain/entities/full_original_post/size.dart';
 import 'package:vk_postman/domain/entities/post.dart';
 
-void main() {
+void main() async {
   test('Проверка функции на возвращаемый тип', () {
     final result = VkApiClient().getAuthDialogLink();
     expect(result.runtimeType, String);
@@ -48,19 +48,23 @@ void main() {
     for (var element in testList) {
       testSizeArr.add(Size.fromJson(element));
     }
-
     String result = PostMethods.largeVkPhoto(testSizeArr);
     expect(result,
         'https://sun9-52.userapi.com/s/v1/ig2/R01brrhBgpvV-FRYMokQ4yr4ySo_KOoIQL5xnDCeWHQdDk4FCIi1MXdnNidKFxiYs1x3qgN9nE_zIJd7njREftaZ.jpg?size=130x97&quality=95&type=album');
   });
 
-  test('Тест синглтон-хранилища', () async {
-    final storage = PersistentStorage();
-    await storage.init();
-    const key = 'key_name';
-    const value = 'Test value for persistent storage';
-    await storage.write(key: key, value: value);
-    print(storage.read(key: key));
-    //expect(storage.read(key: key), value);
+  final storage = PersistentStorage();
+  await storage.init();
+  group('Persistent Storage tests', () {
+    test('Read Write methods', () async {
+      const key = 'another_key';
+      const value = 'Test value for persistent storage';
+      await storage.write(key: key, value: value);
+      expect(storage.read(key: key), value);
+    });
+    test('Keys getter', () async {
+      final keys = storage.keys;
+      print('storage keys getter: $keys');
+    });
   });
 }

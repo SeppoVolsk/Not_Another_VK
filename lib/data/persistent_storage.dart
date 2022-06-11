@@ -1,31 +1,21 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PersistentStorage {
-  static final _instance = PersistentStorage._();
+  static PersistentStorage _instance = PersistentStorage._();
   static SharedPreferences? _prefs;
 
-  PersistentStorage._() {
-    print('_() создался');
-  }
+  PersistentStorage._();
+  factory PersistentStorage() => _instance;
 
-  factory PersistentStorage() {
-    print('factory конструктор');
-    return _instance;
-  }
+  get prefs => prefs.toString();
+  bool get isReady => _prefs == null ? false : true;
 
-  Future<void> init() async {
-    _prefs = await SharedPreferences.getInstance();
-    print('Initialization done');
-  }
+  Set<String>? get keys => _prefs?.getKeys();
 
-  Future<void> write({required String key, required String value}) async {
-    await _prefs?.setString(key, value);
-    print('Write отработал');
-  }
+  Future<void> init() async => _prefs = await SharedPreferences.getInstance();
 
-  String? read({required String key}) {
-    final result = _prefs?.getString(key);
-    print('Read есть результат');
-    return result;
-  }
+  Future<void> write({required String key, required String value}) async =>
+      await _prefs?.setString(key, value);
+
+  String? read({required String key}) => _prefs?.getString(key);
 }

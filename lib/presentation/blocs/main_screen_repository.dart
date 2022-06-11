@@ -13,14 +13,14 @@ class IMainScreenRepository {
   Future<MainScreenEntity> readPostsFromStorage(String? storageKey) async {
     String? storageJsonString;
     String? newsQuery;
-    const postDataProvider = PostsDataProvider();
+    final postDataProvider = PostsDataProvider();
 
     final Map<String, dynamic> json;
     List<Post> posts = [];
 
     if (storageKey == null) {
-      final allStorageKeys = await postDataProvider.getStorageKeys();
-      if (allStorageKeys.isEmpty) {
+      final allStorageKeys = postDataProvider.getStorageKeys();
+      if (allStorageKeys == null) {
         errorSnackBar('Воспользуйтесь поиском');
         return MainScreenEntity();
       }

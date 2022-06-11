@@ -3,15 +3,13 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:vk_postman/data/persistent_storage.dart';
 
 class PostsDataProvider {
-  const PostsDataProvider();
+  //const PostsDataProvider();
+  final storage = PersistentStorage();
 
-  Future<Set<String>> getStorageKeys() async {
-    final storage = await SharedPreferences.getInstance();
-    final storageKeys = storage.getKeys();
-    return storageKeys;
-  }
+  Set<String>? getStorageKeys() => storage.keys;
 
   Future<String?> getStringFromStorage({required String key}) async {
     final storage = await SharedPreferences.getInstance();

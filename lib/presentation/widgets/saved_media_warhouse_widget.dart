@@ -15,7 +15,7 @@ class _SavedMediaWarehouseState extends State<SavedMediaWarehouse> {
   @override
   void initState() {
     super.initState();
-    _filesList = const PostsDataProvider().getFilesInDirectory();
+    _filesList = PostsDataProvider().getFilesInDirectory();
   }
 
   // Future<void> getFilesNames() async {
