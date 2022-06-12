@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:vk_postman/data/api_clients/vk_api_client.dart';
 import 'package:vk_postman/data/data_providers/history_data_provider.dart';
 import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
+import 'package:vk_postman/data/persistent_storage.dart';
 import 'package:vk_postman/domain/entities/full_original_post/full_original_post.dart';
 import 'package:vk_postman/domain/entities/post.dart';
 import 'package:vk_postman/presentation/blocs/mainscreenentity.dart';
@@ -9,17 +10,17 @@ import 'package:vk_postman/presentation/widgets/error_snack_bar.dart';
 
 class IMainScreenRepository {
   final history = HistoryDataProvider();
+  final storage = PersistentStorage();
 
-  Future<MainScreenEntity> readPostsFromStorage(String? storageKey) async {
+  MainScreenEntity readSavedPosts(String? storageKey) {
     String? storageJsonString;
     String? newsQuery;
-    final postDataProvider = PostsDataProvider();
 
     final Map<String, dynamic> json;
     List<Post> posts = [];
 
     if (storageKey == null) {
-      final allStorageKeys = postDataProvider.getStorageKeys();
+      final allStorageKeys = storage.keys;
       if (allStorageKeys == null) {
         errorSnackBar('Воспользуйтесь поиском');
         return MainScreenEntity();
@@ -27,11 +28,9 @@ class IMainScreenRepository {
       newsQuery = allStorageKeys.last;
       history.historyWords
           .addAll(allStorageKeys.take(history.maxLength).toList());
-      storageJsonString =
-          await postDataProvider.getStringFromStorage(key: allStorageKeys.last);
+      storageJsonString = storage.read(key: allStorageKeys.last);
     } else {
-      storageJsonString =
-          await postDataProvider.getStringFromStorage(key: storageKey);
+      storageJsonString = storage.read(key: storageKey);
     }
 
     if (storageJsonString != null) {
@@ -47,7 +46,7 @@ class IMainScreenRepository {
         return MainScreenEntity();
       }
     }
-    print('readFromStorage ${history.historyWords}');
+    print('readSavedPosts ${history.historyWords}');
     return MainScreenEntity(
       posts: posts,
       history: history,

@@ -28,6 +28,9 @@ class VkApiClient {
   static String? accessToken;
   static String? userId;
 
+  final secureStorage = const FlutterSecureStorage();
+  final client = HttpClient();
+
   void setAuthData(String? token, String? id) {
     accessToken = token;
     userId = id;
@@ -39,11 +42,10 @@ class VkApiClient {
     return accessToken != null && userId != null ? true : false;
   }
 
-  get clearTokenInfo async {
+  get clearAuthInfo async {
     await _cleanSecureStorage();
   }
 
-  final client = HttpClient();
   int newsCount = 200; //по умолчанию 30, максимум 200
 
   Future<dynamic> getPosts(String? newsQuery) async {
@@ -79,12 +81,12 @@ class VkApiClient {
   }
 
   String getAuthDialogLink() {
-    final String authAddress = 'https://oauth.vk.com/authorize';
-    final String clientId = '8097225'; // Идентификатор приложения
-    final String displayType = 'mobile';
-    final String redirectUri = 'https://oauth.vk.com/blank.html';
-    final String scope = 'offline'; //'offline' - бесконечный токен
-    final String state =
+    const String authAddress = 'https://oauth.vk.com/authorize';
+    const String clientId = '8097225'; // Идентификатор приложения
+    const String displayType = 'mobile';
+    const String redirectUri = 'https://oauth.vk.com/blank.html';
+    const String scope = 'offline'; //'offline' - бесконечный токен
+    const String state =
         'some_arguments'; //Произвольная строка, которая будет возвращена вместе с результатом авторизации.
     //'https://oauth.vk.com/authorize?client_id=8097225&display=mobile&redirect_uri=https://oauth.vk.com/blank.html&scope=friends&response_type=token&v=5.131&state=123456',
     final url = Uri.parse(
@@ -94,20 +96,19 @@ class VkApiClient {
 
   Future<void> _saveAuthDataToStorage(
       {String? accessToken, String? userId}) async {
-    final storage = FlutterSecureStorage();
-    await storage.write(key: 'token', value: accessToken);
-    await storage.write(key: 'id', value: userId);
+    await secureStorage.write(key: 'token', value: accessToken);
+    await secureStorage.write(key: 'id', value: userId);
   }
 
   Future<void> _getAuthDataFromStorage() async {
-    accessToken = await FlutterSecureStorage().read(key: 'token');
-    userId = await FlutterSecureStorage().read(key: 'id');
+    accessToken = await secureStorage.read(key: 'token');
+    userId = await secureStorage.read(key: 'id');
     print('Access Data received from Secure Storage: $userId $accessToken');
   }
 
   Future<void> _cleanSecureStorage() async {
     accessToken = null;
     userId = null;
-    await FlutterSecureStorage().deleteAll();
+    await secureStorage.deleteAll();
   }
 }

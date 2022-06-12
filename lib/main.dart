@@ -11,6 +11,8 @@ import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_page.dart';
 import 'package:vk_postman/simple_bloc_observer.dart';
 
+import 'initial_widget.dart';
+
 final keyForSnackBar = GlobalKey<ScaffoldMessengerState>();
 
 void main() {
@@ -18,34 +20,6 @@ void main() {
     () => runApp(const InitialWidget()),
     blocObserver: SimpleBlocObserver(),
   );
-}
-
-class InitialWidget extends StatefulWidget {
-  const InitialWidget({Key? key}) : super(key: key);
-
-  @override
-  State<InitialWidget> createState() => _InitialWidgetState();
-}
-
-class _InitialWidgetState extends State<InitialWidget> {
-  final storage = PersistentStorage();
-
-  @override
-  void initState() {
-    super.initState();
-
-    storage.init().whenComplete(() => setState(() {}));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider<AppThemeBLoC>(
-        create: (_) => AppThemeBLoC(repository: IAppThemeRepository())
-          ..add(AppThemeEvent.read()),
-        child: storage.isReady
-            ? const MyApp()
-            : Center(child: CircularProgressIndicator()));
-  }
 }
 
 class MyApp extends StatelessWidget {

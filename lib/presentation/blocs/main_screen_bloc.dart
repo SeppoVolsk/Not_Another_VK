@@ -312,7 +312,7 @@ class MainScreenBLoC extends Bloc<MainScreenEvent, MainScreenState>
       ReadMainScreenEvent event, Emitter<MainScreenState> emit) async {
     try {
       emit(MainScreenState.processing(data: state.data));
-      final newData = await _repository.readPostsFromStorage(event.storageKey);
+      final newData = await _repository.readSavedPosts(event.storageKey);
       emit(MainScreenState.successful(data: newData));
     } on Object catch (err, stackTrace) {
       print('В MainScreenBLoC произошла ошибка: $err $stackTrace');

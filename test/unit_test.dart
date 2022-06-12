@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vk_postman/data/api_clients/vk_api_client.dart';
 import 'package:vk_postman/data/persistent_storage.dart';
@@ -56,13 +58,22 @@ void main() async {
   final storage = PersistentStorage();
   await storage.init();
   group('Persistent Storage tests', () {
-    test('Read Write methods', () async {
+    test('Read Write methods (T String)', () async {
       const key = 'another_key';
       const value = 'Test value for persistent storage';
       await storage.write(key: key, value: value);
       expect(storage.read(key: key), value);
     });
-    test('Keys getter', () async {
+
+    test('Read Write methods json (T Map String, dynamic )', () async {
+      const key = 'some_key';
+      final json = testList[0];
+      await storage.write(key: key, value: json);
+      final jsonToString = jsonEncode(json);
+      expect(storage.read(key: key), jsonToString);
+    });
+
+    test('test for keys getter', () async {
       final keys = storage.keys;
       print('storage keys getter: $keys');
     });

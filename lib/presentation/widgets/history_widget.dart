@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vk_postman/data/persistent_storage.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 
 class HistoryWidget extends StatefulWidget {
@@ -15,6 +16,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   String element = 'aaa';
   bool isSelected = false;
   String? currentWord;
+  final storage = PersistentStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +43,15 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                       .add(MainScreenEvent.read(element));
                 },
                 deleteIcon: const Icon(Icons.cancel),
-                onDeleted: () {
+                onDeleted: () async {
                   state.data.history?.historyWords.remove(element);
-                  state.data.history?.postDataProvider
-                      .removeHistoryElementAtStorage(element);
+                  await storage.delete(key: element);
                   setState(() {});
                 },
               )
           ]);
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );

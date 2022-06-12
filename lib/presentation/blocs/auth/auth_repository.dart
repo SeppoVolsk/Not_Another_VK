@@ -35,7 +35,7 @@ class IAuthenticationRepository {
   }
 
   AuthenticationEntity logOutRepFunc() {
-    VkApiClient().clearTokenInfo;
+    VkApiClient().clearAuthInfo;
     return AuthenticationEntity();
   }
 
