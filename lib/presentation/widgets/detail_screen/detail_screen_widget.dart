@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
+
+import 'package:vk_postman/data/files_manager.dart';
 
 class DetailScreenPage extends StatefulWidget {
   DetailScreenPage({Key? key}) : super(key: key);
@@ -9,6 +10,8 @@ class DetailScreenPage extends StatefulWidget {
 }
 
 class _DetailScreenPageState extends State<DetailScreenPage> {
+  final fileManager = FileManager();
+
   @override
   Widget build(BuildContext context) {
     String? url = ModalRoute.of(context)?.settings.arguments as String;
@@ -18,7 +21,7 @@ class _DetailScreenPageState extends State<DetailScreenPage> {
             IconButton(
                 icon: Icon(Icons.save_alt),
                 onPressed: () async {
-                  final readyFile = await PostsDataProvider().urlToFile(url);
+                  final readyFile = await fileManager.urlToFile(url);
                 }),
           ],
         ),

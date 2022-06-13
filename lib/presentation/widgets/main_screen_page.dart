@@ -1,7 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
+import 'package:vk_postman/data/files_manager.dart';
+//import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
 import 'package:vk_postman/presentation/blocs/app_theme/app_theme_bloc.dart';
 import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
@@ -20,7 +21,7 @@ enum _select { news, saved }
 
 class _MainScreenPageState extends State<MainScreenPage> {
   final _searchController = TextEditingController();
-
+  final fileManager = FileManager();
   var _selectedTab = _select.news;
 
   @override
@@ -51,7 +52,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
                   ? IconButton(
                       icon: Icon(Icons.delete_forever),
                       onPressed: () async {
-                        await PostsDataProvider().clearDirectory();
+                        await fileManager.clearDirectory();
                       },
                     )
                   : IconButton(

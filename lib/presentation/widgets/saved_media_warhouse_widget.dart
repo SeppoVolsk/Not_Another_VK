@@ -1,6 +1,7 @@
-import 'dart:io';
+//import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
+//import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
+import 'package:vk_postman/data/files_manager.dart';
 
 class SavedMediaWarehouse extends StatefulWidget {
   SavedMediaWarehouse({Key? key}) : super(key: key);
@@ -11,11 +12,12 @@ class SavedMediaWarehouse extends StatefulWidget {
 
 class _SavedMediaWarehouseState extends State<SavedMediaWarehouse> {
   var _filesList;
+  final fileManager = FileManager();
 
   @override
   void initState() {
     super.initState();
-    _filesList = PostsDataProvider().getFilesInDirectory();
+    _filesList = fileManager.getFilesInDirectory();
   }
 
   // Future<void> getFilesNames() async {
