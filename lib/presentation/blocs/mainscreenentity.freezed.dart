@@ -18,7 +18,6 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$MainScreenEntity {
   List<Post>? get posts => throw _privateConstructorUsedError;
   HistoryDataProvider? get history => throw _privateConstructorUsedError;
-  bool get loadingInProgress => throw _privateConstructorUsedError;
   String? get newsQuery => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -32,10 +31,7 @@ abstract class $MainScreenEntityCopyWith<$Res> {
           MainScreenEntity value, $Res Function(MainScreenEntity) then) =
       _$MainScreenEntityCopyWithImpl<$Res>;
   $Res call(
-      {List<Post>? posts,
-      HistoryDataProvider? history,
-      bool loadingInProgress,
-      String? newsQuery});
+      {List<Post>? posts, HistoryDataProvider? history, String? newsQuery});
 }
 
 /// @nodoc
@@ -51,7 +47,6 @@ class _$MainScreenEntityCopyWithImpl<$Res>
   $Res call({
     Object? posts = freezed,
     Object? history = freezed,
-    Object? loadingInProgress = freezed,
     Object? newsQuery = freezed,
   }) {
     return _then(_value.copyWith(
@@ -63,10 +58,6 @@ class _$MainScreenEntityCopyWithImpl<$Res>
           ? _value.history
           : history // ignore: cast_nullable_to_non_nullable
               as HistoryDataProvider?,
-      loadingInProgress: loadingInProgress == freezed
-          ? _value.loadingInProgress
-          : loadingInProgress // ignore: cast_nullable_to_non_nullable
-              as bool,
       newsQuery: newsQuery == freezed
           ? _value.newsQuery
           : newsQuery // ignore: cast_nullable_to_non_nullable
@@ -83,10 +74,7 @@ abstract class _$$_MainScreenEntityCopyWith<$Res>
       __$$_MainScreenEntityCopyWithImpl<$Res>;
   @override
   $Res call(
-      {List<Post>? posts,
-      HistoryDataProvider? history,
-      bool loadingInProgress,
-      String? newsQuery});
+      {List<Post>? posts, HistoryDataProvider? history, String? newsQuery});
 }
 
 /// @nodoc
@@ -104,7 +92,6 @@ class __$$_MainScreenEntityCopyWithImpl<$Res>
   $Res call({
     Object? posts = freezed,
     Object? history = freezed,
-    Object? loadingInProgress = freezed,
     Object? newsQuery = freezed,
   }) {
     return _then(_$_MainScreenEntity(
@@ -116,10 +103,6 @@ class __$$_MainScreenEntityCopyWithImpl<$Res>
           ? _value.history
           : history // ignore: cast_nullable_to_non_nullable
               as HistoryDataProvider?,
-      loadingInProgress: loadingInProgress == freezed
-          ? _value.loadingInProgress
-          : loadingInProgress // ignore: cast_nullable_to_non_nullable
-              as bool,
       newsQuery: newsQuery == freezed
           ? _value.newsQuery
           : newsQuery // ignore: cast_nullable_to_non_nullable
@@ -131,26 +114,18 @@ class __$$_MainScreenEntityCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_MainScreenEntity implements _MainScreenEntity {
-  const _$_MainScreenEntity(
-      {this.posts,
-      this.history,
-      this.loadingInProgress = true,
-      this.newsQuery = ''});
+  const _$_MainScreenEntity({this.posts, this.history, this.newsQuery});
 
   @override
   final List<Post>? posts;
   @override
   final HistoryDataProvider? history;
   @override
-  @JsonKey()
-  final bool loadingInProgress;
-  @override
-  @JsonKey()
   final String? newsQuery;
 
   @override
   String toString() {
-    return 'MainScreenEntity(posts: $posts, history: $history, loadingInProgress: $loadingInProgress, newsQuery: $newsQuery)';
+    return 'MainScreenEntity(posts: $posts, history: $history, newsQuery: $newsQuery)';
   }
 
   @override
@@ -160,8 +135,6 @@ class _$_MainScreenEntity implements _MainScreenEntity {
             other is _$_MainScreenEntity &&
             const DeepCollectionEquality().equals(other.posts, posts) &&
             const DeepCollectionEquality().equals(other.history, history) &&
-            const DeepCollectionEquality()
-                .equals(other.loadingInProgress, loadingInProgress) &&
             const DeepCollectionEquality().equals(other.newsQuery, newsQuery));
   }
 
@@ -170,7 +143,6 @@ class _$_MainScreenEntity implements _MainScreenEntity {
       runtimeType,
       const DeepCollectionEquality().hash(posts),
       const DeepCollectionEquality().hash(history),
-      const DeepCollectionEquality().hash(loadingInProgress),
       const DeepCollectionEquality().hash(newsQuery));
 
   @JsonKey(ignore: true)
@@ -183,15 +155,12 @@ abstract class _MainScreenEntity implements MainScreenEntity {
   const factory _MainScreenEntity(
       {final List<Post>? posts,
       final HistoryDataProvider? history,
-      final bool loadingInProgress,
       final String? newsQuery}) = _$_MainScreenEntity;
 
   @override
   List<Post>? get posts => throw _privateConstructorUsedError;
   @override
   HistoryDataProvider? get history => throw _privateConstructorUsedError;
-  @override
-  bool get loadingInProgress => throw _privateConstructorUsedError;
   @override
   String? get newsQuery => throw _privateConstructorUsedError;
   @override

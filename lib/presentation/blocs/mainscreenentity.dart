@@ -9,7 +9,6 @@ class MainScreenEntity with _$MainScreenEntity {
   const factory MainScreenEntity({
     List<Post>? posts,
     HistoryDataProvider? history,
-    @Default(true) bool loadingInProgress,
-    @Default('') String? newsQuery,
+    String? newsQuery,
   }) = _MainScreenEntity;
 }
