@@ -220,7 +220,7 @@ part 'main_screen_bloc.freezed.dart';
 class MainScreenEvent with _$MainScreenEvent {
   const MainScreenEvent._();
 
-  //const factory MainScreenEvent.create() = CreateMainScreenEvent;
+  const factory MainScreenEvent.check() = CheckMainScreenEvent;
 
   const factory MainScreenEvent.read(String? storageKey) = ReadMainScreenEvent;
 
@@ -278,7 +278,7 @@ class MainScreenBLoC extends Bloc<MainScreenEvent, MainScreenState>
         ) {
     on<MainScreenEvent>(
       (event, emit) => event.map<Future<void>>(
-        //create: (event) => _create(event, emit),
+        check: (event) => _check(event, emit),
         read: (event) => _read(event, emit),
         update: (event) => _update(event, emit),
         //delete: (event) => _delete(event, emit),
@@ -292,20 +292,19 @@ class MainScreenBLoC extends Bloc<MainScreenEvent, MainScreenState>
 
   final IMainScreenRepository _repository;
 
-  /// Create event handler
-  // Future<void> _create(CreateMainScreenEvent event, Emitter<MainScreenState> emit) async {
-  //   try {
-  //     emit(MainScreenState.processing(data: state.data));
-  //     //final newData = await _repository.();
-  //     emit(MainScreenState.successful(data: newData));
-  //   } on Object catch (err, stackTrace) {
-  //     l.e('В MainScreenBLoC произошла ошибка: $err', stackTrace);
-  //     emit(MainScreenState.error(data: state.data));
-  //     rethrow;
-  //   } finally {
-  //     emit(MainScreenState.idle(data: state.data));
-  //   }
-  // }
+  /// Check event handler
+  Future<void> _check(
+      CheckMainScreenEvent event, Emitter<MainScreenState> emit) async {
+    try {
+      emit(MainScreenState.processing(data: state.data));
+      final newData = await MainScreenCachedData().read(query: null);
+      emit(MainScreenState.successful(data: newData));
+    } on Object catch (err, stackTrace) {
+      print('В MainScreenBLoC произошла ошибка: $err $stackTrace');
+      emit(MainScreenState.error(data: state.data));
+      rethrow;
+    }
+  }
 
   /// Read event handler
   Future<void> _read(

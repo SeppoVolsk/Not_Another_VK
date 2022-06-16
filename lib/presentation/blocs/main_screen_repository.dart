@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:vk_postman/data/api_clients/vk_api_client.dart';
 import 'package:vk_postman/data/data_providers/history_data_provider.dart';
 import 'package:vk_postman/data/persistent_storage.dart';
@@ -9,12 +8,12 @@ import 'package:vk_postman/presentation/blocs/mainscreenentity.dart';
 import 'package:vk_postman/presentation/widgets/error_snack_bar.dart';
 
 class IMainScreenRepository {
-  final _history = HistoryDataProvider();
   final _storage = PersistentStorage();
 
-  List<Post>? _posts;
-  Map<String, dynamic>? _json;
+  final _posts = <Post>[];
+  final _history = HistoryDataProvider();
   String? _newsQuery;
+  Map<String, dynamic>? _json;
 
   void _fetchJson() {}
   void _convertJsonToPosts() {}
@@ -110,18 +109,45 @@ class IMainScreenRepository {
   }
 }
 
-class MainScreenStoragePosts extends IMainScreenRepository {
+class MainScreenInitialData extends IMainScreenRepository {
+  static Set<String>? _keys;
+
+  @override
+  MainScreenEntity read({required String? query}) {
+    _keys = _storage.keys;
+    if (_keys == null) {
+      errorSnackBar('История поиска не найдена.Воспользуйтесь поиском');
+      return const MainScreenEntity();
+    }
+    _initHistory(words: _keys);
+    return super.read(query: null);
+  }
+
+  @override
+  void _fetchJson() {
+    final lastKey = _keys?.last;
+    String? jsonString;
+    if (lastKey != null) jsonString = _storage.read(key: lastKey);
+    if (jsonString != null) _json = jsonDecode(jsonString);
+  }
+
+  @override
+  void _convertJsonToPosts() {
+    int length = _json?['response']['items'].length;
+    for (int i = 0; i < length; i++) {
+      _posts.add(Post.postFromJson(json, i));
+    }
+  }
+
+  void _initHistory({required Set<String>? words}) => words != null
+      ? _history.historyWords.addAll(words.take(_history.maxLength).toList())
+      : errorSnackBar('Не удалось инициилизировать историю');
+}
+
+class MainScreenCachedData extends IMainScreenRepository {
   @override
   MainScreenEntity read({required String? query}) {
     final keys = _storage.keys;
-
-    if (query == null && keys == null) {
-      errorSnackBar('История поиска не найдена.Воспользуйтесь поиском');
-      return MainScreenEntity();
-    }
-    if (keys != null) {
-      _initHistory(words: keys);
-    }
 
     return super.read(query: query);
   }
@@ -129,7 +155,7 @@ class MainScreenStoragePosts extends IMainScreenRepository {
   @override
   _fetchJson() {
     final lastKey = _storage.keys?.last;
-    q;
+
     if (lastKey != null) {
       _json = jsonDecode(_storage.read(key: lastKey).toString());
     }
@@ -139,11 +165,7 @@ class MainScreenStoragePosts extends IMainScreenRepository {
   void _convertJsonToPosts() {
     int jsonFromStorageLength = (_json?['response']['items']).length;
     for (int i = 0; i < jsonFromStorageLength; i++) {
-      _posts?.add(Post.postFromJson(json, i));
+      _posts.add(Post.postFromJson(_json, i));
     }
-  }
-
-  void _initHistory({required Set<String> words}) {
-    _history.historyWords.addAll(words.take(_history.maxLength).toList());
   }
 }

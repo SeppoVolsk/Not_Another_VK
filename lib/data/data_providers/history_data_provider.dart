@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
 import 'package:vk_postman/data/persistent_storage.dart';
 
 class HistoryDataProvider {
