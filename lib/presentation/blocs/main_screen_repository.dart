@@ -11,7 +11,7 @@ class IMainScreenRepository {
   final _storage = PersistentStorage();
 
   final _posts = <Post>[];
-  final _history = HistoryDataProvider();
+  static final _history = HistoryDataProvider();
   String? _newsQuery;
   Map<String, dynamic>? _json;
 
@@ -23,7 +23,7 @@ class IMainScreenRepository {
 
   MainScreenEntity _templateMethod({required String? query}) {
     try {
-      final json = _fetchJson();
+      _fetchJson();
     } catch (e) {
       errorSnackBar(
           'Не удалось загрузить посты. Повторите попытку или воспользуйтесь поиском');
@@ -109,7 +109,7 @@ class IMainScreenRepository {
   }
 }
 
-class MainScreenInitialData extends IMainScreenRepository {
+class MainScreenInitialData extends IMainScreenRepository with JsonToPost {
   static Set<String>? _keys;
 
   @override
@@ -125,45 +125,43 @@ class MainScreenInitialData extends IMainScreenRepository {
 
   @override
   void _fetchJson() {
-    final lastKey = _keys?.last;
+    final _newsQuery = _keys?.last;
     String? jsonString;
-    if (lastKey != null) jsonString = _storage.read(key: lastKey);
+    jsonString = _storage.read(key: _newsQuery!);
     if (jsonString != null) _json = jsonDecode(jsonString);
   }
 
   @override
-  void _convertJsonToPosts() {
-    int length = _json?['response']['items'].length;
-    for (int i = 0; i < length; i++) {
-      _posts.add(Post.postFromJson(json, i));
-    }
-  }
+  void _convertJsonToPosts() => __convertJsonToPosts();
 
   void _initHistory({required Set<String>? words}) => words != null
-      ? _history.historyWords.addAll(words.take(_history.maxLength).toList())
+      ? IMainScreenRepository._history.historyWords
+          .addAll(words.take(IMainScreenRepository._history.maxLength).toList())
       : errorSnackBar('Не удалось инициилизировать историю');
 }
 
-class MainScreenCachedData extends IMainScreenRepository {
+class MainScreenCachedData extends IMainScreenRepository with JsonToPost {
   @override
   MainScreenEntity read({required String? query}) {
-    final keys = _storage.keys;
-
+    _newsQuery = query;
+    print('CACHED DATA HISTORY ${IMainScreenRepository._history.historyWords}');
     return super.read(query: query);
   }
 
   @override
   _fetchJson() {
-    final lastKey = _storage.keys?.last;
-
-    if (lastKey != null) {
-      _json = jsonDecode(_storage.read(key: lastKey).toString());
-    }
+    String? jsonString;
+    jsonString = _storage.read(key: _newsQuery!);
+    if (jsonString != null) _json = jsonDecode(jsonString);
   }
 
   @override
-  void _convertJsonToPosts() {
-    int jsonFromStorageLength = (_json?['response']['items']).length;
+  void _convertJsonToPosts() => __convertJsonToPosts();
+}
+
+mixin JsonToPost on IMainScreenRepository {
+  void __convertJsonToPosts() {
+    int jsonFromStorageLength = _json?['response']['items'].length;
     for (int i = 0; i < jsonFromStorageLength; i++) {
       _posts.add(Post.postFromJson(_json, i));
     }
