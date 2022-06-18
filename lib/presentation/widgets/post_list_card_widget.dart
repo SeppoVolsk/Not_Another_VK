@@ -83,10 +83,17 @@ class _PostCardState extends State<PostCard> {
                                 .data.posts![widget.index].postPhoto![i]
                                 .toString()),
                             onTap: () {
-                              Navigator.of(context).pushNamed(
-                                  MainNavigationRoutesNames.detailScreen,
-                                  arguments: state.data.posts?[widget.index]
-                                      .postLargePhoto?[i]);
+                              try {
+                                Navigator.of(context).pushNamed(
+                                    MainNavigationRoutesNames.detailScreen,
+                                    arguments: state.data.posts?[widget.index]
+                                        .postLargePhoto?[i]);
+                              } catch (e) {
+                                Navigator.of(context).pushNamed(
+                                    MainNavigationRoutesNames.detailScreen,
+                                    arguments: state.data.posts?[widget.index]
+                                        .postPhoto?[i]);
+                              }
                             },
                           )
                         : const SizedBox.shrink()

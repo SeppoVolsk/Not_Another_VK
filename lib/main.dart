@@ -28,10 +28,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mainScreenRepository = MainScreenInitialData(
+      MainScreenCachedData(
+        MainScreenNetworkData(),
+      ),
+    );
     return MultiBlocProvider(
       providers: [
         BlocProvider<MainScreenBLoC>(
-            create: (_) => MainScreenBLoC(repository: IMainScreenRepository())
+            create: (_) => MainScreenBLoC(repository: mainScreenRepository)
               ..add(MainScreenEvent.check())),
         BlocProvider<AuthenticationBLoC>(
             create: (_) =>
