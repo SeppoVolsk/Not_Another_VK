@@ -20,12 +20,16 @@ class IMainScreenRepository {
   IMainScreenRepository([this._nextHandler]);
 
   FutureOr<void> _fetchJson() async {}
+
   void _convertJsonToPosts() {}
 
-  Future<MainScreenEntity> read({required String? query}) async =>
-      await _templateMethod(query: query);
+  Future<MainScreenEntity> read([String? query]) {
+    print('#' * 15 + 'MAIN READ' + '#' * 15);
+    return _templateMethod(query: query);
+  }
 
   Future<MainScreenEntity> _templateMethod({required String? query}) async {
+    print('#' * 15 + 'TEMPLATE METHOD' + '#' * 15);
     try {
       await _fetchJson();
       _convertJsonToPosts();
@@ -35,25 +39,36 @@ class IMainScreenRepository {
       return const MainScreenEntity();
     }
     return MainScreenEntity(
-        posts: _posts, history: _history, newsQuery: _newsQuery);
+        posts: _posts,
+        history: IMainScreenRepository._history,
+        newsQuery: _newsQuery);
   }
 }
 
 class MainScreenInitialData extends IMainScreenRepository with JsonToPost {
   static Set<String>? _keys;
 
-  MainScreenInitialData([IMainScreenRepository? _nextHandler]);
+  MainScreenInitialData([IMainScreenRepository? _nextHandler])
+      : super(_nextHandler);
+  // @override
+  // Future<MainScreenEntity> _templateMethod({required String? query}) {
+  //   print('#' * 15 + 'INITIAL TEMPLATE METHOD' + '#' * 15);
+  //   return super._templateMethod(query: query);
+  // }
 
   @override
-  Future<MainScreenEntity> read({required String? query}) async {
-    if (query != null) _nextHandler?.read(query: query);
+  Future<MainScreenEntity> read([String? query]) async {
+    print('#' * 15 + 'INITIAL READ' + '#' * 15);
+    print('_' * 10 + 'QUERY: $query');
+    if (query != null) return _nextHandler!.read(query);
+
     _keys = _storage.keys;
     if (_keys == null) {
       errorSnackBar('История поиска не найдена.Воспользуйтесь поиском');
       return const MainScreenEntity();
     }
     _initHistory(words: _keys);
-    return super.read(query: null);
+    return super.read(null);
   }
 
   @override
@@ -67,20 +82,31 @@ class MainScreenInitialData extends IMainScreenRepository with JsonToPost {
   @override
   void _convertJsonToPosts() => __convertJsonToPosts(_json);
 
-  void _initHistory({required Set<String>? words}) => IMainScreenRepository
-      ._history.historyWords
-      .addAll(words!.take(IMainScreenRepository._history.maxLength).toList());
+  void _initHistory({required Set<String>? words}) {
+    print("INIT HISTORY do ${IMainScreenRepository._history.historyWords}");
+    IMainScreenRepository._history.historyWords
+        .addAll(words!.take(IMainScreenRepository._history.maxLength).toList());
+    print("INIT HISTORY posle ${IMainScreenRepository._history.historyWords}");
+  }
 }
 
 class MainScreenCachedData extends IMainScreenRepository with JsonToPost {
-  MainScreenCachedData([IMainScreenRepository? _nextHandler]);
+  MainScreenCachedData([IMainScreenRepository? _nextHandler])
+      : super(_nextHandler);
+  // @override
+  // Future<MainScreenEntity> _templateMethod({required String? query}) {
+  //   print('#' * 15 + 'CACHED TEMPLATE METHOD' + '#' * 15);
+  //   return super._templateMethod(query: query);
+  // }
 
   @override
-  Future<MainScreenEntity> read({required String? query}) async {
+  Future<MainScreenEntity> read([String? query]) {
+    print('#' * 15 + 'CACHED READ' + '#' * 15);
+    print('_' * 10 + 'QUERY: $query');
     if (!IMainScreenRepository._history.historyWords.contains(query)) {
-      return _nextHandler!.read(query: query);
+      return _nextHandler!.read(query);
     }
-    return super.read(query: _newsQuery = query);
+    return super.read(_newsQuery = query);
   }
 
   @override
@@ -95,9 +121,18 @@ class MainScreenCachedData extends IMainScreenRepository with JsonToPost {
 }
 
 class MainScreenNetworkData extends IMainScreenRepository with JsonToPost {
+  // @override
+  // Future<MainScreenEntity> _templateMethod({required String? query}) {
+  //   print('#' * 15 + 'NETWORK TEMPLATE METHOD' + '#' * 15);
+  //   return super._templateMethod(query: query);
+  // }
+
   @override
-  Future<MainScreenEntity> read({required String? query}) async =>
-      super.read(query: _newsQuery = query);
+  Future<MainScreenEntity> read([String? query]) {
+    print('#' * 15 + 'NETWORK READ' + '#' * 15);
+    print('_' * 10 + 'QUERY: $query');
+    return super.read(_newsQuery = query);
+  }
 
   @override
   void _fetchJson() async => _json = await VkApiClient().getPosts(_newsQuery);
@@ -118,6 +153,7 @@ class MainScreenNetworkData extends IMainScreenRepository with JsonToPost {
 mixin JsonToPost on IMainScreenRepository {
   void __convertJsonToPosts<T>([T? source]) {
     final sourceLength;
+    _posts.clear();
     switch (T) {
       case Map<String, dynamic>:
         sourceLength = _json['response']['items'].length;

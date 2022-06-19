@@ -22,10 +22,10 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
       builder: (context, state) {
-        var a = state.data.history;
-        if (a != null) {
+        var history = state.data.history;
+        if (history != null) {
           return Wrap(children: [
-            for (String element in a.historyWords)
+            for (String element in history.historyWords)
               InputChip(
                 label: Text(element),
                 showCheckmark: false,

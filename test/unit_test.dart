@@ -5,6 +5,7 @@ import 'package:vk_postman/data/api_clients/vk_api_client.dart';
 import 'package:vk_postman/data/persistent_storage.dart';
 import 'package:vk_postman/domain/entities/full_original_post/size.dart';
 import 'package:vk_postman/domain/entities/post.dart';
+import 'package:vk_postman/presentation/blocs/main_screen_repository.dart';
 
 void main() async {
   test('Проверка функции на возвращаемый тип', () {
@@ -76,6 +77,19 @@ void main() async {
     test('test for keys getter', () async {
       final keys = storage.keys;
       print('storage keys getter: $keys');
+    });
+  });
+
+  group('IMainScreenRepository tests', () {
+    test('Init - Cached - Network chain', () async {
+      final storage = PersistentStorage();
+      final reposChain =
+          MainScreenInitialData(MainScreenCachedData(MainScreenNetworkData()));
+      final data = await reposChain.read(query: 'erty');
+      print(data
+        ..history
+        ..newsQuery
+        ..posts?.length);
     });
   });
 }
