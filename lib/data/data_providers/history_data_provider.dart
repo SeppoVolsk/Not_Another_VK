@@ -5,7 +5,10 @@ class HistoryDataProvider {
   final historyWords = <String>[];
   final storage = PersistentStorage();
 
-  void markInHistory(
+  void firstInit({required Set<String> words}) =>
+      historyWords.addAll(words.take(maxLength).toList());
+
+  void makeMarks(
       {required String newsQuery, required Map<String, dynamic> json}) async {
     if (historyWords.length < maxLength) {
       historyWords.add(newsQuery);

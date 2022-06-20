@@ -85,7 +85,7 @@ void main() async {
       final storage = PersistentStorage();
       final reposChain =
           MainScreenInitialData(MainScreenCachedData(MainScreenNetworkData()));
-      final data = await reposChain.read(query: 'erty');
+      final data = await reposChain.read('erty');
       print(data
         ..history
         ..newsQuery

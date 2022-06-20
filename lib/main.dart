@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<MainScreenBLoC>(
             create: (_) => MainScreenBLoC(repository: mainScreenRepository)
-              ..add(MainScreenEvent.check())),
+              ..add(MainScreenEvent.load())),
         BlocProvider<AuthenticationBLoC>(
             create: (_) =>
                 AuthenticationBLoC(repository: IAuthenticationRepository())

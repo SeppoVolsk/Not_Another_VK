@@ -40,7 +40,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
 
                   context
                       .read<MainScreenBLoC>()
-                      .add(MainScreenEvent.read(element));
+                      .add(MainScreenEvent.load(element));
                 },
                 deleteIcon: const Icon(Icons.cancel),
                 onDeleted: () async {

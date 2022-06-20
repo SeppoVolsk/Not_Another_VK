@@ -10,26 +10,22 @@ import 'package:vk_postman/presentation/widgets/error_snack_bar.dart';
 
 class IMainScreenRepository {
   final _storage = PersistentStorage();
-
   final _posts = <Post>[];
   static final _history = HistoryDataProvider();
   String? _newsQuery;
   var _json = <String, dynamic>{};
 
-  IMainScreenRepository? _nextHandler;
+  final IMainScreenRepository? _nextHandler;
   IMainScreenRepository([this._nextHandler]);
 
   FutureOr<void> _fetchJson() async {}
 
   void _convertJsonToPosts() {}
 
-  Future<MainScreenEntity> read([String? query]) {
-    print('#' * 15 + 'MAIN READ' + '#' * 15);
-    return _templateMethod(query: query);
-  }
+  Future<MainScreenEntity> read([String? query]) =>
+      _templateMethod(query: query);
 
   Future<MainScreenEntity> _templateMethod({required String? query}) async {
-    print('#' * 15 + 'TEMPLATE METHOD' + '#' * 15);
     try {
       await _fetchJson();
       _convertJsonToPosts();
@@ -45,30 +41,22 @@ class IMainScreenRepository {
   }
 }
 
-class MainScreenInitialData extends IMainScreenRepository with JsonToPost {
+class MainScreenInitialData extends IMainScreenRepository with SourceToPost {
   static Set<String>? _keys;
 
   MainScreenInitialData([IMainScreenRepository? _nextHandler])
       : super(_nextHandler);
-  // @override
-  // Future<MainScreenEntity> _templateMethod({required String? query}) {
-  //   print('#' * 15 + 'INITIAL TEMPLATE METHOD' + '#' * 15);
-  //   return super._templateMethod(query: query);
-  // }
 
   @override
   Future<MainScreenEntity> read([String? query]) async {
-    print('#' * 15 + 'INITIAL READ' + '#' * 15);
-    print('_' * 10 + 'QUERY: $query');
     if (query != null) return _nextHandler!.read(query);
-
     _keys = _storage.keys;
     if (_keys == null) {
       errorSnackBar('История поиска не найдена.Воспользуйтесь поиском');
       return const MainScreenEntity();
     }
-    _initHistory(words: _keys);
-    return super.read(null);
+    IMainScreenRepository._history.firstInit(words: _keys!);
+    return super.read();
   }
 
   @override
@@ -80,29 +68,15 @@ class MainScreenInitialData extends IMainScreenRepository with JsonToPost {
   }
 
   @override
-  void _convertJsonToPosts() => __convertJsonToPosts(_json);
-
-  void _initHistory({required Set<String>? words}) {
-    print("INIT HISTORY do ${IMainScreenRepository._history.historyWords}");
-    IMainScreenRepository._history.historyWords
-        .addAll(words!.take(IMainScreenRepository._history.maxLength).toList());
-    print("INIT HISTORY posle ${IMainScreenRepository._history.historyWords}");
-  }
+  void _convertJsonToPosts() => __convertSourceToPosts(_json);
 }
 
-class MainScreenCachedData extends IMainScreenRepository with JsonToPost {
+class MainScreenCachedData extends IMainScreenRepository with SourceToPost {
   MainScreenCachedData([IMainScreenRepository? _nextHandler])
       : super(_nextHandler);
-  // @override
-  // Future<MainScreenEntity> _templateMethod({required String? query}) {
-  //   print('#' * 15 + 'CACHED TEMPLATE METHOD' + '#' * 15);
-  //   return super._templateMethod(query: query);
-  // }
 
   @override
   Future<MainScreenEntity> read([String? query]) {
-    print('#' * 15 + 'CACHED READ' + '#' * 15);
-    print('_' * 10 + 'QUERY: $query');
     if (!IMainScreenRepository._history.historyWords.contains(query)) {
       return _nextHandler!.read(query);
     }
@@ -117,22 +91,13 @@ class MainScreenCachedData extends IMainScreenRepository with JsonToPost {
   }
 
   @override
-  void _convertJsonToPosts() => __convertJsonToPosts(_json);
+  void _convertJsonToPosts() => __convertSourceToPosts(_json);
 }
 
-class MainScreenNetworkData extends IMainScreenRepository with JsonToPost {
-  // @override
-  // Future<MainScreenEntity> _templateMethod({required String? query}) {
-  //   print('#' * 15 + 'NETWORK TEMPLATE METHOD' + '#' * 15);
-  //   return super._templateMethod(query: query);
-  // }
-
+class MainScreenNetworkData extends IMainScreenRepository with SourceToPost {
   @override
-  Future<MainScreenEntity> read([String? query]) {
-    print('#' * 15 + 'NETWORK READ' + '#' * 15);
-    print('_' * 10 + 'QUERY: $query');
-    return super.read(_newsQuery = query);
-  }
+  Future<MainScreenEntity> read([String? query]) =>
+      super.read(_newsQuery = query);
 
   @override
   void _fetchJson() async => _json = await VkApiClient().getPosts(_newsQuery);
@@ -141,18 +106,18 @@ class MainScreenNetworkData extends IMainScreenRepository with JsonToPost {
   void _convertJsonToPosts() {
     FullOriginalPost originalPost = FullOriginalPost.fromJson(_json);
     try {
-      __convertJsonToPosts(originalPost);
+      __convertSourceToPosts(originalPost);
     } catch (e) {
       rethrow;
     }
     IMainScreenRepository._history
-        .markInHistory(newsQuery: _newsQuery!, json: _json);
+        .makeMarks(newsQuery: _newsQuery!, json: _json);
   }
 }
 
-mixin JsonToPost on IMainScreenRepository {
-  void __convertJsonToPosts<T>([T? source]) {
-    final sourceLength;
+mixin SourceToPost on IMainScreenRepository {
+  void __convertSourceToPosts<T>([T? source]) {
+    final int sourceLength;
     _posts.clear();
     switch (T) {
       case Map<String, dynamic>:
@@ -168,7 +133,6 @@ mixin JsonToPost on IMainScreenRepository {
             _posts.add(Post.fromOriginaltoView(source as FullOriginalPost, i));
           }
         } catch (e) {
-          //errorSnackBar('Некорректный запрос. Попробуйте еще раз');
           rethrow;
         }
         break;

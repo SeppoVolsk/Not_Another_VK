@@ -94,7 +94,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
                     if (_searchController.text.isNotEmpty) {
                       context
                           .read<MainScreenBLoC>()
-                          .add(MainScreenEvent.update(_searchController.text));
+                          .add(MainScreenEvent.load(_searchController.text));
                     }
                   }
                 : null,

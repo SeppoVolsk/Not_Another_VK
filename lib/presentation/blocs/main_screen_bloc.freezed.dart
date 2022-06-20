@@ -16,49 +16,42 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$MainScreenEvent {
+  String? get query => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() check,
-    required TResult Function(String? storageKey) read,
-    required TResult Function(String newsQuery) update,
+    required TResult Function(String? query) load,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? check,
-    TResult Function(String? storageKey)? read,
-    TResult Function(String newsQuery)? update,
+    TResult Function(String? query)? load,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? check,
-    TResult Function(String? storageKey)? read,
-    TResult Function(String newsQuery)? update,
+    TResult Function(String? query)? load,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(CheckMainScreenEvent value) check,
-    required TResult Function(ReadMainScreenEvent value) read,
-    required TResult Function(UpdateMainScreenEvent value) update,
+    required TResult Function(LoadMainScreenEvent value) load,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(CheckMainScreenEvent value)? check,
-    TResult Function(ReadMainScreenEvent value)? read,
-    TResult Function(UpdateMainScreenEvent value)? update,
+    TResult Function(LoadMainScreenEvent value)? load,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(CheckMainScreenEvent value)? check,
-    TResult Function(ReadMainScreenEvent value)? read,
-    TResult Function(UpdateMainScreenEvent value)? update,
+    TResult Function(LoadMainScreenEvent value)? load,
     required TResult orElse(),
   }) =>
+      throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $MainScreenEventCopyWith<MainScreenEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -67,6 +60,7 @@ abstract class $MainScreenEventCopyWith<$Res> {
   factory $MainScreenEventCopyWith(
           MainScreenEvent value, $Res Function(MainScreenEvent) then) =
       _$MainScreenEventCopyWithImpl<$Res>;
+  $Res call({String? query});
 }
 
 /// @nodoc
@@ -77,147 +71,49 @@ class _$MainScreenEventCopyWithImpl<$Res>
   final MainScreenEvent _value;
   // ignore: unused_field
   final $Res Function(MainScreenEvent) _then;
-}
-
-/// @nodoc
-abstract class _$$CheckMainScreenEventCopyWith<$Res> {
-  factory _$$CheckMainScreenEventCopyWith(_$CheckMainScreenEvent value,
-          $Res Function(_$CheckMainScreenEvent) then) =
-      __$$CheckMainScreenEventCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$CheckMainScreenEventCopyWithImpl<$Res>
-    extends _$MainScreenEventCopyWithImpl<$Res>
-    implements _$$CheckMainScreenEventCopyWith<$Res> {
-  __$$CheckMainScreenEventCopyWithImpl(_$CheckMainScreenEvent _value,
-      $Res Function(_$CheckMainScreenEvent) _then)
-      : super(_value, (v) => _then(v as _$CheckMainScreenEvent));
-
-  @override
-  _$CheckMainScreenEvent get _value => super._value as _$CheckMainScreenEvent;
-}
-
-/// @nodoc
-
-class _$CheckMainScreenEvent extends CheckMainScreenEvent {
-  const _$CheckMainScreenEvent() : super._();
-
-  @override
-  String toString() {
-    return 'MainScreenEvent.check()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$CheckMainScreenEvent);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() check,
-    required TResult Function(String? storageKey) read,
-    required TResult Function(String newsQuery) update,
-  }) {
-    return check();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? check,
-    TResult Function(String? storageKey)? read,
-    TResult Function(String newsQuery)? update,
-  }) {
-    return check?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? check,
-    TResult Function(String? storageKey)? read,
-    TResult Function(String newsQuery)? update,
-    required TResult orElse(),
-  }) {
-    if (check != null) {
-      return check();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(CheckMainScreenEvent value) check,
-    required TResult Function(ReadMainScreenEvent value) read,
-    required TResult Function(UpdateMainScreenEvent value) update,
-  }) {
-    return check(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(CheckMainScreenEvent value)? check,
-    TResult Function(ReadMainScreenEvent value)? read,
-    TResult Function(UpdateMainScreenEvent value)? update,
-  }) {
-    return check?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(CheckMainScreenEvent value)? check,
-    TResult Function(ReadMainScreenEvent value)? read,
-    TResult Function(UpdateMainScreenEvent value)? update,
-    required TResult orElse(),
-  }) {
-    if (check != null) {
-      return check(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class CheckMainScreenEvent extends MainScreenEvent {
-  const factory CheckMainScreenEvent() = _$CheckMainScreenEvent;
-  const CheckMainScreenEvent._() : super._();
-}
-
-/// @nodoc
-abstract class _$$ReadMainScreenEventCopyWith<$Res> {
-  factory _$$ReadMainScreenEventCopyWith(_$ReadMainScreenEvent value,
-          $Res Function(_$ReadMainScreenEvent) then) =
-      __$$ReadMainScreenEventCopyWithImpl<$Res>;
-  $Res call({String? storageKey});
-}
-
-/// @nodoc
-class __$$ReadMainScreenEventCopyWithImpl<$Res>
-    extends _$MainScreenEventCopyWithImpl<$Res>
-    implements _$$ReadMainScreenEventCopyWith<$Res> {
-  __$$ReadMainScreenEventCopyWithImpl(
-      _$ReadMainScreenEvent _value, $Res Function(_$ReadMainScreenEvent) _then)
-      : super(_value, (v) => _then(v as _$ReadMainScreenEvent));
-
-  @override
-  _$ReadMainScreenEvent get _value => super._value as _$ReadMainScreenEvent;
 
   @override
   $Res call({
-    Object? storageKey = freezed,
+    Object? query = freezed,
   }) {
-    return _then(_$ReadMainScreenEvent(
-      storageKey == freezed
-          ? _value.storageKey
-          : storageKey // ignore: cast_nullable_to_non_nullable
+    return _then(_value.copyWith(
+      query: query == freezed
+          ? _value.query
+          : query // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$LoadMainScreenEventCopyWith<$Res>
+    implements $MainScreenEventCopyWith<$Res> {
+  factory _$$LoadMainScreenEventCopyWith(_$LoadMainScreenEvent value,
+          $Res Function(_$LoadMainScreenEvent) then) =
+      __$$LoadMainScreenEventCopyWithImpl<$Res>;
+  @override
+  $Res call({String? query});
+}
+
+/// @nodoc
+class __$$LoadMainScreenEventCopyWithImpl<$Res>
+    extends _$MainScreenEventCopyWithImpl<$Res>
+    implements _$$LoadMainScreenEventCopyWith<$Res> {
+  __$$LoadMainScreenEventCopyWithImpl(
+      _$LoadMainScreenEvent _value, $Res Function(_$LoadMainScreenEvent) _then)
+      : super(_value, (v) => _then(v as _$LoadMainScreenEvent));
+
+  @override
+  _$LoadMainScreenEvent get _value => super._value as _$LoadMainScreenEvent;
+
+  @override
+  $Res call({
+    Object? query = freezed,
+  }) {
+    return _then(_$LoadMainScreenEvent(
+      query == freezed
+          ? _value.query
+          : query // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -225,66 +121,59 @@ class __$$ReadMainScreenEventCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ReadMainScreenEvent extends ReadMainScreenEvent {
-  const _$ReadMainScreenEvent(this.storageKey) : super._();
+class _$LoadMainScreenEvent extends LoadMainScreenEvent {
+  const _$LoadMainScreenEvent([this.query]) : super._();
 
   @override
-  final String? storageKey;
+  final String? query;
 
   @override
   String toString() {
-    return 'MainScreenEvent.read(storageKey: $storageKey)';
+    return 'MainScreenEvent.load(query: $query)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ReadMainScreenEvent &&
-            const DeepCollectionEquality()
-                .equals(other.storageKey, storageKey));
+            other is _$LoadMainScreenEvent &&
+            const DeepCollectionEquality().equals(other.query, query));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(storageKey));
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(query));
 
   @JsonKey(ignore: true)
   @override
-  _$$ReadMainScreenEventCopyWith<_$ReadMainScreenEvent> get copyWith =>
-      __$$ReadMainScreenEventCopyWithImpl<_$ReadMainScreenEvent>(
+  _$$LoadMainScreenEventCopyWith<_$LoadMainScreenEvent> get copyWith =>
+      __$$LoadMainScreenEventCopyWithImpl<_$LoadMainScreenEvent>(
           this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() check,
-    required TResult Function(String? storageKey) read,
-    required TResult Function(String newsQuery) update,
+    required TResult Function(String? query) load,
   }) {
-    return read(storageKey);
+    return load(query);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? check,
-    TResult Function(String? storageKey)? read,
-    TResult Function(String newsQuery)? update,
+    TResult Function(String? query)? load,
   }) {
-    return read?.call(storageKey);
+    return load?.call(query);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? check,
-    TResult Function(String? storageKey)? read,
-    TResult Function(String newsQuery)? update,
+    TResult Function(String? query)? load,
     required TResult orElse(),
   }) {
-    if (read != null) {
-      return read(storageKey);
+    if (load != null) {
+      return load(query);
     }
     return orElse();
   }
@@ -292,189 +181,42 @@ class _$ReadMainScreenEvent extends ReadMainScreenEvent {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(CheckMainScreenEvent value) check,
-    required TResult Function(ReadMainScreenEvent value) read,
-    required TResult Function(UpdateMainScreenEvent value) update,
+    required TResult Function(LoadMainScreenEvent value) load,
   }) {
-    return read(this);
+    return load(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(CheckMainScreenEvent value)? check,
-    TResult Function(ReadMainScreenEvent value)? read,
-    TResult Function(UpdateMainScreenEvent value)? update,
+    TResult Function(LoadMainScreenEvent value)? load,
   }) {
-    return read?.call(this);
+    return load?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(CheckMainScreenEvent value)? check,
-    TResult Function(ReadMainScreenEvent value)? read,
-    TResult Function(UpdateMainScreenEvent value)? update,
+    TResult Function(LoadMainScreenEvent value)? load,
     required TResult orElse(),
   }) {
-    if (read != null) {
-      return read(this);
+    if (load != null) {
+      return load(this);
     }
     return orElse();
   }
 }
 
-abstract class ReadMainScreenEvent extends MainScreenEvent {
-  const factory ReadMainScreenEvent(final String? storageKey) =
-      _$ReadMainScreenEvent;
-  const ReadMainScreenEvent._() : super._();
+abstract class LoadMainScreenEvent extends MainScreenEvent {
+  const factory LoadMainScreenEvent([final String? query]) =
+      _$LoadMainScreenEvent;
+  const LoadMainScreenEvent._() : super._();
 
-  String? get storageKey => throw _privateConstructorUsedError;
+  @override
+  String? get query => throw _privateConstructorUsedError;
+  @override
   @JsonKey(ignore: true)
-  _$$ReadMainScreenEventCopyWith<_$ReadMainScreenEvent> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$UpdateMainScreenEventCopyWith<$Res> {
-  factory _$$UpdateMainScreenEventCopyWith(_$UpdateMainScreenEvent value,
-          $Res Function(_$UpdateMainScreenEvent) then) =
-      __$$UpdateMainScreenEventCopyWithImpl<$Res>;
-  $Res call({String newsQuery});
-}
-
-/// @nodoc
-class __$$UpdateMainScreenEventCopyWithImpl<$Res>
-    extends _$MainScreenEventCopyWithImpl<$Res>
-    implements _$$UpdateMainScreenEventCopyWith<$Res> {
-  __$$UpdateMainScreenEventCopyWithImpl(_$UpdateMainScreenEvent _value,
-      $Res Function(_$UpdateMainScreenEvent) _then)
-      : super(_value, (v) => _then(v as _$UpdateMainScreenEvent));
-
-  @override
-  _$UpdateMainScreenEvent get _value => super._value as _$UpdateMainScreenEvent;
-
-  @override
-  $Res call({
-    Object? newsQuery = freezed,
-  }) {
-    return _then(_$UpdateMainScreenEvent(
-      newsQuery == freezed
-          ? _value.newsQuery
-          : newsQuery // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$UpdateMainScreenEvent extends UpdateMainScreenEvent {
-  const _$UpdateMainScreenEvent(this.newsQuery) : super._();
-
-  @override
-  final String newsQuery;
-
-  @override
-  String toString() {
-    return 'MainScreenEvent.update(newsQuery: $newsQuery)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$UpdateMainScreenEvent &&
-            const DeepCollectionEquality().equals(other.newsQuery, newsQuery));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(newsQuery));
-
-  @JsonKey(ignore: true)
-  @override
-  _$$UpdateMainScreenEventCopyWith<_$UpdateMainScreenEvent> get copyWith =>
-      __$$UpdateMainScreenEventCopyWithImpl<_$UpdateMainScreenEvent>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() check,
-    required TResult Function(String? storageKey) read,
-    required TResult Function(String newsQuery) update,
-  }) {
-    return update(newsQuery);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? check,
-    TResult Function(String? storageKey)? read,
-    TResult Function(String newsQuery)? update,
-  }) {
-    return update?.call(newsQuery);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? check,
-    TResult Function(String? storageKey)? read,
-    TResult Function(String newsQuery)? update,
-    required TResult orElse(),
-  }) {
-    if (update != null) {
-      return update(newsQuery);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(CheckMainScreenEvent value) check,
-    required TResult Function(ReadMainScreenEvent value) read,
-    required TResult Function(UpdateMainScreenEvent value) update,
-  }) {
-    return update(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(CheckMainScreenEvent value)? check,
-    TResult Function(ReadMainScreenEvent value)? read,
-    TResult Function(UpdateMainScreenEvent value)? update,
-  }) {
-    return update?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(CheckMainScreenEvent value)? check,
-    TResult Function(ReadMainScreenEvent value)? read,
-    TResult Function(UpdateMainScreenEvent value)? update,
-    required TResult orElse(),
-  }) {
-    if (update != null) {
-      return update(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class UpdateMainScreenEvent extends MainScreenEvent {
-  const factory UpdateMainScreenEvent(final String newsQuery) =
-      _$UpdateMainScreenEvent;
-  const UpdateMainScreenEvent._() : super._();
-
-  String get newsQuery => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  _$$UpdateMainScreenEventCopyWith<_$UpdateMainScreenEvent> get copyWith =>
+  _$$LoadMainScreenEventCopyWith<_$LoadMainScreenEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
