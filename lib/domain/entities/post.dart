@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:vk_postman/domain/entities/full_original_post/full_original_post.dart';
 import 'dart:math';
-
 import 'package:vk_postman/domain/entities/full_original_post/size.dart';
 
 class Post {
@@ -23,6 +22,54 @@ class Post {
       this.postText,
       this.postPhoto,
       this.postLargePhoto});
+
+  static Stream<Post> from<T>(T source) async* {
+    String? _firstName;
+    String? _surName;
+    String? _userPhoto;
+    List<String?> _postPhoto = [];
+    List<String?> _postLargePhoto = [];
+    List<dynamic> _profilesList = (source as Map)['response']['profiles'];
+    List<dynamic> _groupsList = source['response']['groups'];
+    List<dynamic> _itemsList = source['response']['items'];
+    int _userId; // = _itemsList[index]['from_id'];
+    DateTime? _dateTime; // = DateTime.fromMillisecondsSinceEpoch(
+    //itemsList[index]['date'] * 1000);
+    String? _postText; // = _itemsList[index]['text'];
+    List<dynamic> _attachmentsList;
+    bool _postContainsMedia;
+
+    for (var e in _itemsList) {
+      _userId = e['from_id'];
+      print(_userId);
+      _postText = e['text'];
+      _dateTime = DateTime.fromMillisecondsSinceEpoch(e['date'] * 1000);
+      if (_userId > 0) {
+        for (var p in _profilesList) {
+          if (p['id'] == _userId) {
+            _firstName = p['first_name'];
+            _surName = p['last_name'];
+            _userPhoto = p['photo_50'];
+          }
+        }
+      } else {
+        for (var p in _groupsList) {
+          if (p['id'] == _userId.abs()) {
+            _firstName = p['name'];
+            _surName = p['screen_name'];
+            _userPhoto = p['photo_50'];
+          }
+        }
+      }
+      //await Future.delayed(const Duration(seconds: 1));
+      yield Post(
+          userId: _userId,
+          firstName: _firstName,
+          surName: _surName,
+          postText: _postText,
+          userPhoto: _userPhoto);
+    }
+  }
 
   factory Post.postFromJson(dynamic json, int index) {
     String? _firstName;

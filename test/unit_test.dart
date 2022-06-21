@@ -1,11 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vk_postman/data/api_clients/vk_api_client.dart';
 import 'package:vk_postman/data/persistent_storage.dart';
 import 'package:vk_postman/domain/entities/full_original_post/size.dart';
 import 'package:vk_postman/domain/entities/post.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_repository.dart';
+
+import 'example_json.dart';
 
 void main() async {
   test('Проверка функции на возвращаемый тип', () {
@@ -90,6 +91,20 @@ void main() async {
         ..history
         ..newsQuery
         ..posts?.length);
+    });
+  });
+
+  group('From method tests', () {
+    test('From Json source test', () {
+      final data = Post.from(exampleJson).listen((event) async {
+        print(event.firstName);
+      });
+
+      //data.cancel();
+      // Future.delayed(Duration(minutes: 1)).then((value) {
+      //   print('М И Н У Т А');
+      //   data.cancel();
+      // });
     });
   });
 }

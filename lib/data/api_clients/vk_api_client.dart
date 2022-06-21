@@ -2,16 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-//import 'package:webview_flutter/webview_flutter.dart';
-// import 'dart:math';
-// import 'package:vk_postman/domain/api_clients/response_posts/response_posts.dart';
-
 enum ExceptionType { noNetwork, failedLoad }
-
-class VkApiClientException implements Exception {
-  final ExceptionType errorType;
-  VkApiClientException(this.errorType);
-}
 
 // TosterID = 8097225
 // Защищённый ключ XmvFyHgK9P0MQgNb0G0C
@@ -23,7 +14,7 @@ class VkApiClientException implements Exception {
 class VkApiClient {
   final String apiAddress = 'https://api.vk.com/method';
   final String apiVer = 'v=5.131';
-  static const String clientCredentialsFlowToken =
+  final String clientCredentialsFlowToken =
       '600104d1600104d1600104d1d5607a891866001600104d10229e437a43114591ecf962f';
   static String? accessToken;
   static String? userId;
