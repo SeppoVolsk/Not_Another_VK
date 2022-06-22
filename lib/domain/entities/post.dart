@@ -32,42 +32,56 @@ class Post {
     List<dynamic> _profilesList = (source as Map)['response']['profiles'];
     List<dynamic> _groupsList = source['response']['groups'];
     List<dynamic> _itemsList = source['response']['items'];
-    int _userId; // = _itemsList[index]['from_id'];
-    DateTime? _dateTime; // = DateTime.fromMillisecondsSinceEpoch(
-    //itemsList[index]['date'] * 1000);
-    String? _postText; // = _itemsList[index]['text'];
+    int _userId;
+    String _dateTime;
+    String? _postText;
     List<dynamic> _attachmentsList;
     bool _postContainsMedia;
 
     for (var e in _itemsList) {
       _userId = e['from_id'];
-      print(_userId);
       _postText = e['text'];
-      _dateTime = DateTime.fromMillisecondsSinceEpoch(e['date'] * 1000);
-      if (_userId > 0) {
-        for (var p in _profilesList) {
-          if (p['id'] == _userId) {
-            _firstName = p['first_name'];
-            _surName = p['last_name'];
-            _userPhoto = p['photo_50'];
-          }
-        }
-      } else {
-        for (var p in _groupsList) {
-          if (p['id'] == _userId.abs()) {
-            _firstName = p['name'];
-            _surName = p['screen_name'];
-            _userPhoto = p['photo_50'];
-          }
+      _dateTime = PostMethods.visibleVkDate(e['date']);
+
+      bool thisIsGroup = _userId < 0 ? true : false;
+      for (var p in thisIsGroup ? _groupsList : _profilesList) {
+        if (p['id'] == _userId.abs()) {
+          _firstName = thisIsGroup ? p['name'] : p['first_name'];
+          _surName = thisIsGroup ? p['screen_name'] : p['last_name'];
+          _userPhoto = p['photo_50'];
         }
       }
-      //await Future.delayed(const Duration(seconds: 1));
+      _postLargePhoto.clear();
+      _postPhoto.clear();
+
+      if (_postContainsMedia = e.containsKey('attachments')) {
+        for (var a in e['attachments']) {
+          String type = a['type'];
+          _postPhoto.add(type == 'video'
+              ? a['video']['image'][0]['url']
+              : type == 'photo'
+                  ? a['photo']['sizes'][0]['url']
+                  : null);
+          _postLargePhoto.add(type == 'video'
+              ? PostMethods.largeVkPhoto(a['video']['image'])
+              : type == 'photo'
+                  ? PostMethods.largeVkPhoto(a['photo']['sizes'])
+                  : null);
+        }
+      } else {
+        _postPhoto.add(null);
+        _postLargePhoto.add(null);
+      }
+
       yield Post(
           userId: _userId,
           firstName: _firstName,
           surName: _surName,
+          dateTime: _dateTime,
           postText: _postText,
-          userPhoto: _userPhoto);
+          userPhoto: _userPhoto,
+          postPhoto: [..._postPhoto],
+          postLargePhoto: [..._postLargePhoto]);
     }
   }
 
@@ -345,5 +359,10 @@ class PostMethods {
         ? element.height == maxPhotoHeight
         : element['height'] == maxPhotoHeight);
     return isSize ? result.url : result['url'];
+  }
+
+  static String visibleVkDate(int unixDate) {
+    DateTime? _dateTime = DateTime.fromMillisecondsSinceEpoch(unixDate * 1000);
+    return _dateTime.toString().substring(0, 19);
   }
 }

@@ -96,15 +96,13 @@ void main() async {
 
   group('From method tests', () {
     test('From Json source test', () {
-      final data = Post.from(exampleJson).listen((event) async {
-        print(event.firstName);
+      final data = Post.from(exampleJson).listen((event) {
+        print(
+            '${event.userId}: ${event.dateTime} \n ${event.postPhoto} \n ${event.postLargePhoto}');
+        // for (var i = 0; i < 10; i++) {
+        //   print(Post.postFromJson(exampleJson, i).postPhoto);
+        // }
       });
-
-      //data.cancel();
-      // Future.delayed(Duration(minutes: 1)).then((value) {
-      //   print('М И Н У Т А');
-      //   data.cancel();
-      // });
     });
   });
 }
