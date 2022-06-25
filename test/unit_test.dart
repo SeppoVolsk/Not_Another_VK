@@ -42,9 +42,9 @@ void main() async {
   ];
 
   test('Проверка функции _largeVkPhoto Map', () {
-    String result = PostMethods.largeVkPhoto(testList);
-    expect(result,
-        'https://sun9-52.userapi.com/s/v1/ig2/R01brrhBgpvV-FRYMokQ4yr4ySo_KOoIQL5xnDCeWHQdDk4FCIi1MXdnNidKFxiYs1x3qgN9nE_zIJd7njREftaZ.jpg?size=130x97&quality=95&type=album');
+    // String result = largeVkPhoto(testList);
+    //  expect(result,
+    //      'https://sun9-52.userapi.com/s/v1/ig2/R01brrhBgpvV-FRYMokQ4yr4ySo_KOoIQL5xnDCeWHQdDk4FCIi1MXdnNidKFxiYs1x3qgN9nE_zIJd7njREftaZ.jpg?size=130x97&quality=95&type=album');
   });
 
   test('Проверка функции largeVkPhoto OriginalPost', () {
@@ -52,9 +52,9 @@ void main() async {
     for (var element in testList) {
       testSizeArr.add(Size.fromJson(element));
     }
-    String result = PostMethods.largeVkPhoto(testSizeArr);
-    expect(result,
-        'https://sun9-52.userapi.com/s/v1/ig2/R01brrhBgpvV-FRYMokQ4yr4ySo_KOoIQL5xnDCeWHQdDk4FCIi1MXdnNidKFxiYs1x3qgN9nE_zIJd7njREftaZ.jpg?size=130x97&quality=95&type=album');
+    // String result = largeVkPhoto(testSizeArr);
+    // expect(result,
+    //     'https://sun9-52.userapi.com/s/v1/ig2/R01brrhBgpvV-FRYMokQ4yr4ySo_KOoIQL5xnDCeWHQdDk4FCIi1MXdnNidKFxiYs1x3qgN9nE_zIJd7njREftaZ.jpg?size=130x97&quality=95&type=album');
   });
 
   final storage = PersistentStorage();
@@ -96,13 +96,23 @@ void main() async {
 
   group('From method tests', () {
     test('From Json source test', () {
-      final data = Post.from(exampleJson).listen((event) {
-        print(
-            '${event.userId}: ${event.dateTime} \n ${event.postPhoto} \n ${event.postLargePhoto}');
-        // for (var i = 0; i < 10; i++) {
-        //   print(Post.postFromJson(exampleJson, i).postPhoto);
-        // }
+      var i = 0;
+      final data = Post().from(exampleJson).listen((event) {
+        i++;
+        print('$i ${event.postPhoto}');
       });
+      // data.cancel();
+    });
+    test('await for test', () async {
+      final List<Post> post = [];
+      await for (Post p in Post().from(exampleJson)) {
+        post.add(p);
+
+        print('${p.userId} ${p.firstName} ${p.surName}');
+        print(p.userPhoto);
+        // print('${p.postText}');
+      }
+      print('ready up');
     });
   });
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vk_postman/domain/entities/post.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 
@@ -13,9 +14,8 @@ class PostListWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return PostCard(index: index);
       },
-      itemCount: context.select((MainScreenBLoC bloc) =>
-          bloc.state.data.posts?.length ??
-          0), //MainScreenPageProvider.watch(context)?.model.post.length ?? 0,
+      itemCount: context
+          .select((MainScreenBLoC bloc) => bloc.state.data.posts?.length ?? 0),
     );
   }
 }
@@ -33,13 +33,8 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    //dynamic post = MainScreenPageProvider.read(context)?.model.post;
-
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
       builder: ((context, state) {
-        // state.data.posts?.forEach((element) {
-        //   print(element.firstName);
-        // });
         return Card(
           child: Column(
             children: [
@@ -54,24 +49,6 @@ class _PostCardState extends State<PostCard> {
                 subtitle: Text(
                     'id: ${state.data.posts?[widget.index].userId}\n${state.data.posts?[widget.index].dateTime}'),
               ),
-              // Wrap(
-              //   children: [
-              //     for (var element
-              //         in state.data.posts![widget.index].postPhoto!)
-              //       element != null
-              //           ? InkWell(
-              //               child: Image.network(element),
-              //               onTap: () {
-
-              //                 Navigator.of(context).pushNamed(
-              //                     MainNavigationRoutesNames.detailScreen,
-              //                     arguments: state.data.posts?[widget.index]
-              //                         .postLargePhoto?[1]);
-              //               },
-              //             )
-              //           : const SizedBox.shrink()
-              //   ],
-              // ),
               Wrap(
                 children: [
                   for (int i = 0;
@@ -99,7 +76,6 @@ class _PostCardState extends State<PostCard> {
                         : const SizedBox.shrink()
                 ],
               ),
-
               ExpansionTile(
                 title: !textTileIsOpen
                     ? Text(
@@ -122,10 +98,5 @@ class _PostCardState extends State<PostCard> {
         );
       }),
     );
-
-    // post.userPhoto == ""
-    //     ? Icon(Icons.account_box)
-    //     : Image.network(post.userPhoto);
-    // Для CircleAvatar - NetworkImage(post.userPhoto)
   }
 }

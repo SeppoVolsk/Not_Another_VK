@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$MainScreenEntity {
   List<Post>? get posts => throw _privateConstructorUsedError;
+  Stream<Post>? get postsStream => throw _privateConstructorUsedError;
   HistoryDataProvider? get history => throw _privateConstructorUsedError;
   String? get newsQuery => throw _privateConstructorUsedError;
 
@@ -31,7 +32,10 @@ abstract class $MainScreenEntityCopyWith<$Res> {
           MainScreenEntity value, $Res Function(MainScreenEntity) then) =
       _$MainScreenEntityCopyWithImpl<$Res>;
   $Res call(
-      {List<Post>? posts, HistoryDataProvider? history, String? newsQuery});
+      {List<Post>? posts,
+      Stream<Post>? postsStream,
+      HistoryDataProvider? history,
+      String? newsQuery});
 }
 
 /// @nodoc
@@ -46,6 +50,7 @@ class _$MainScreenEntityCopyWithImpl<$Res>
   @override
   $Res call({
     Object? posts = freezed,
+    Object? postsStream = freezed,
     Object? history = freezed,
     Object? newsQuery = freezed,
   }) {
@@ -54,6 +59,10 @@ class _$MainScreenEntityCopyWithImpl<$Res>
           ? _value.posts
           : posts // ignore: cast_nullable_to_non_nullable
               as List<Post>?,
+      postsStream: postsStream == freezed
+          ? _value.postsStream
+          : postsStream // ignore: cast_nullable_to_non_nullable
+              as Stream<Post>?,
       history: history == freezed
           ? _value.history
           : history // ignore: cast_nullable_to_non_nullable
@@ -74,7 +83,10 @@ abstract class _$$_MainScreenEntityCopyWith<$Res>
       __$$_MainScreenEntityCopyWithImpl<$Res>;
   @override
   $Res call(
-      {List<Post>? posts, HistoryDataProvider? history, String? newsQuery});
+      {List<Post>? posts,
+      Stream<Post>? postsStream,
+      HistoryDataProvider? history,
+      String? newsQuery});
 }
 
 /// @nodoc
@@ -91,6 +103,7 @@ class __$$_MainScreenEntityCopyWithImpl<$Res>
   @override
   $Res call({
     Object? posts = freezed,
+    Object? postsStream = freezed,
     Object? history = freezed,
     Object? newsQuery = freezed,
   }) {
@@ -99,6 +112,10 @@ class __$$_MainScreenEntityCopyWithImpl<$Res>
           ? _value.posts
           : posts // ignore: cast_nullable_to_non_nullable
               as List<Post>?,
+      postsStream: postsStream == freezed
+          ? _value.postsStream
+          : postsStream // ignore: cast_nullable_to_non_nullable
+              as Stream<Post>?,
       history: history == freezed
           ? _value.history
           : history // ignore: cast_nullable_to_non_nullable
@@ -114,10 +131,13 @@ class __$$_MainScreenEntityCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_MainScreenEntity implements _MainScreenEntity {
-  const _$_MainScreenEntity({this.posts, this.history, this.newsQuery});
+  const _$_MainScreenEntity(
+      {this.posts, this.postsStream, this.history, this.newsQuery});
 
   @override
   final List<Post>? posts;
+  @override
+  final Stream<Post>? postsStream;
   @override
   final HistoryDataProvider? history;
   @override
@@ -125,7 +145,7 @@ class _$_MainScreenEntity implements _MainScreenEntity {
 
   @override
   String toString() {
-    return 'MainScreenEntity(posts: $posts, history: $history, newsQuery: $newsQuery)';
+    return 'MainScreenEntity(posts: $posts, postsStream: $postsStream, history: $history, newsQuery: $newsQuery)';
   }
 
   @override
@@ -134,6 +154,8 @@ class _$_MainScreenEntity implements _MainScreenEntity {
         (other.runtimeType == runtimeType &&
             other is _$_MainScreenEntity &&
             const DeepCollectionEquality().equals(other.posts, posts) &&
+            const DeepCollectionEquality()
+                .equals(other.postsStream, postsStream) &&
             const DeepCollectionEquality().equals(other.history, history) &&
             const DeepCollectionEquality().equals(other.newsQuery, newsQuery));
   }
@@ -142,6 +164,7 @@ class _$_MainScreenEntity implements _MainScreenEntity {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(posts),
+      const DeepCollectionEquality().hash(postsStream),
       const DeepCollectionEquality().hash(history),
       const DeepCollectionEquality().hash(newsQuery));
 
@@ -154,11 +177,14 @@ class _$_MainScreenEntity implements _MainScreenEntity {
 abstract class _MainScreenEntity implements MainScreenEntity {
   const factory _MainScreenEntity(
       {final List<Post>? posts,
+      final Stream<Post>? postsStream,
       final HistoryDataProvider? history,
       final String? newsQuery}) = _$_MainScreenEntity;
 
   @override
   List<Post>? get posts => throw _privateConstructorUsedError;
+  @override
+  Stream<Post>? get postsStream => throw _privateConstructorUsedError;
   @override
   HistoryDataProvider? get history => throw _privateConstructorUsedError;
   @override

@@ -116,21 +116,25 @@ class MainScreenNetworkData extends IMainScreenRepository with SourceToPost {
 }
 
 mixin SourceToPost on IMainScreenRepository {
-  void __convertSourceToPosts<T>([T? source]) {
+  void __convertSourceToPosts<T>([T? source]) async {
     final int sourceLength;
     _posts.clear();
     switch (T) {
       case Map<String, dynamic>:
-        sourceLength = _json['response']['items'].length;
-        for (int i = 0; i < sourceLength; i++) {
-          _posts.add(Post.postFromJson(source, i));
+        //sourceLength = _json['response']['items'].length;
+        // for (int i = 0; i < sourceLength; i++) {
+        //   _posts.add(Post.postFromJson(source, i));
+        // }
+        await for (Post p in Post().from(source)) {
+          _posts.add(p);
         }
         break;
       case FullOriginalPost:
         sourceLength = VkApiClient().newsCount;
         try {
           for (int i = 0; i < sourceLength; i++) {
-            _posts.add(Post.fromOriginaltoView(source as FullOriginalPost, i));
+            _posts
+                .add(Post().fromOriginaltoView(source as FullOriginalPost, i));
           }
         } catch (e) {
           rethrow;

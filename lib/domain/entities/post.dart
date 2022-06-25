@@ -23,69 +23,25 @@ class Post {
       this.postPhoto,
       this.postLargePhoto});
 
-  static Stream<Post> from<T>(T source) async* {
-    String? _firstName;
-    String? _surName;
-    String? _userPhoto;
-    List<String?> _postPhoto = [];
-    List<String?> _postLargePhoto = [];
-    List<dynamic> _profilesList = (source as Map)['response']['profiles'];
-    List<dynamic> _groupsList = source['response']['groups'];
-    List<dynamic> _itemsList = source['response']['items'];
-    int _userId;
-    String _dateTime;
-    String? _postText;
-    List<dynamic> _attachmentsList;
-    bool _postContainsMedia;
-
+  Stream<Post> from<T>(T source) async* {
+    List<dynamic> _itemsList = (source as Map)['response']['items'];
     for (var e in _itemsList) {
-      _userId = e['from_id'];
-      _postText = e['text'];
-      _dateTime = PostMethods.visibleVkDate(e['date']);
-
-      bool thisIsGroup = _userId < 0 ? true : false;
-      for (var p in thisIsGroup ? _groupsList : _profilesList) {
-        if (p['id'] == _userId.abs()) {
-          _firstName = thisIsGroup ? p['name'] : p['first_name'];
-          _surName = thisIsGroup ? p['screen_name'] : p['last_name'];
-          _userPhoto = p['photo_50'];
-        }
-      }
-      _postLargePhoto.clear();
-      _postPhoto.clear();
-
-      if (_postContainsMedia = e.containsKey('attachments')) {
-        for (var a in e['attachments']) {
-          String type = a['type'];
-          _postPhoto.add(type == 'video'
-              ? a['video']['image'][0]['url']
-              : type == 'photo'
-                  ? a['photo']['sizes'][0]['url']
-                  : null);
-          _postLargePhoto.add(type == 'video'
-              ? PostMethods.largeVkPhoto(a['video']['image'])
-              : type == 'photo'
-                  ? PostMethods.largeVkPhoto(a['photo']['sizes'])
-                  : null);
-        }
-      } else {
-        _postPhoto.add(null);
-        _postLargePhoto.add(null);
-      }
+      final textFields = fillTextFields(e, source);
+      final mediaFields = fillMediaFields(e);
 
       yield Post(
-          userId: _userId,
-          firstName: _firstName,
-          surName: _surName,
-          dateTime: _dateTime,
-          postText: _postText,
-          userPhoto: _userPhoto,
-          postPhoto: [..._postPhoto],
-          postLargePhoto: [..._postLargePhoto]);
+          userId: textFields['userId'],
+          firstName: textFields['firstName'],
+          surName: textFields['surName'],
+          dateTime: textFields['dateTime'],
+          postText: textFields['postText'],
+          userPhoto: textFields['userPhoto'],
+          postPhoto: mediaFields['postPhoto'],
+          postLargePhoto: mediaFields['postLargePhoto']);
     }
   }
 
-  factory Post.postFromJson(dynamic json, int index) {
+  Post postFromJson(dynamic json, int index) {
     String? _firstName;
     String? _surName;
     String? _userPhoto;
@@ -132,16 +88,16 @@ class Post {
             {
               _postPhoto
                   .add(_attachmentsList[attIndex]['video']['image'][0]['url']);
-              _postLargePhoto.add(PostMethods.largeVkPhoto(
-                  _attachmentsList[attIndex]['video']['image']));
+              _postLargePhoto.add(
+                  largeVkPhoto(_attachmentsList[attIndex]['video']['image']));
             }
             break;
           case 'photo':
             {
               _postPhoto
                   .add(_attachmentsList[attIndex]['photo']['sizes'][0]['url']);
-              _postLargePhoto.add(PostMethods.largeVkPhoto(
-                  _attachmentsList[attIndex]['photo']['sizes']));
+              _postLargePhoto.add(
+                  largeVkPhoto(_attachmentsList[attIndex]['photo']['sizes']));
             }
             break;
           case 'link':
@@ -182,7 +138,7 @@ class Post {
             _postLargePhoto.length, (ind) => _postLargePhoto[ind]));
   }
 
-  factory Post.fromOriginaltoView(FullOriginalPost originalPost, int index) {
+  Post fromOriginaltoView(FullOriginalPost originalPost, int index) {
     String? _firstName;
     String? _surName;
     String? _userPhoto;
@@ -244,16 +200,16 @@ class Post {
             case 'video':
               {
                 _postPhoto.add(_attachmentsList[attIndex].video.image[0].url);
-                _postLargePhoto.add(PostMethods.largeVkPhoto(
-                    _attachmentsList[attIndex].video.image));
+                _postLargePhoto
+                    .add(largeVkPhoto(_attachmentsList[attIndex].video.image));
               }
               break;
             case 'photo':
               {
                 _postPhoto.add(_attachmentsList[attIndex].photo.sizes[0].url);
 
-                _postLargePhoto.add(PostMethods.largeVkPhoto(
-                    _attachmentsList[attIndex].photo.sizes));
+                _postLargePhoto
+                    .add(largeVkPhoto(_attachmentsList[attIndex].photo.sizes));
               }
               break;
             case 'link':
@@ -347,8 +303,8 @@ class Post {
   }
 }
 
-class PostMethods {
-  static String largeVkPhoto(List<dynamic> sizesList) {
+extension on Post {
+  String largeVkPhoto(List<dynamic> sizesList) {
     bool isSize = sizesList.first is Size;
     List<int> photoHeights = [];
     for (var element in sizesList) {
@@ -361,8 +317,57 @@ class PostMethods {
     return isSize ? result.url : result['url'];
   }
 
-  static String visibleVkDate(int unixDate) {
+  String visibleVkDate(int unixDate) {
     DateTime? _dateTime = DateTime.fromMillisecondsSinceEpoch(unixDate * 1000);
     return _dateTime.toString().substring(0, 19);
+  }
+
+  Map<String, dynamic> fillTextFields(dynamic e, dynamic source) {
+    final int _userId = e['from_id'];
+    final String _postText = e['text'];
+    final String _dateTime = visibleVkDate(e['date']);
+    String? _firstName, _surName, _userPhoto;
+    bool thisIsGroup = _userId < 0 ? true : false;
+    List<dynamic> _profilesList = (source as Map)['response']['profiles'];
+    List<dynamic> _groupsList = source['response']['groups'];
+    for (var p in thisIsGroup ? _groupsList : _profilesList) {
+      if (p['id'] == _userId.abs()) {
+        _firstName = thisIsGroup ? p['name'] : p['first_name'];
+        _surName = thisIsGroup ? p['screen_name'] : p['last_name'];
+        _userPhoto = p['photo_50'];
+      }
+    }
+    return {
+      'userId': _userId,
+      'firstName': _firstName,
+      'surName': _surName,
+      'dateTime': _dateTime,
+      'postText': _postText,
+      'userPhoto': _userPhoto
+    };
+  }
+
+  Map<String, List<String?>> fillMediaFields(dynamic e) {
+    final List<String?> _postLargePhoto = [], _postPhoto = [];
+    bool _postContainsMedia = e.containsKey('attachments');
+    if (_postContainsMedia) {
+      for (var a in e['attachments']) {
+        String type = a['type'];
+        _postPhoto.add(type == 'video'
+            ? a['video']['image'][0]['url']
+            : type == 'photo'
+                ? a['photo']['sizes'][0]['url']
+                : null);
+        _postLargePhoto.add(type == 'video'
+            ? largeVkPhoto(a['video']['image'])
+            : type == 'photo'
+                ? largeVkPhoto(a['photo']['sizes'])
+                : null);
+      }
+    } else {
+      _postPhoto.add(null);
+      _postLargePhoto.add(null);
+    }
+    return {'postPhoto': _postPhoto, 'postLargePhoto': _postLargePhoto};
   }
 }
