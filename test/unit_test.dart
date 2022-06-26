@@ -105,7 +105,7 @@ void main() async {
     });
     test('await for test', () async {
       final List<Post> post = [];
-      await for (Post p in Post().from(exampleJson)) {
+      await for (Post p in Post().from<Map>(exampleJson)) {
         post.add(p);
 
         print('${p.userId} ${p.firstName} ${p.surName}');

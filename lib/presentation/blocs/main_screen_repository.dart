@@ -125,7 +125,7 @@ mixin SourceToPost on IMainScreenRepository {
         // for (int i = 0; i < sourceLength; i++) {
         //   _posts.add(Post.postFromJson(source, i));
         // }
-        await for (Post p in Post().from(source)) {
+        await for (Post p in Post().from(source as Map)) {
           _posts.add(p);
         }
         break;

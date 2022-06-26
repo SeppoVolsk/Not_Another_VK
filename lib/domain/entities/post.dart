@@ -24,119 +24,125 @@ class Post {
       this.postLargePhoto});
 
   Stream<Post> from<T>(T source) async* {
-    List<dynamic> _itemsList = (source as Map)['response']['items'];
-    for (var e in _itemsList) {
-      final textFields = fillTextFields(e, source);
-      final mediaFields = fillMediaFields(e);
+    switch (T) {
+      case Map:
+        List<dynamic> _itemsList = (source as Map)['response']['items'];
+        for (var e in _itemsList) {
+          final textFields = fillTextFields(e, source);
+          final mediaFields = fillMediaFields(e);
 
-      yield Post(
-          userId: textFields['userId'],
-          firstName: textFields['firstName'],
-          surName: textFields['surName'],
-          dateTime: textFields['dateTime'],
-          postText: textFields['postText'],
-          userPhoto: textFields['userPhoto'],
-          postPhoto: mediaFields['postPhoto'],
-          postLargePhoto: mediaFields['postLargePhoto']);
+          yield Post(
+              userId: textFields['userId'],
+              firstName: textFields['firstName'],
+              surName: textFields['surName'],
+              dateTime: textFields['dateTime'],
+              postText: textFields['postText'],
+              userPhoto: textFields['userPhoto'],
+              postPhoto: mediaFields['postPhoto'],
+              postLargePhoto: mediaFields['postLargePhoto']);
+        }
+        break;
+      case FullOriginalPost:
+        break;
     }
   }
 
-  Post postFromJson(dynamic json, int index) {
-    String? _firstName;
-    String? _surName;
-    String? _userPhoto;
-    List<String?> _postPhoto = [];
-    List<String?> _postLargePhoto = [];
-    List<dynamic> _profilesList = json['response']['profiles'];
-    List<dynamic> _groupsList = json['response']['groups'];
-    List<dynamic> _itemsList = json['response']['items'];
-    int _userId = _itemsList[index]['from_id'];
-    DateTime? _dateTime =
-        DateTime.fromMillisecondsSinceEpoch(_itemsList[index]['date'] * 1000);
-    String _postText = _itemsList[index]['text'];
-    List<dynamic> _attachmentsList;
+  // Post postFromJson(dynamic json, int index) {
+  //   String? _firstName;
+  //   String? _surName;
+  //   String? _userPhoto;
+  //   List<String?> _postPhoto = [];
+  //   List<String?> _postLargePhoto = [];
+  //   List<dynamic> _profilesList = json['response']['profiles'];
+  //   List<dynamic> _groupsList = json['response']['groups'];
+  //   List<dynamic> _itemsList = json['response']['items'];
+  //   int _userId = _itemsList[index]['from_id'];
+  //   DateTime? _dateTime =
+  //       DateTime.fromMillisecondsSinceEpoch(_itemsList[index]['date'] * 1000);
+  //   String _postText = _itemsList[index]['text'];
+  //   List<dynamic> _attachmentsList;
 
-    bool _postContainsMedia;
+  //   bool _postContainsMedia;
 
-    if (_userId > 0) {
-      for (int indexProfile = 0;
-          indexProfile < _profilesList.length;
-          indexProfile++) {
-        if (_profilesList[indexProfile]['id'] == _userId) {
-          _firstName = _profilesList[indexProfile]['first_name'];
-          _surName = _profilesList[indexProfile]['last_name'];
-          _userPhoto = _profilesList[indexProfile]['photo_50'];
-          break;
-        }
-      }
-    } else {
-      for (int indexGroup = 0; indexGroup < _groupsList.length; indexGroup++) {
-        if (_groupsList[indexGroup]['id'] == _userId.abs()) {
-          _firstName = _groupsList[indexGroup]['name'];
-          _surName = _groupsList[indexGroup]['screen_name'];
-          _userPhoto = _groupsList[indexGroup]['photo_50'];
-          break;
-        }
-      }
-    }
-    _postContainsMedia = _itemsList[index].containsKey('attachments');
-    if (_postContainsMedia) {
-      _attachmentsList = _itemsList[index]['attachments'];
-      for (int attIndex = 0; attIndex < _attachmentsList.length; attIndex++) {
-        switch (_attachmentsList[attIndex]['type']) {
-          case 'video':
-            {
-              _postPhoto
-                  .add(_attachmentsList[attIndex]['video']['image'][0]['url']);
-              _postLargePhoto.add(
-                  largeVkPhoto(_attachmentsList[attIndex]['video']['image']));
-            }
-            break;
-          case 'photo':
-            {
-              _postPhoto
-                  .add(_attachmentsList[attIndex]['photo']['sizes'][0]['url']);
-              _postLargePhoto.add(
-                  largeVkPhoto(_attachmentsList[attIndex]['photo']['sizes']));
-            }
-            break;
-          case 'link':
-            {
-              _postPhoto.add(null);
-              _postLargePhoto.add(null);
-            }
-            break;
-          case 'audio':
-            {
-              _postPhoto.add(null);
-              _postLargePhoto.add(null);
-            }
-            break;
-          default:
-            {
-              _postPhoto.add(null);
-              _postLargePhoto.add(null);
-            }
-            break;
-        }
-      }
-    } else {
-      _postPhoto.add(null);
-      _postLargePhoto.add(null);
-    }
-    String _dateString = _dateTime.toString().substring(0, 19);
+  //   if (_userId > 0) {
+  //     for (int indexProfile = 0;
+  //         indexProfile < _profilesList.length;
+  //         indexProfile++) {
+  //       if (_profilesList[indexProfile]['id'] == _userId) {
+  //         _firstName = _profilesList[indexProfile]['first_name'];
+  //         _surName = _profilesList[indexProfile]['last_name'];
+  //         _userPhoto = _profilesList[indexProfile]['photo_50'];
+  //         break;
+  //       }
+  //     }
+  //   } else {
+  //     for (int indexGroup = 0; indexGroup < _groupsList.length; indexGroup++) {
+  //       if (_groupsList[indexGroup]['id'] == _userId.abs()) {
+  //         _firstName = _groupsList[indexGroup]['name'];
+  //         _surName = _groupsList[indexGroup]['screen_name'];
+  //         _userPhoto = _groupsList[indexGroup]['photo_50'];
+  //         break;
+  //       }
+  //     }
+  //   }
+  //   _postContainsMedia = _itemsList[index].containsKey('attachments');
+  //   if (_postContainsMedia) {
+  //     _attachmentsList = _itemsList[index]['attachments'];
+  //     for (int attIndex = 0; attIndex < _attachmentsList.length; attIndex++) {
+  //       switch (_attachmentsList[attIndex]['type']) {
+  //         case 'video':
+  //           {
+  //             _postPhoto
+  //                 .add(_attachmentsList[attIndex]['video']['image'][0]['url']);
+  //             _postLargePhoto.add(
+  //                 largeVkPhoto(_attachmentsList[attIndex]['video']['image']));
+  //           }
+  //           break;
+  //         case 'photo':
+  //           {
+  //             _postPhoto
+  //                 .add(_attachmentsList[attIndex]['photo']['sizes'][0]['url']);
+  //             _postLargePhoto.add(
+  //                 largeVkPhoto(_attachmentsList[attIndex]['photo']['sizes']));
+  //           }
+  //           break;
+  //         case 'link':
+  //           {
+  //             _postPhoto.add(null);
+  //             _postLargePhoto.add(null);
+  //           }
+  //           break;
+  //         case 'audio':
+  //           {
+  //             _postPhoto.add(null);
+  //             _postLargePhoto.add(null);
+  //           }
+  //           break;
+  //         default:
+  //           {
+  //             _postPhoto.add(null);
+  //             _postLargePhoto.add(null);
+  //           }
+  //           break;
+  //       }
+  //     }
+  //   } else {
+  //     _postPhoto.add(null);
+  //     _postLargePhoto.add(null);
+  //   }
+  //   String _dateString = _dateTime.toString().substring(0, 19);
 
-    return Post(
-        userId: _userId,
-        dateTime: _dateString,
-        firstName: _firstName,
-        surName: _surName,
-        userPhoto: _userPhoto,
-        postText: _postText,
-        postPhoto: List.generate(_postPhoto.length, (ind) => _postPhoto[ind]),
-        postLargePhoto: List.generate(
-            _postLargePhoto.length, (ind) => _postLargePhoto[ind]));
-  }
+  //   return Post(
+  //       userId: _userId,
+  //       dateTime: _dateString,
+  //       firstName: _firstName,
+  //       surName: _surName,
+  //       userPhoto: _userPhoto,
+  //       postText: _postText,
+  //       postPhoto: List.generate(_postPhoto.length, (ind) => _postPhoto[ind]),
+  //       postLargePhoto: List.generate(
+  //           _postLargePhoto.length, (ind) => _postLargePhoto[ind]));
+  // }
 
   Post fromOriginaltoView(FullOriginalPost originalPost, int index) {
     String? _firstName;
@@ -323,20 +329,31 @@ extension on Post {
   }
 
   Map<String, dynamic> fillTextFields(dynamic e, dynamic source) {
-    final int _userId = e['from_id'];
-    final String _postText = e['text'];
-    final String _dateTime = visibleVkDate(e['date']);
+    bool itsJson = source is Map;
+
+    final int _userId = itsJson ? e['from_id'] : e.fromId;
+    final String _postText = itsJson ? e['text'] : e.text;
+    final String _dateTime = visibleVkDate(itsJson ? e['date'] : e.date);
     String? _firstName, _surName, _userPhoto;
-    bool thisIsGroup = _userId < 0 ? true : false;
-    List<dynamic> _profilesList = (source as Map)['response']['profiles'];
-    List<dynamic> _groupsList = source['response']['groups'];
-    for (var p in thisIsGroup ? _groupsList : _profilesList) {
-      if (p['id'] == _userId.abs()) {
-        _firstName = thisIsGroup ? p['name'] : p['first_name'];
-        _surName = thisIsGroup ? p['screen_name'] : p['last_name'];
-        _userPhoto = p['photo_50'];
+    List<dynamic> _profilesList =
+        itsJson ? source['response']['profiles'] : source.response.profiles;
+    List<dynamic> _groupsList =
+        itsJson ? source['response']['groups'] : source.response.groups;
+    bool itsGroup = _userId < 0 ? true : false;
+    for (var p in itsGroup ? _groupsList : _profilesList) {
+      if (itsJson && p['id'] == _userId.abs()) {
+        if (itsJson) {
+          _firstName = itsGroup ? p['name'] : p['first_name'];
+          _surName = itsGroup ? p['screen_name'] : p['last_name'];
+          _userPhoto = p['photo_50'];
+        } else if (p.id == _userId.abs()) {
+          _firstName = itsGroup ? p.name : p.firstName;
+          _surName = itsGroup ? p.screenName : p.lastName;
+          _userPhoto = p.photo50;
+        }
       }
     }
+
     return {
       'userId': _userId,
       'firstName': _firstName,
