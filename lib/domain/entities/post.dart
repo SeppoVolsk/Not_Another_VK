@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:vk_postman/domain/entities/full_original_post/full_original_post.dart';
+import 'package:vk_postman/domain/entities/full_original_post/image.dart';
 import 'dart:math';
 import 'package:vk_postman/domain/entities/full_original_post/size.dart';
 
@@ -24,13 +25,15 @@ class Post {
       this.postLargePhoto});
 
   Stream<Post> from<T>(T source) async* {
+    var textFields = <String, dynamic>{};
+    var mediaFields = <String, List<String?>>{};
+    dynamic _itemsList;
     switch (T) {
       case Map:
-        List<dynamic> _itemsList = (source as Map)['response']['items'];
+        _itemsList = (source as Map)['response']['items'];
         for (var e in _itemsList) {
-          final textFields = fillTextFields(e, source);
-          final mediaFields = fillMediaFields(e);
-
+          textFields = fillTextFields(e, source);
+          mediaFields = fillMediaFields(e);
           yield Post(
               userId: textFields['userId'],
               firstName: textFields['firstName'],
@@ -43,6 +46,20 @@ class Post {
         }
         break;
       case FullOriginalPost:
+        _itemsList = (source as FullOriginalPost).response?.items;
+        for (var e in _itemsList) {
+          textFields = fillTextFields(e, source);
+          mediaFields = fillMediaFields(e);
+          yield Post(
+              userId: textFields['userId'],
+              firstName: textFields['firstName'],
+              surName: textFields['surName'],
+              dateTime: textFields['dateTime'],
+              postText: textFields['postText'],
+              userPhoto: textFields['userPhoto'],
+              postPhoto: mediaFields['postPhoto'],
+              postLargePhoto: mediaFields['postLargePhoto']);
+        }
         break;
     }
   }
@@ -311,7 +328,8 @@ class Post {
 
 extension on Post {
   String largeVkPhoto(List<dynamic> sizesList) {
-    bool isSize = sizesList.first is Size;
+    bool isSize = sizesList.first is Size || sizesList.first is Image;
+    ;
     List<int> photoHeights = [];
     for (var element in sizesList) {
       photoHeights.add(isSize ? element.height : element['height']);
@@ -342,18 +360,15 @@ extension on Post {
     bool itsGroup = _userId < 0 ? true : false;
     for (var p in itsGroup ? _groupsList : _profilesList) {
       if (itsJson && p['id'] == _userId.abs()) {
-        if (itsJson) {
-          _firstName = itsGroup ? p['name'] : p['first_name'];
-          _surName = itsGroup ? p['screen_name'] : p['last_name'];
-          _userPhoto = p['photo_50'];
-        } else if (p.id == _userId.abs()) {
-          _firstName = itsGroup ? p.name : p.firstName;
-          _surName = itsGroup ? p.screenName : p.lastName;
-          _userPhoto = p.photo50;
-        }
+        _firstName = itsGroup ? p['name'] : p['first_name'];
+        _surName = itsGroup ? p['screen_name'] : p['last_name'];
+        _userPhoto = p['photo_50'];
+      } else if (!itsJson && p.id == _userId.abs()) {
+        _firstName = itsGroup ? p.name : p.firstName;
+        _surName = itsGroup ? p.screenName : p.lastName;
+        _userPhoto = p.photo50;
       }
     }
-
     return {
       'userId': _userId,
       'firstName': _firstName,
@@ -365,20 +380,27 @@ extension on Post {
   }
 
   Map<String, List<String?>> fillMediaFields(dynamic e) {
+    bool itsJson = e is Map;
     final List<String?> _postLargePhoto = [], _postPhoto = [];
-    bool _postContainsMedia = e.containsKey('attachments');
+    bool _postContainsMedia =
+        itsJson ? e.containsKey('attachments') : e.attachments != null;
     if (_postContainsMedia) {
-      for (var a in e['attachments']) {
-        String type = a['type'];
+      for (var a in itsJson ? e['attachments'] : e.attachments) {
+        String type = itsJson ? a['type'] : a.type;
+
         _postPhoto.add(type == 'video'
-            ? a['video']['image'][0]['url']
+            ? itsJson
+                ? a['video']['image'][0]['url']
+                : a.video.image[0].url
             : type == 'photo'
-                ? a['photo']['sizes'][0]['url']
+                ? itsJson
+                    ? a['photo']['sizes'][0]['url']
+                    : a.photo.sizes[0].url
                 : null);
         _postLargePhoto.add(type == 'video'
-            ? largeVkPhoto(a['video']['image'])
+            ? largeVkPhoto(itsJson ? a['video']['image'] : a.video.image)
             : type == 'photo'
-                ? largeVkPhoto(a['photo']['sizes'])
+                ? largeVkPhoto(itsJson ? a['photo']['sizes'] : a.photo.sizes)
                 : null);
       }
     } else {
