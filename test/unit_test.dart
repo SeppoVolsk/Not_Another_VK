@@ -164,4 +164,17 @@ void main() async {
       }
     });
   });
+
+  group('VkApiClient tests', () {
+    test('get method with VkApiClientsMethods', () async {
+      final apiClient = VkApiClient();
+      final jsonNews =
+          await apiClient.get(VkApiClientMethods.newsfeedSearch('поиск'));
+      print(jsonNews['response'].keys);
+      final usersGet = await apiClient.get(VkApiClientMethods.usersGet(
+          '709755195',
+          'vk1.a.NwAa9aFgj5pi-3BH4Oef3PDDg4I0VFbo082ecybn_lbLW2d9firjEnjqZ57x9a_onYyv9KJGyhclZ0mo3Uo6z7MviQ7ndotoVmaAbUmaNjVsFQyEayDjHrtMNGBivqsSrGMxSsdK8KtBjy-REYh06p7Sw3B3sGdiJp54seLMVa9Jr6SdwlMhjPV4JRO8uh_F'));
+      print(usersGet);
+    });
+  });
 }

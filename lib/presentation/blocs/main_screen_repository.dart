@@ -100,7 +100,9 @@ class MainScreenNetworkData extends IMainScreenRepository with SourceToPost {
       super.read(_newsQuery = query);
 
   @override
-  void _fetchJson() async => _json = await VkApiClient().getPosts(_newsQuery);
+  void _fetchJson() async => _json =
+      await VkApiClient().get(VkApiClientMethods.newsfeedSearch(_newsQuery));
+  //await VkApiClient().getPosts(_newsQuery);
 
   @override
   void _convertJsonToPosts() {

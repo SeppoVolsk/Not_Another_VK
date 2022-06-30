@@ -19,8 +19,9 @@ class IAuthenticationRepository {
     final _userId = pureUri.queryParameters['user_id'];
     print('ACCESS TOKEN: ' + _accessToken.toString());
     print('USER ID: $_userId');
-    final userInfoJson =
-        await VkApiClient().getUserInfo(token: _accessToken, id: _userId);
+    final userInfoJson = await VkApiClient()
+        .get(VkApiClientMethods.usersGet(id: _userId, token: _accessToken));
+    // await VkApiClient().getUserInfo(token: _accessToken, id: _userId);
     final profileInfo = ProfileInfo.fromJson(userInfoJson);
     final _name = profileInfo.response?.first.firstName;
     final _surName = profileInfo.response?.first.lastName;
