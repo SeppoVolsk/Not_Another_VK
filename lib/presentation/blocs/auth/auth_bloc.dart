@@ -71,7 +71,7 @@ class AuthenticationState with _$AuthenticationState {
 class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
     implements EventSink<AuthenticationEvent> {
   AuthenticationBLoC({
-    required final IAuthenticationRepository repository,
+    required final AuthenticationRepository repository,
     final AuthenticationState? initialState,
   })  : _repository = repository,
         super(
@@ -94,16 +94,14 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
     );
   }
 
-  final IAuthenticationRepository _repository;
+  final AuthenticationRepository _repository;
 
   /// LogIn event handler
   Future<void> _logIn(
       LogInAuthenticationEvent event, Emitter<AuthenticationState> emit) async {
     try {
-      final newData =
-          await _repository.logInRepFunc(navigation: event.navigation);
+      final newData = await _repository.logIn(navigation: event.navigation);
       if (newData.accessToken != null) {
-        VkApiClient().setAuthData(newData.accessToken, newData.userId);
         emit(AuthenticationState.authenticated(data: newData));
       } else {
         emit(AuthenticationState.notAuthenticated(data: state.data));
@@ -112,9 +110,7 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
       print('В AuthenticationBLoC произошла ошибка: $err, $stackTrace');
       emit(AuthenticationState.error(data: state.data));
       rethrow;
-    } //finally {
-    //   emit(AuthenticationState.authenticated(data: state.data));
-    // }
+    }
   }
 
   /// LogOut event handler
@@ -122,7 +118,7 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
       Emitter<AuthenticationState> emit) async {
     try {
       emit(AuthenticationState.unknow(data: state.data));
-      final newData = await _repository.logOutRepFunc();
+      final newData = await _repository.logOut();
       emit(AuthenticationState.notAuthenticated(data: newData));
     } on Object catch (err, stackTrace) {
       print('В AuthenticationBLoC произошла ошибка: $err, $stackTrace');
@@ -137,7 +133,7 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
   Future<void> _checkAuth(CheckAuthAuthenticationEvent event,
       Emitter<AuthenticationState> emit) async {
     try {
-      final newData = await _repository.checkAuthRepFunc();
+      final newData = await _repository.checkAuth();
       newData.accessToken != null
           ? emit(AuthenticationState.authenticated(data: newData))
           : emit(AuthenticationState.notAuthenticated(data: state.data));

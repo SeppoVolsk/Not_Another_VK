@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
               ..add(MainScreenEvent.load())),
         BlocProvider<AuthenticationBLoC>(
             create: (_) =>
-                AuthenticationBLoC(repository: IAuthenticationRepository())
+                AuthenticationBLoC(repository: AuthenticationRepository())
                   ..add(AuthenticationEvent.checkAuth())),
       ],
       child: MaterialApp(

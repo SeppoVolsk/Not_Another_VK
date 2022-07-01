@@ -25,7 +25,7 @@ class _AuthScreenPageState extends State<AuthScreenPage> {
         body: Center(
           child: Stack(children: [
             WebView(
-              initialUrl: VkApiClient().getAuthDialogLink(),
+              initialUrl: VkApiClientMethods.authDialog().toString(),
               navigationDelegate: (NavigationRequest navigation) {
                 context
                     .read<AuthenticationBLoC>()

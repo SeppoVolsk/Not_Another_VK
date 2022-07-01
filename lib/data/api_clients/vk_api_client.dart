@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // TosterID = 8097225
 // Защищённый ключ XmvFyHgK9P0MQgNb0G0C
@@ -10,17 +10,17 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //vk1.a.NwAa9aFgj5pi-3BH4Oef3PDDg4I0VFbo082ecybn_lbLW2d9firjEnjqZ57x9a_onYyv9KJGyhclZ0mo3Uo6z7MviQ7ndotoVmaAbUmaNjVsFQyEayDjHrtMNGBivqsSrGMxSsdK8KtBjy-REYh06p7Sw3B3sGdiJp54seLMVa9Jr6SdwlMhjPV4JRO8uh_F
 
 class VkApiClient {
-  final String apiAddress = 'https://api.vk.com/method';
-  final String apiVer = 'v=5.131';
-  final String clientCredentialsFlowToken =
-      '600104d1600104d1600104d1d5607a891866001600104d10229e437a43114591ecf962f';
-  static String? accessToken;
-  static String? userId;
-  final secureStorage = const FlutterSecureStorage();
-  final client = HttpClient();
+  // final String apiAddress = 'https://api.vk.com/method';
+  // final String apiVer = 'v=5.131';
+  // final String clientCredentialsFlowToken =
+  //     '600104d1600104d1600104d1d5607a891866001600104d10229e437a43114591ecf962f';
+  // static String? accessToken;
+  // static String? userId;
+  // //final secureStorage = const FlutterSecureStorage();
+  // final client = HttpClient();
 
   Future<Map<String, dynamic>> get(Uri url) async {
-    final request = await client.getUrl(url);
+    final request = await HttpClient().getUrl(url);
     final response = await request.close();
     print('Status Code: ${response.statusCode}');
     final jsonStrings = await response
@@ -32,22 +32,22 @@ class VkApiClient {
     return json;
   }
 
-  void setAuthData(String? token, String? id) {
-    accessToken = token;
-    userId = id;
-    _saveAuthDataToStorage(accessToken: accessToken, userId: userId);
-  }
+  // void setAuthData(String? token, String? id) {
+  //   accessToken = token;
+  //   userId = id;
+  //   _saveAuthDataToStorage(accessToken: accessToken, userId: userId);
+  // }
 
-  Future<bool> get authDataExists async {
-    await _getAuthDataFromStorage();
-    return accessToken != null && userId != null ? true : false;
-  }
+  // Future<bool> get authDataExists async {
+  //   await _getAuthDataFromStorage();
+  //   return accessToken != null && userId != null ? true : false;
+  // }
 
-  get clearAuthInfo async {
-    await _cleanSecureStorage();
-  }
+  // get clearAuthInfo async {
+  //   await _cleanSecureStorage();
+  // }
 
-  int newsCount = 200; //по умолчанию 30, максимум 200
+  //final newsCount = 200; //по умолчанию 30, максимум 200
 
   // Future<dynamic> getPosts(String? newsQuery) async {
   //   final url = Uri.parse(
@@ -81,37 +81,38 @@ class VkApiClient {
   //   return json;
   // }
 
-  String getAuthDialogLink() {
-    const String authAddress = 'https://oauth.vk.com/authorize';
-    const String clientId = '8097225'; // Идентификатор приложения
-    const String displayType = 'mobile';
-    const String redirectUri = 'https://oauth.vk.com/blank.html';
-    const String scope = 'offline'; //'offline' - бесконечный токен
-    const String state =
-        'some_arguments'; //Произвольная строка, которая будет возвращена вместе с результатом авторизации.
-    //'https://oauth.vk.com/authorize?client_id=8097225&display=mobile&redirect_uri=https://oauth.vk.com/blank.html&scope=friends&response_type=token&v=5.131&state=123456',
-    final url = Uri.parse(
-        '$authAddress?client_id=$clientId&display=$displayType&redirect_uri=$redirectUri&scope=$scope&response_type=token&v=$apiVer&state=$state');
-    return url.toString();
-  }
+  // String getAuthDialogLink() {
+  //   const String authAddress = 'https://oauth.vk.com/authorize';
+  //   const String clientId = '8097225'; // Идентификатор приложения
+  //   const String displayType = 'mobile';
+  //   const String redirectUri = 'https://oauth.vk.com/blank.html';
+  //   const String scope = 'offline'; //'offline' - бесконечный токен
+  //   const String state =
+  //       'some_arguments'; //Произвольная строка, которая будет возвращена вместе с результатом авторизации.
+  //   //'https://oauth.vk.com/authorize?client_id=8097225&display=mobile&redirect_uri=https://oauth.vk.com/blank.html&scope=friends&response_type=token&v=5.131&state=123456',
+  //   final url = Uri.parse(
+  //       '$authAddress?client_id=$clientId&display=$displayType&redirect_uri=$redirectUri&scope=$scope&response_type=token&v=$apiVer&state=$state');
+  //   return url.toString();
+  // }
 
-  Future<void> _saveAuthDataToStorage(
-      {String? accessToken, String? userId}) async {
-    await secureStorage.write(key: 'token', value: accessToken);
-    await secureStorage.write(key: 'id', value: userId);
-  }
+  // Future<void> _saveAuthDataToStorage(
+  //     {String? accessToken, String? userId}) async {
+  //   await secureStorage.write(key: 'token', value: accessToken);
+  //   await secureStorage.write(key: 'id', value: userId);
+  // }
 
-  Future<void> _getAuthDataFromStorage() async {
-    accessToken = await secureStorage.read(key: 'token');
-    userId = await secureStorage.read(key: 'id');
-    print('Access Data received from Secure Storage: $userId $accessToken');
-  }
+  // Future<void> _getAuthDataFromStorage() async {
+  //   accessToken = await secureStorage.read(key: 'token');
+  //   userId = await secureStorage.read(key: 'id');
+  //   print('Access Data received from Secure Storage: $userId $accessToken');
+  // }
 
-  Future<void> _cleanSecureStorage() async {
-    accessToken = null;
-    userId = null;
-    await secureStorage.deleteAll();
-  }
+  // Future<void> _cleanSecureStorage() async {
+  //   accessToken = null;
+  //   userId = null;
+  //   await secureStorage.deleteAll();
+  // }
+
 }
 
 abstract class VkApiClientMethods {
