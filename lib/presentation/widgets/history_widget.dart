@@ -24,32 +24,34 @@ class _HistoryWidgetState extends State<HistoryWidget> {
       builder: (context, state) {
         var history = state.data.history;
         if (history != null) {
-          return Wrap(children: [
-            for (String element in history.historyWords)
-              InputChip(
-                label: Text(element),
-                showCheckmark: false,
-                selected:
-                    (state.data.newsQuery == element || currentWord == element),
-                selectedColor: Theme.of(context).primaryColor,
-                onPressed: () {
-                  setState(() {
-                    currentWord = element;
-                  });
-                  //setState(() => isSelected = v);
+          return Material(
+            child: Wrap(children: [
+              for (String element in history.historyWords)
+                InputChip(
+                  label: Text(element),
+                  showCheckmark: false,
+                  selected: (state.data.newsQuery == element ||
+                      currentWord == element),
+                  selectedColor: Theme.of(context).primaryColor,
+                  onPressed: () {
+                    setState(() {
+                      currentWord = element;
+                    });
+                    //setState(() => isSelected = v);
 
-                  context
-                      .read<MainScreenBLoC>()
-                      .add(MainScreenEvent.load(element));
-                },
-                deleteIcon: const Icon(Icons.cancel),
-                onDeleted: () async {
-                  state.data.history?.historyWords.remove(element);
-                  await storage.delete(key: element);
-                  setState(() {});
-                },
-              )
-          ]);
+                    context
+                        .read<MainScreenBLoC>()
+                        .add(MainScreenEvent.load(element));
+                  },
+                  deleteIcon: const Icon(Icons.cancel),
+                  onDeleted: () async {
+                    state.data.history?.historyWords.remove(element);
+                    await storage.delete(key: element);
+                    setState(() {});
+                  },
+                )
+            ]),
+          );
         } else {
           return const SizedBox.shrink();
         }

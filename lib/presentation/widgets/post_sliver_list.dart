@@ -1,8 +1,13 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/widgets/history_widget.dart';
+
+import 'post_list_card_widget.dart';
 
 class PostSliverList extends StatefulWidget {
   PostSliverList({Key? key}) : super(key: key);
@@ -15,36 +20,47 @@ class _PostSliverListState extends State<PostSliverList> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      physics: const BouncingScrollPhysics(),
       slivers: [
-        //Image.asset('pringles-logo.png'),
         SliverAppBar(
           pinned: true,
 
           //title: Text('Sliver App Bar'),
           backgroundColor: Colors.grey,
           flexibleSpace: FlexibleSpaceBar(
+              title: DecoratedBox(
+                child: Text('Not Another VK',
+                    style: TextStyle(fontWeight: FontWeight.w900)),
+                decoration: BoxDecoration(
+                    gradient:
+                        LinearGradient(colors: [Colors.blueGrey, Colors.blue])),
+              ),
               background: Image.asset(
-            'lib/assets/pringles-logo.png',
-            fit: BoxFit.cover,
-          )),
+                'lib/assets/pringles-logo.png',
+                fit: BoxFit.cover,
+              )),
           expandedHeight: 300,
         ),
         SliverPersistentHeader(
           delegate: MainScreenPersistentDelegate(),
           pinned: true,
-          floating: false,
+          // floating: true,
         ),
         SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
-          return Container(
-            //color: Color.fromRGBO(index, 50, 70, 1),
-            height: 50,
-            child: Text(index.toString()),
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                color: Color.fromRGBO(index, 50, 70, 1), border: Border.all()),
-          );
-        }, childCount: 254))
+          return PostCard(index: index);
+          // Container(
+          //   //color: Color.fromRGBO(index, 50, 70, 1),
+          //   height: 50,
+          //   child: Text(index.toString()),
+          //   padding: EdgeInsets.all(5),
+          //   decoration: BoxDecoration(
+          //       color: Color.fromRGBO(index, 50, 70, 1), border: Border.all()),
+          // );
+        },
+                childCount: context.select((MainScreenBLoC bloc) =>
+                    bloc.state.data.posts?.length ?? 0)))
       ],
     );
   }
@@ -54,7 +70,7 @@ class MainScreenPersistentDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return HistoryWidget();
+    return SizedBox.expand(child: HistoryWidget());
   }
 
   @override

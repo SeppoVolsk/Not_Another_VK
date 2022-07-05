@@ -8,6 +8,7 @@ import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_set_widgets.dart';
+import 'package:vk_postman/presentation/widgets/post_sliver_list.dart';
 import 'package:vk_postman/presentation/widgets/saved_media_warhouse_widget.dart';
 
 class MainScreenPage extends StatefulWidget {
@@ -38,92 +39,93 @@ class _MainScreenPageState extends State<MainScreenPage> {
         context.watch<AppThemeBLoC>().state is LightAppThemeState;
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
         builder: (context, state) {
-      return GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 65,
-            title: _selectedTab == _select.news
-                ? const TitleWidget()
-                : Text('Сохранённые медиа'),
-            actions: [
-              userIsAuth ? ProfileInfoWidget() : SizedBox.shrink(),
-              _selectedTab == _select.saved
-                  ? IconButton(
-                      icon: Icon(Icons.delete_forever),
-                      onPressed: () async {
-                        await fileManager.clearDirectory();
-                      },
-                    )
-                  : IconButton(
-                      icon: userIsAuth ? Icon(Icons.logout) : Icon(Icons.login),
-                      onPressed: () {
-                        userIsAuth
-                            ? context
-                                .read<AuthenticationBLoC>()
-                                .add(AuthenticationEvent.logOut())
-                            : Navigator.of(context)
-                                .pushNamed(MainNavigation().authRoute);
-                      },
-                    ),
-              IconButton(
-                  icon: lightTheme
-                      ? Icon(Icons.dark_mode)
-                      : Icon(Icons.wb_sunny_rounded),
-                  onPressed: () =>
-                      context.read<AppThemeBLoC>().add(AppThemeEvent.change())),
-            ],
-          ),
-          body: _selectedTab == _select.news
-              ? MainScreenSetWidgets(
-                  state: state, searchController: _searchController)
-              : SavedMediaWarehouse(),
-          floatingActionButton: FloatingActionButton(
-            child: state.when(
-              idle: (data, _) =>
-                  const CircularProgressIndicator(color: Colors.white),
-              processing: (data, _) =>
-                  const CircularProgressIndicator(color: Colors.white),
-              successful: (data, _) => const Icon(Icons.autorenew),
-              error: (data, _) => const Icon(Icons.error_outline),
-            ),
-            onPressed: state is SuccessfulMainScreenState ||
-                    state is ErrorMainScreenState
-                ? () {
-                    FocusScope.of(context).unfocus();
-                    if (_searchController.text.isNotEmpty) {
-                      context
-                          .read<MainScreenBLoC>()
-                          .add(MainScreenEvent.load(_searchController.text));
-                    }
-                  }
-                : null,
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _selectedTab.index == 0
-                ? _select.news.index
-                : _select.saved.index,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.fiber_new_rounded),
-                label: 'Новости',
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.now_wallpaper_sharp), label: 'Сохраненные')
-            ],
-            onTap: (index) {
-              _selectedTab.index == index
-                  ? null
-                  : setState(() {
-                      index == 0
-                          ? _selectedTab = _select.news
-                          : _selectedTab = _select.saved;
-                    });
-            },
-          ),
-        ),
-      );
+      return PostSliverList();
+      // GestureDetector(
+      //   onTap: () => FocusScope.of(context).unfocus(),
+      //   child: Scaffold(
+      //     appBar: AppBar(
+      //       toolbarHeight: 65,
+      //       title: _selectedTab == _select.news
+      //           ? const TitleWidget()
+      //           : Text('Сохранённые медиа'),
+      //       actions: [
+      //         userIsAuth ? ProfileInfoWidget() : SizedBox.shrink(),
+      //         _selectedTab == _select.saved
+      //             ? IconButton(
+      //                 icon: Icon(Icons.delete_forever),
+      //                 onPressed: () async {
+      //                   await fileManager.clearDirectory();
+      //                 },
+      //               )
+      //             : IconButton(
+      //                 icon: userIsAuth ? Icon(Icons.logout) : Icon(Icons.login),
+      //                 onPressed: () {
+      //                   userIsAuth
+      //                       ? context
+      //                           .read<AuthenticationBLoC>()
+      //                           .add(AuthenticationEvent.logOut())
+      //                       : Navigator.of(context)
+      //                           .pushNamed(MainNavigation().authRoute);
+      //                 },
+      //               ),
+      //         IconButton(
+      //             icon: lightTheme
+      //                 ? Icon(Icons.dark_mode)
+      //                 : Icon(Icons.wb_sunny_rounded),
+      //             onPressed: () =>
+      //                 context.read<AppThemeBLoC>().add(AppThemeEvent.change())),
+      //       ],
+      //     ),
+      //     body: _selectedTab == _select.news
+      //         ? MainScreenSetWidgets(
+      //             state: state, searchController: _searchController)
+      //         : SavedMediaWarehouse(),
+      //     floatingActionButton: FloatingActionButton(
+      //       child: state.when(
+      //         idle: (data, _) =>
+      //             const CircularProgressIndicator(color: Colors.white),
+      //         processing: (data, _) =>
+      //             const CircularProgressIndicator(color: Colors.white),
+      //         successful: (data, _) => const Icon(Icons.autorenew),
+      //         error: (data, _) => const Icon(Icons.error_outline),
+      //       ),
+      //       onPressed: state is SuccessfulMainScreenState ||
+      //               state is ErrorMainScreenState
+      //           ? () {
+      //               FocusScope.of(context).unfocus();
+      //               if (_searchController.text.isNotEmpty) {
+      //                 context
+      //                     .read<MainScreenBLoC>()
+      //                     .add(MainScreenEvent.load(_searchController.text));
+      //               }
+      //             }
+      //           : null,
+      //     ),
+      //     floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      //     bottomNavigationBar: BottomNavigationBar(
+      //       currentIndex: _selectedTab.index == 0
+      //           ? _select.news.index
+      //           : _select.saved.index,
+      //       items: const [
+      //         BottomNavigationBarItem(
+      //           icon: Icon(Icons.fiber_new_rounded),
+      //           label: 'Новости',
+      //         ),
+      //         BottomNavigationBarItem(
+      //             icon: Icon(Icons.now_wallpaper_sharp), label: 'Сохраненные')
+      //       ],
+      //       onTap: (index) {
+      //         _selectedTab.index == index
+      //             ? null
+      //             : setState(() {
+      //                 index == 0
+      //                     ? _selectedTab = _select.news
+      //                     : _selectedTab = _select.saved;
+      //               });
+      //       },
+      //     ),
+      //   ),
+      // );
     });
   }
 }
