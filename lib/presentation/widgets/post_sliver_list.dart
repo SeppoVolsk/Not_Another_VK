@@ -25,16 +25,22 @@ class _PostSliverListState extends State<PostSliverList> {
       slivers: [
         SliverAppBar(
           pinned: true,
+          floating: true,
+          stretch: true,
 
           //title: Text('Sliver App Bar'),
           backgroundColor: Colors.grey,
           flexibleSpace: FlexibleSpaceBar(
-              title: DecoratedBox(
-                child: Text('Not Another VK',
+              stretchModes: const [
+                StretchMode.zoomBackground,
+                StretchMode.fadeTitle
+              ],
+              title: const DecoratedBox(
+                child: const Text('Not Another VK',
                     style: TextStyle(fontWeight: FontWeight.w900)),
-                decoration: BoxDecoration(
-                    gradient:
-                        LinearGradient(colors: [Colors.blueGrey, Colors.blue])),
+                decoration: const BoxDecoration(
+                    gradient: const LinearGradient(
+                        colors: [Colors.blueGrey, Colors.blue])),
               ),
               background: Image.asset(
                 'lib/assets/pringles-logo.png',
@@ -70,7 +76,7 @@ class MainScreenPersistentDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: HistoryWidget());
+    return const SizedBox.expand(child: const HistoryWidget());
   }
 
   @override
