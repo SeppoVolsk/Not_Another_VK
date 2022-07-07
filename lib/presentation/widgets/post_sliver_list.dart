@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vk_postman/images.dart';
+import 'package:vk_postman/presentation/blocs/app_theme/app_theme_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/widgets/history_widget.dart';
 
@@ -19,6 +21,8 @@ class PostSliverList extends StatefulWidget {
 class _PostSliverListState extends State<PostSliverList> {
   @override
   Widget build(BuildContext context) {
+    final lightTheme =
+        context.watch<AppThemeBLoC>().state is LightAppThemeState;
     return CustomScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       physics: const BouncingScrollPhysics(),
@@ -27,8 +31,7 @@ class _PostSliverListState extends State<PostSliverList> {
           pinned: true,
           floating: true,
           stretch: true,
-
-          //title: Text('Sliver App Bar'),
+          title: Text('Sliver App Bar'),
           backgroundColor: Colors.grey,
           flexibleSpace: FlexibleSpaceBar(
               stretchModes: const [
@@ -43,10 +46,18 @@ class _PostSliverListState extends State<PostSliverList> {
                         colors: [Colors.blueGrey, Colors.blue])),
               ),
               background: Image.asset(
-                'lib/assets/pringles-logo.png',
+                AppImages.appBarBackground,
                 fit: BoxFit.cover,
               )),
           expandedHeight: 300,
+          actions: [
+            IconButton(
+                icon: lightTheme
+                    ? Icon(Icons.dark_mode)
+                    : Icon(Icons.wb_sunny_rounded),
+                onPressed: () =>
+                    context.read<AppThemeBLoC>().add(AppThemeEvent.change())),
+          ],
         ),
         SliverPersistentHeader(
           delegate: MainScreenPersistentDelegate(),
