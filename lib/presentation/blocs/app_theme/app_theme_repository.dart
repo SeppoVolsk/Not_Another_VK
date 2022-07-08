@@ -8,6 +8,7 @@ class IAppThemeRepository {
   final ThemeData _light = ThemeData.light();
   final ThemeData _dark = ThemeData(
       brightness: Brightness.dark,
+      appBarTheme: AppBarTheme(),
       inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.blue),
           focusedBorder: UnderlineInputBorder(

@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_postman/images.dart';
 import 'package:vk_postman/presentation/blocs/app_theme/app_theme_bloc.dart';
@@ -46,7 +47,7 @@ class _PostSliverListState extends State<PostSliverList> {
                         colors: [Colors.blueGrey, Colors.blue])),
               ),
               background: Image.asset(
-                AppImages.appBarBackground,
+                'assets/icons/VkLight/VkLight.png',
                 fit: BoxFit.cover,
               )),
           expandedHeight: 300,
@@ -87,7 +88,7 @@ class MainScreenPersistentDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return const SizedBox.expand(child: const HistoryWidget());
+    return const SizedBox.expand(child: HistoryWidget());
   }
 
   @override
