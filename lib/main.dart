@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_postman/data/persistent_storage.dart';
 import 'package:vk_postman/presentation/blocs/app_theme/app_theme_bloc.dart';
 import 'package:vk_postman/presentation/blocs/app_theme/app_theme_repository.dart';
+import 'package:vk_postman/presentation/blocs/app_theme/theme_type.dart';
 import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:vk_postman/presentation/blocs/auth/auth_repository.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
@@ -47,10 +48,9 @@ class MyApp extends StatelessWidget {
         title: 'Not Another VK',
         debugShowCheckedModeBanner: false,
         scaffoldMessengerKey: keyForSnackBar,
-        // theme: context.watch<AppThemeBLoC>().state.data.appTheme,
-        theme: ThemeData.light(),
-        darkTheme: ThemeData.dark(),
-        themeMode: ThemeMode.system,
+        theme: AppThemes.light,
+        darkTheme: AppThemes.dark,
+        themeMode: context.watch<AppThemeBLoC>().state.data.appThemeMode,
         home: const MainScreenPage(),
         routes: mainNavigation.routes,
       ),

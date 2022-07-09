@@ -29,25 +29,20 @@ class _PostSliverListState extends State<PostSliverList> {
       physics: const BouncingScrollPhysics(),
       slivers: [
         SliverAppBar(
+          leading: Icon(Icons.abc_sharp),
           pinned: true,
           floating: true,
           stretch: true,
-          title: Text('Sliver App Bar'),
-          backgroundColor: Colors.grey,
+          title: Text('Not Another VK'),
           flexibleSpace: FlexibleSpaceBar(
               stretchModes: const [
                 StretchMode.zoomBackground,
                 StretchMode.fadeTitle
               ],
-              title: const DecoratedBox(
-                child: const Text('Not Another VK',
-                    style: TextStyle(fontWeight: FontWeight.w900)),
-                decoration: const BoxDecoration(
-                    gradient: const LinearGradient(
-                        colors: [Colors.blueGrey, Colors.blue])),
-              ),
               background: Image.asset(
-                'assets/icons/VkLight/VkLight.png',
+                lightTheme
+                    ? 'assets/icons/VkLight/VkLight.png'
+                    : 'assets/icons/VkDark/VkDark.png',
                 fit: BoxFit.cover,
               )),
           expandedHeight: 300,
@@ -88,16 +83,16 @@ class MainScreenPersistentDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return const SizedBox.expand(child: HistoryWidget());
+    return SizedBox.expand(child: HistoryWidget());
   }
 
   @override
   // TODO: implement maxExtent
-  double get maxExtent => 96;
+  double get maxExtent => 48;
 
   @override
   // TODO: implement minExtent
-  double get minExtent => 96;
+  double get minExtent => 48;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

@@ -78,7 +78,7 @@ class AppThemeBLoC extends Bloc<AppThemeEvent, AppThemeState>
   }
 
   final IAppThemeRepository _repository;
-  ThemeType? _themeType;
+  ThemeMode? _themeMode;
 
   /// Read event handler
   Future<void> _read(
@@ -86,12 +86,12 @@ class AppThemeBLoC extends Bloc<AppThemeEvent, AppThemeState>
     try {
       emit(AppThemeState.unknow(data: state.data));
       final newData = await _repository.checkCurrentTheme();
-      if (newData.appTheme == ThemeData.light()) {
+      if (newData.appThemeMode == ThemeMode.light) {
         emit(AppThemeState.light(data: newData));
-        _themeType = ThemeType.light;
+        _themeMode = ThemeMode.light;
       } else {
         emit(AppThemeState.dark(data: newData));
-        _themeType = ThemeType.dark;
+        _themeMode = ThemeMode.dark;
       }
     } on Object catch (err, stackTrace) {
       print('В AppThemeBLoC произошла ошибка: $err $stackTrace');
@@ -104,13 +104,14 @@ class AppThemeBLoC extends Bloc<AppThemeEvent, AppThemeState>
   Future<void> _update(
       ChangeAppThemeEvent event, Emitter<AppThemeState> emit) async {
     try {
-      final newData = await _repository.changeTheme(_themeType!);
-      if (_themeType == ThemeType.light) {
+      print('BLoC Theme Mode $_themeMode');
+      final newData = await _repository.changeTheme(_themeMode!);
+      if (_themeMode == ThemeMode.light) {
         emit(AppThemeState.dark(data: newData));
-        _themeType = ThemeType.dark;
+        _themeMode = ThemeMode.dark;
       } else {
         emit(AppThemeState.light(data: newData));
-        _themeType = ThemeType.light;
+        _themeMode = ThemeMode.light;
       }
     } on Object catch (err, stackTrace) {
       print('В AppThemeBLoC произошла ошибка: $err $stackTrace');

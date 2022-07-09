@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AppThemeEntity {
-  ThemeData? get appTheme => throw _privateConstructorUsedError;
+  ThemeMode? get appThemeMode => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AppThemeEntityCopyWith<AppThemeEntity> get copyWith =>
@@ -28,7 +28,7 @@ abstract class $AppThemeEntityCopyWith<$Res> {
   factory $AppThemeEntityCopyWith(
           AppThemeEntity value, $Res Function(AppThemeEntity) then) =
       _$AppThemeEntityCopyWithImpl<$Res>;
-  $Res call({ThemeData? appTheme});
+  $Res call({ThemeMode? appThemeMode});
 }
 
 /// @nodoc
@@ -42,13 +42,13 @@ class _$AppThemeEntityCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? appTheme = freezed,
+    Object? appThemeMode = freezed,
   }) {
     return _then(_value.copyWith(
-      appTheme: appTheme == freezed
-          ? _value.appTheme
-          : appTheme // ignore: cast_nullable_to_non_nullable
-              as ThemeData?,
+      appThemeMode: appThemeMode == freezed
+          ? _value.appThemeMode
+          : appThemeMode // ignore: cast_nullable_to_non_nullable
+              as ThemeMode?,
     ));
   }
 }
@@ -60,7 +60,7 @@ abstract class _$$_AppThemeEntityCopyWith<$Res>
           _$_AppThemeEntity value, $Res Function(_$_AppThemeEntity) then) =
       __$$_AppThemeEntityCopyWithImpl<$Res>;
   @override
-  $Res call({ThemeData? appTheme});
+  $Res call({ThemeMode? appThemeMode});
 }
 
 /// @nodoc
@@ -76,13 +76,13 @@ class __$$_AppThemeEntityCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? appTheme = freezed,
+    Object? appThemeMode = freezed,
   }) {
     return _then(_$_AppThemeEntity(
-      appTheme: appTheme == freezed
-          ? _value.appTheme
-          : appTheme // ignore: cast_nullable_to_non_nullable
-              as ThemeData?,
+      appThemeMode: appThemeMode == freezed
+          ? _value.appThemeMode
+          : appThemeMode // ignore: cast_nullable_to_non_nullable
+              as ThemeMode?,
     ));
   }
 }
@@ -90,14 +90,14 @@ class __$$_AppThemeEntityCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AppThemeEntity implements _AppThemeEntity {
-  _$_AppThemeEntity({this.appTheme});
+  _$_AppThemeEntity({this.appThemeMode});
 
   @override
-  final ThemeData? appTheme;
+  final ThemeMode? appThemeMode;
 
   @override
   String toString() {
-    return 'AppThemeEntity(appTheme: $appTheme)';
+    return 'AppThemeEntity(appThemeMode: $appThemeMode)';
   }
 
   @override
@@ -105,12 +105,13 @@ class _$_AppThemeEntity implements _AppThemeEntity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AppThemeEntity &&
-            const DeepCollectionEquality().equals(other.appTheme, appTheme));
+            const DeepCollectionEquality()
+                .equals(other.appThemeMode, appThemeMode));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(appTheme));
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(appThemeMode));
 
   @JsonKey(ignore: true)
   @override
@@ -119,10 +120,10 @@ class _$_AppThemeEntity implements _AppThemeEntity {
 }
 
 abstract class _AppThemeEntity implements AppThemeEntity {
-  factory _AppThemeEntity({final ThemeData? appTheme}) = _$_AppThemeEntity;
+  factory _AppThemeEntity({final ThemeMode? appThemeMode}) = _$_AppThemeEntity;
 
   @override
-  ThemeData? get appTheme => throw _privateConstructorUsedError;
+  ThemeMode? get appThemeMode => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_AppThemeEntityCopyWith<_$_AppThemeEntity> get copyWith =>
