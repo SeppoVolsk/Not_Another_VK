@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vk_postman/presentation/widgets/history_widget.dart';
+import 'package:vk_postman/presentation/widgets/main_screen/search_widget/search_widget.dart';
 import 'package:vk_postman/presentation/widgets/post_list_card_widget.dart';
 import 'package:vk_postman/presentation/widgets/post_sliver_list.dart';
-import 'package:vk_postman/presentation/widgets/search_widget.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 
 class MainScreenSetWidgets extends StatefulWidget {
@@ -41,8 +41,6 @@ class _MainScreenSetWidgetsState extends State<MainScreenSetWidgets> {
           //       : const Center(child: Text('Ищем новости...')),
 
           //state.data.history?.historyWords
-
-          SearchWidget(widget.searchController),
         ],
       ),
     );

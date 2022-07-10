@@ -63,14 +63,6 @@ class _PostSliverListState extends State<PostSliverList> {
         SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
           return PostCard(index: index);
-          // Container(
-          //   //color: Color.fromRGBO(index, 50, 70, 1),
-          //   height: 50,
-          //   child: Text(index.toString()),
-          //   padding: EdgeInsets.all(5),
-          //   decoration: BoxDecoration(
-          //       color: Color.fromRGBO(index, 50, 70, 1), border: Border.all()),
-          // );
         },
                 childCount: context.select((MainScreenBLoC bloc) =>
                     bloc.state.data.posts?.length ?? 0)))

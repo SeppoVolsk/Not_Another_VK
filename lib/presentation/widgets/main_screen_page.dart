@@ -7,6 +7,7 @@ import 'package:vk_postman/presentation/blocs/app_theme/app_theme_bloc.dart';
 import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
+import 'package:vk_postman/presentation/widgets/main_screen/search_widget/search_widget.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_set_widgets.dart';
 import 'package:vk_postman/presentation/widgets/post_sliver_list.dart';
 import 'package:vk_postman/presentation/widgets/saved_media_warhouse_widget.dart';
@@ -35,11 +36,16 @@ class _MainScreenPageState extends State<MainScreenPage> {
   Widget build(BuildContext context) {
     final userIsAuth =
         context.watch<AuthenticationBLoC>().state is AuthenticatedState;
-    final lightTheme =
-        context.watch<AppThemeBLoC>().state is LightAppThemeState;
+    // final lightTheme =
+    //     context.watch<AppThemeBLoC>().state is LightAppThemeState;
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
         builder: (context, state) {
-      return PostSliverList();
+      return Material(
+        child: Stack(children: [
+          PostSliverList(),
+          SearchWidget(controller: _searchController),
+        ]),
+      );
       // GestureDetector(
       //   onTap: () => FocusScope.of(context).unfocus(),
       //   child: Scaffold(
