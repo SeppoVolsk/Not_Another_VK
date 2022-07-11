@@ -7,6 +7,7 @@ import 'package:vk_postman/presentation/blocs/app_theme/app_theme_bloc.dart';
 import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
+import 'package:vk_postman/presentation/widgets/main_screen/bottom_navi_bar.dart';
 import 'package:vk_postman/presentation/widgets/main_screen/search_widget/search_widget.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_set_widgets.dart';
 import 'package:vk_postman/presentation/widgets/post_sliver_list.dart';
@@ -22,14 +23,12 @@ class MainScreenPage extends StatefulWidget {
 enum _select { news, saved }
 
 class _MainScreenPageState extends State<MainScreenPage> {
-  final _searchController = TextEditingController();
   final fileManager = FileManager();
   var _selectedTab = _select.news;
 
   @override
   void initState() {
     super.initState();
-    _searchController.addListener(() {});
   }
 
   @override
@@ -40,11 +39,12 @@ class _MainScreenPageState extends State<MainScreenPage> {
     //     context.watch<AppThemeBLoC>().state is LightAppThemeState;
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
         builder: (context, state) {
-      return Material(
-        child: Stack(children: [
+      return Scaffold(
+        body: Stack(children: [
           PostSliverList(),
-          SearchWidget(controller: _searchController),
+          SearchWidget(),
         ]),
+        bottomNavigationBar: BottomNaviBar(),
       );
       // GestureDetector(
       //   onTap: () => FocusScope.of(context).unfocus(),

@@ -4,22 +4,34 @@ import 'package:flutter/material.dart';
 
 abstract class AppThemes {
   static final ThemeData light = ThemeData(
-    brightness: Brightness.light,
-    cardTheme: const CardTheme(shadowColor: Colors.blue, elevation: 5),
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.lightBlue[200],
-      iconTheme: const IconThemeData(color: Colors.blue),
-    ),
-  );
+      brightness: Brightness.light,
+      cardTheme: const CardTheme(shadowColor: Colors.blue, elevation: 5),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.lightBlue,
+        iconTheme: IconThemeData(color: Colors.blue),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedIconTheme: IconThemeData(color: Colors.deepOrange),
+          unselectedIconTheme: IconThemeData(color: Colors.white)));
+
   static final ThemeData dark = ThemeData(
       brightness: Brightness.dark,
-      appBarTheme: AppBarTheme(
-        iconTheme: const IconThemeData(color: Colors.blueGrey),
-        titleTextStyle: TextStyle(color: Colors.grey[750], fontSize: 20),
-        backgroundColor: Colors.grey,
-      ));
+      appBarTheme: const AppBarTheme(
+        iconTheme: IconThemeData(color: Colors.blueGrey),
+        titleTextStyle: TextStyle(color: AppColors.lightGrey, fontSize: 20),
+        backgroundColor: AppColors.lightGrey,
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedIconTheme: IconThemeData(color: Colors.black),
+          unselectedIconTheme: IconThemeData(color: Colors.white)));
 }
 
 abstract class AppColors {
   static const darkBlue = Color.fromRGBO(18, 55, 85, 1);
+  static const lightBlue = Color.fromRGBO(129, 212, 250, 1);
+  static const blueGradient =
+      LinearGradient(colors: [AppColors.lightBlue, AppColors.darkBlue]);
+  static const lightGrey = Color.fromRGBO(158, 158, 158, 1);
+  static const greyGradient =
+      LinearGradient(colors: [AppColors.lightGrey, Colors.grey]);
 }

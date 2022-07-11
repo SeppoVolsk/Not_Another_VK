@@ -5,9 +5,22 @@ import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 part 'search_field.dart';
 part 'search_button.dart';
 
-class SearchWidget extends StatelessWidget {
-  const SearchWidget({required this.controller, Key? key}) : super(key: key);
-  final TextEditingController controller;
+class SearchWidget extends StatefulWidget {
+  SearchWidget({Key? key}) : super(key: key);
+
+  @override
+  State<SearchWidget> createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
+  final _searchController = TextEditingController();
+  int offsetFromBottomBar = 3;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +29,21 @@ class SearchWidget extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(
             left: 5,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 15,
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom + offsetFromBottomBar,
             right: 5,
           ),
           child: Row(children: [
-            Expanded(child: SearchField(controller)),
+            Expanded(child: SearchField(_searchController)),
             const SizedBox(width: 5),
-            SearchButton(findText: controller.text)
+            SearchButton(findText: _searchController.text)
           ]),
         ));
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }
