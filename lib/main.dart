@@ -9,6 +9,7 @@ import 'package:vk_postman/presentation/blocs/auth/auth_repository.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_repository.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
+import 'package:vk_postman/presentation/widgets/main_screen/model/main_screen_model.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_page.dart';
 import 'package:vk_postman/simple_bloc_observer.dart';
 
@@ -51,7 +52,8 @@ class MyApp extends StatelessWidget {
         theme: AppThemes.light,
         darkTheme: AppThemes.dark,
         themeMode: context.watch<AppThemeBLoC>().state.data.appThemeMode,
-        home: const MainScreenPage(),
+        home: MainScreenProvider(
+            model: MainScreenModel(), child: const MainScreenPage()),
         routes: mainNavigation.routes,
       ),
       //onGenerateRoute: mainNavigation.onGenerateRoute,

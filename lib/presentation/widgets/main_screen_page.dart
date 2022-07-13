@@ -8,6 +8,7 @@ import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 import 'package:vk_postman/presentation/widgets/main_screen/bottom_navi_bar.dart';
+import 'package:vk_postman/presentation/widgets/main_screen/model/main_screen_model.dart';
 import 'package:vk_postman/presentation/widgets/main_screen/search_widget/search_widget.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_set_widgets.dart';
 import 'package:vk_postman/presentation/widgets/post_sliver_list.dart';
@@ -20,11 +21,9 @@ class MainScreenPage extends StatefulWidget {
   State<MainScreenPage> createState() => _MainScreenPageState();
 }
 
-enum _select { news, saved }
-
 class _MainScreenPageState extends State<MainScreenPage> {
   final fileManager = FileManager();
-  var _selectedTab = _select.news;
+  final mainScreenModel = MainScreenModel();
 
   @override
   void initState() {
@@ -35,16 +34,20 @@ class _MainScreenPageState extends State<MainScreenPage> {
   Widget build(BuildContext context) {
     final userIsAuth =
         context.watch<AuthenticationBLoC>().state is AuthenticatedState;
+    final screenIndex = MainScreenProvider.of(context)?.model?.MainScreenIndex;
+
     // final lightTheme =
     //     context.watch<AppThemeBLoC>().state is LightAppThemeState;
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
         builder: (context, state) {
       return Scaffold(
-        body: Stack(children: [
-          PostSliverList(),
-          SearchWidget(),
-        ]),
-        bottomNavigationBar: BottomNaviBar(),
+        body: screenIndex == select.news
+            ? Stack(children: [
+                PostSliverList(),
+                SearchWidget(),
+              ])
+            : SavedMediaWarehouse(),
+        bottomNavigationBar: const BottomNaviBar(),
       );
       // GestureDetector(
       //   onTap: () => FocusScope.of(context).unfocus(),
