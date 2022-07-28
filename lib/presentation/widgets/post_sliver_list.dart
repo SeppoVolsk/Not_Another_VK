@@ -33,7 +33,7 @@ class _PostSliverListState extends State<PostSliverList> {
           pinned: true,
           floating: true,
           stretch: true,
-          title: Text('Not Another VK'),
+          title: Text('Новости'),
           flexibleSpace: FlexibleSpaceBar(
               stretchModes: const [
                 StretchMode.zoomBackground,

@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 
-enum select { news, saved }
+enum selectMenu { news, saved }
 
 class MainScreenModel extends ChangeNotifier {
-  var MainScreenIndex = select.news;
+  var mainScreenIndex = selectMenu.news;
 
   void switchIndex() {
-    MainScreenIndex =
-        MainScreenIndex == select.news ? select.saved : select.news;
+    mainScreenIndex =
+        mainScreenIndex == selectMenu.news ? selectMenu.saved : selectMenu.news;
     notifyListeners();
   }
 }

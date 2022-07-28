@@ -11,18 +11,19 @@ abstract class AppThemes {
         iconTheme: IconThemeData(color: Colors.blue),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedIconTheme: IconThemeData(color: Colors.deepOrange),
-          unselectedIconTheme: IconThemeData(color: Colors.white)));
+        selectedIconTheme: IconThemeData(color: Colors.white, size: 40),
+        selectedItemColor: Colors.white,
+      ));
 
   static final ThemeData dark = ThemeData(
       brightness: Brightness.dark,
       appBarTheme: const AppBarTheme(
         iconTheme: IconThemeData(color: Colors.blueGrey),
-        titleTextStyle: TextStyle(color: AppColors.lightGrey, fontSize: 20),
+        titleTextStyle: TextStyle(color: AppColors.darkBlue, fontSize: 20),
         backgroundColor: AppColors.lightGrey,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedIconTheme: IconThemeData(color: Colors.black),
+          selectedIconTheme: IconThemeData(size: 40),
           unselectedIconTheme: IconThemeData(color: Colors.white)));
 }
 

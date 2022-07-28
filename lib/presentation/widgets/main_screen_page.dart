@@ -1,18 +1,15 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_postman/data/files_manager.dart';
-//import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
-import 'package:vk_postman/presentation/blocs/app_theme/app_theme_bloc.dart';
 import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
-import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 import 'package:vk_postman/presentation/widgets/main_screen/bottom_navi_bar.dart';
 import 'package:vk_postman/presentation/widgets/main_screen/model/main_screen_model.dart';
 import 'package:vk_postman/presentation/widgets/main_screen/search_widget/search_widget.dart';
-import 'package:vk_postman/presentation/widgets/main_screen_set_widgets.dart';
 import 'package:vk_postman/presentation/widgets/post_sliver_list.dart';
 import 'package:vk_postman/presentation/widgets/saved_media_warhouse_widget.dart';
+
+import 'main_screen/saved_page_appbar.dart';
 
 class MainScreenPage extends StatefulWidget {
   const MainScreenPage({Key? key}) : super(key: key);
@@ -34,20 +31,24 @@ class _MainScreenPageState extends State<MainScreenPage> {
   Widget build(BuildContext context) {
     final userIsAuth =
         context.watch<AuthenticationBLoC>().state is AuthenticatedState;
-    final screenIndex = MainScreenProvider.of(context)?.model?.MainScreenIndex;
+    final screenIndex = MainScreenProvider.of(context)?.model?.mainScreenIndex;
 
     // final lightTheme =
     //     context.watch<AppThemeBLoC>().state is LightAppThemeState;
     return BlocBuilder<MainScreenBLoC, MainScreenState>(
         builder: (context, state) {
-      return Scaffold(
-        body: screenIndex == select.news
-            ? Stack(children: [
-                PostSliverList(),
-                SearchWidget(),
-              ])
-            : SavedMediaWarehouse(),
-        bottomNavigationBar: const BottomNaviBar(),
+      return GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          appBar: screenIndex == selectMenu.saved ? SavedPageAppBar() : null,
+          body: screenIndex == selectMenu.news
+              ? Stack(children: [
+                  PostSliverList(),
+                  SearchWidget(),
+                ])
+              : SavedMediaWarehouse(),
+          bottomNavigationBar: const BottomNaviBar(),
+        ),
       );
       // GestureDetector(
       //   onTap: () => FocusScope.of(context).unfocus(),

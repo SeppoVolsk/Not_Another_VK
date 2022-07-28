@@ -17,7 +17,7 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
     final lightTheme =
         context.watch<AppThemeBLoC>().state is LightAppThemeState;
     final model = MainScreenProvider.of(context)?.model;
-    final _selectedTab = model?.MainScreenIndex;
+    final _selectedTab = model?.mainScreenIndex;
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: lightTheme ? AppColors.blueGradient : AppColors.greyGradient,
