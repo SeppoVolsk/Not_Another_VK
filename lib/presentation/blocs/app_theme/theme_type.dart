@@ -8,7 +8,7 @@ abstract class AppThemes {
       cardTheme: const CardTheme(shadowColor: Colors.blue, elevation: 5),
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.lightBlue,
-        iconTheme: IconThemeData(color: Colors.blue),
+        iconTheme: IconThemeData(color: AppColors.darkBlue),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         selectedIconTheme: IconThemeData(color: Colors.white, size: 40),

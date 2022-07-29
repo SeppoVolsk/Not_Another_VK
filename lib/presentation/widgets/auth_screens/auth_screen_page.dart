@@ -22,21 +22,22 @@ class _AuthScreenPageState extends State<AuthScreenPage> {
 
     return Scaffold(
         appBar: AppBar(title: Text('Вход VK')),
-        body: Center(
-          child: Stack(children: [
-            WebView(
-              initialUrl: VkApiClientMethods.authDialog().toString(),
-              navigationDelegate: (NavigationRequest navigation) {
-                context
-                    .read<AuthenticationBLoC>()
-                    .add(AuthenticationEvent.logIn(navigation));
+        body: Stack(alignment: Alignment.center, children: [
+          WebView(
+            initialUrl: VkApiClientMethods.authDialog().toString(),
+            navigationDelegate: (NavigationRequest navigation) {
+              context
+                  .read<AuthenticationBLoC>()
+                  .add(AuthenticationEvent.logIn(navigation));
 
-                return NavigationDecision.navigate;
-              },
-            ),
-            if (_accessToken != null) ConfirmedAuthWidget(),
-          ]),
-        ));
+              return NavigationDecision.navigate;
+            },
+          ),
+          if (_accessToken != null)
+            Positioned.fill(
+                child: Align(
+                    alignment: Alignment.center, child: ConfirmedAuthWidget())),
+        ]));
   }
 }
 
@@ -50,8 +51,12 @@ class ConfirmedAuthWidget extends StatelessWidget {
     name = userData.name;
     surName = userData.surname;
     photo = userData.photo;
-    return Center(
-      child: ColoredBox(
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: AnimatedContainer(
+        // height: 150,
+        // width: 100,
+        duration: Duration(milliseconds: 250),
         color: Theme.of(context).primaryColor,
         child: Column(children: [
           Text('Вы авторизированы как: '),

@@ -19,7 +19,6 @@ class MainScreenPage extends StatefulWidget {
 }
 
 class _MainScreenPageState extends State<MainScreenPage> {
-  final fileManager = FileManager();
   final mainScreenModel = MainScreenModel();
 
   @override
@@ -29,8 +28,6 @@ class _MainScreenPageState extends State<MainScreenPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userIsAuth =
-        context.watch<AuthenticationBLoC>().state is AuthenticatedState;
     final screenIndex = MainScreenProvider.of(context)?.model?.mainScreenIndex;
 
     // final lightTheme =

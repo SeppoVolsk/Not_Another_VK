@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:vk_postman/data/files_manager.dart';
 
 class DetailScreenPage extends StatefulWidget {
@@ -21,7 +20,7 @@ class _DetailScreenPageState extends State<DetailScreenPage> {
             IconButton(
                 icon: Icon(Icons.save_alt),
                 onPressed: () async {
-                  final readyFile = await fileManager.urlToFile(url);
+                  await fileManager.urlToFile(url);
                 }),
           ],
         ),

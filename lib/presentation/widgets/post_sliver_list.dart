@@ -1,15 +1,10 @@
-import 'dart:math';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vk_postman/images.dart';
 import 'package:vk_postman/presentation/blocs/app_theme/app_theme_bloc.dart';
+import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
+import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 import 'package:vk_postman/presentation/widgets/history_widget.dart';
-
 import 'post_list_card_widget.dart';
 
 class PostSliverList extends StatefulWidget {
@@ -22,6 +17,8 @@ class PostSliverList extends StatefulWidget {
 class _PostSliverListState extends State<PostSliverList> {
   @override
   Widget build(BuildContext context) {
+    final userIsAuth =
+        context.watch<AuthenticationBLoC>().state is AuthenticatedState;
     final lightTheme =
         context.watch<AppThemeBLoC>().state is LightAppThemeState;
     return CustomScrollView(
@@ -29,11 +26,20 @@ class _PostSliverListState extends State<PostSliverList> {
       physics: const BouncingScrollPhysics(),
       slivers: [
         SliverAppBar(
-          leading: Icon(Icons.abc_sharp),
+          leading: IconButton(
+            icon: userIsAuth ? Icon(Icons.logout) : Icon(Icons.login),
+            onPressed: () {
+              userIsAuth
+                  ? context
+                      .read<AuthenticationBLoC>()
+                      .add(AuthenticationEvent.logOut())
+                  : Navigator.of(context).pushNamed(MainNavigation().authRoute);
+            },
+          ),
           pinned: true,
           floating: true,
           stretch: true,
-          title: Text('Новости'),
+          title: const Text('Новости'),
           flexibleSpace: FlexibleSpaceBar(
               stretchModes: const [
                 StretchMode.zoomBackground,
@@ -49,10 +55,11 @@ class _PostSliverListState extends State<PostSliverList> {
           actions: [
             IconButton(
                 icon: lightTheme
-                    ? Icon(Icons.dark_mode)
-                    : Icon(Icons.wb_sunny_rounded),
-                onPressed: () =>
-                    context.read<AppThemeBLoC>().add(AppThemeEvent.change())),
+                    ? const Icon(Icons.dark_mode)
+                    : const Icon(Icons.wb_sunny_rounded),
+                onPressed: () => context
+                    .read<AppThemeBLoC>()
+                    .add(const AppThemeEvent.change())),
           ],
         ),
         SliverPersistentHeader(
@@ -75,7 +82,7 @@ class MainScreenPersistentDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: HistoryWidget());
+    return const SizedBox.expand(child: HistoryWidget());
   }
 
   @override
