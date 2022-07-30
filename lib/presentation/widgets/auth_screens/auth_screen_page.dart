@@ -14,11 +14,13 @@ class AuthScreenPage extends StatefulWidget {
 class _AuthScreenPageState extends State<AuthScreenPage> {
   //WebViewController? _controller;
   String? _accessToken;
+  late bool _isConfirmed;
 
   @override
   Widget build(BuildContext context) {
     _accessToken = context
         .select((AuthenticationBLoC bloc) => bloc.state.data.accessToken);
+    _isConfirmed = _accessToken != null;
 
     return Scaffold(
         appBar: AppBar(title: Text('Вход VK')),
@@ -33,39 +35,51 @@ class _AuthScreenPageState extends State<AuthScreenPage> {
               return NavigationDecision.navigate;
             },
           ),
-          if (_accessToken != null)
-            Positioned.fill(
-                child: Align(
-                    alignment: Alignment.center, child: ConfirmedAuthWidget())),
+          Positioned.fill(
+              child: Align(
+                  alignment: Alignment.center,
+                  child: ConfirmedAuthWidget(toggle: _isConfirmed))),
         ]));
   }
 }
 
-class ConfirmedAuthWidget extends StatelessWidget {
-  ConfirmedAuthWidget({Key? key}) : super(key: key);
+class ConfirmedAuthWidget extends StatefulWidget {
+  ConfirmedAuthWidget({Key? key, required this.toggle}) : super(key: key);
+  bool toggle;
+
+  @override
+  State<ConfirmedAuthWidget> createState() => _ConfirmedAuthWidgetState();
+}
+
+class _ConfirmedAuthWidgetState extends State<ConfirmedAuthWidget> {
   String? name, surName, photo;
+  bool animationIsDone = false;
 
   @override
   Widget build(BuildContext context) {
     final userData = context.read<AuthenticationBLoC>().state.data;
+
     name = userData.name;
     surName = userData.surname;
     photo = userData.photo;
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: AnimatedContainer(
-        // height: 150,
-        // width: 100,
-        duration: Duration(milliseconds: 250),
+        height: widget.toggle ? 200 : 0,
+        width: widget.toggle ? 200 : 0,
+        duration: Duration(milliseconds: 950),
         color: Theme.of(context).primaryColor,
-        child: Column(children: [
-          Text('Вы авторизированы как: '),
-          Image.network(photo.toString()),
-          Text('$name $surName'),
-          CloseButton(
-            onPressed: () => Navigator.of(context).pop(),
-          )
-        ]),
+        child: animationIsDone
+            ? Column(children: [
+                Text('Вы авторизированы как: '),
+                Expanded(child: Image.network(photo.toString())),
+                Text('$name $surName'),
+                CloseButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              ])
+            : SizedBox.shrink(),
+        onEnd: () => setState(() => animationIsDone = true),
       ),
     );
   }
