@@ -1,8 +1,8 @@
 part of 'search_widget.dart';
 
 class SearchButton extends StatelessWidget {
-  SearchButton({required this.findText, Key? key}) : super(key: key);
-  String findText;
+  SearchButton({required this.textController, Key? key}) : super(key: key);
+  TextEditingController textController;
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +22,12 @@ class SearchButton extends StatelessWidget {
             state is SuccessfulMainScreenState || state is ErrorMainScreenState
                 ? () {
                     FocusScope.of(context).unfocus();
-                    if (findText.isNotEmpty) {
-                      print('ИЩЕМ: $findText');
+                    if (textController.text.isNotEmpty) {
+                      print('ИЩЕМ: $textController');
                       context
                           .read<MainScreenBLoC>()
-                          .add(MainScreenEvent.load(findText));
+                          .add(MainScreenEvent.load(textController.text));
+                      textController.text = "";
                     }
                   }
                 : null,

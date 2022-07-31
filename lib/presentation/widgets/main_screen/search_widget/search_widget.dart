@@ -36,7 +36,7 @@ class _SearchWidgetState extends State<SearchWidget> {
           child: Row(children: [
             Expanded(child: SearchField(_searchController)),
             const SizedBox(width: 5),
-            SearchButton(findText: _searchController.text)
+            SearchButton(textController: _searchController)
           ]),
         ));
   }

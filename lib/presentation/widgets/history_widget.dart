@@ -13,7 +13,7 @@ class HistoryWidget extends StatefulWidget {
 }
 
 class _HistoryWidgetState extends State<HistoryWidget> {
-  String element = 'aaa';
+  //String element = 'aaa';
   bool isSelected = false;
   String? currentWord;
   final storage = PersistentStorage();
