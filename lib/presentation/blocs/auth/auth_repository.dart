@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vk_postman/data/api_clients/vk_api_client.dart';
+import 'package:vk_postman/data/api_clients/vk_api_client_methods.dart';
 import 'package:vk_postman/domain/entities/profile_info/profile_info/profile_info.dart';
 import 'package:vk_postman/presentation/blocs/auth/authenticationentity.dart';
 import 'package:webview_flutter/webview_flutter.dart';

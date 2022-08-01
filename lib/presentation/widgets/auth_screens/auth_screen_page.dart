@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vk_postman/data/api_clients/vk_api_client.dart';
+import 'package:vk_postman/data/api_clients/vk_api_client_methods.dart';
 import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class AuthScreenPage extends StatefulWidget {
-  AuthScreenPage({Key? key}) : super(key: key);
+  const AuthScreenPage({Key? key}) : super(key: key);
 
   @override
   State<AuthScreenPage> createState() => _AuthScreenPageState();
 }
 
 class _AuthScreenPageState extends State<AuthScreenPage> {
-  //WebViewController? _controller;
   String? _accessToken;
   late bool _isConfirmed;
 
@@ -23,7 +22,7 @@ class _AuthScreenPageState extends State<AuthScreenPage> {
     _isConfirmed = _accessToken != null;
 
     return Scaffold(
-        appBar: AppBar(title: Text('Вход VK')),
+        appBar: AppBar(title: const Text('Вход VK')),
         body: Stack(alignment: Alignment.center, children: [
           WebView(
             initialUrl: VkApiClientMethods.authDialog().toString(),
@@ -67,18 +66,18 @@ class _ConfirmedAuthWidgetState extends State<ConfirmedAuthWidget> {
       child: AnimatedContainer(
         height: widget.toggle ? 200 : 0,
         width: widget.toggle ? 200 : 0,
-        duration: Duration(milliseconds: 950),
+        duration: const Duration(milliseconds: 950),
         color: Theme.of(context).primaryColor,
         child: animationIsDone
             ? Column(children: [
-                Text('Вы авторизированы как: '),
+                const Text('Вы авторизированы как: '),
                 Expanded(child: Image.network(photo.toString())),
                 Text('$name $surName'),
                 CloseButton(
                   onPressed: () => Navigator.of(context).pop(),
                 )
               ])
-            : SizedBox.shrink(),
+            : const SizedBox.shrink(),
         onEnd: () => setState(() => animationIsDone = true),
       ),
     );

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:vk_postman/data/api_clients/vk_api_client.dart';
+import 'package:vk_postman/data/api_clients/vk_api_client_methods.dart';
 import 'package:vk_postman/data/data_providers/history_data_provider.dart';
 import 'package:vk_postman/data/persistent_storage.dart';
 import 'package:vk_postman/domain/entities/full_original_post/full_original_post.dart';
@@ -102,7 +103,6 @@ class MainScreenNetworkData extends IMainScreenRepository with SourceToPost {
   @override
   void _fetchJson() async => _json =
       await VkApiClient().get(VkApiClientMethods.newsfeedSearch(_newsQuery));
-  //await VkApiClient().getPosts(_newsQuery);
 
   @override
   void _convertJsonToPosts() {
