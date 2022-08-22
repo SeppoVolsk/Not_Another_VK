@@ -8,7 +8,7 @@ import 'package:vk_postman/presentation/widgets/history_widget.dart';
 import 'post_list_card_widget.dart';
 
 class PostSliverList extends StatefulWidget {
-  PostSliverList({Key? key}) : super(key: key);
+  const PostSliverList({Key? key}) : super(key: key);
 
   @override
   State<PostSliverList> createState() => _PostSliverListState();
@@ -32,7 +32,7 @@ class _PostSliverListState extends State<PostSliverList> {
               userIsAuth
                   ? context
                       .read<AuthenticationBLoC>()
-                      .add(AuthenticationEvent.logOut())
+                      .add(const AuthenticationEvent.logOut())
                   : Navigator.of(context).pushNamed(MainNavigation().authRoute);
             },
           ),

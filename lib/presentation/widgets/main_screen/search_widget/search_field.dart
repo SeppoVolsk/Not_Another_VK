@@ -16,10 +16,10 @@ class _SearchFieldState extends State<SearchField> {
       controller: widget.controller,
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.darkBlue, width: 4),
+            borderSide: const BorderSide(color: AppColors.darkBlue, width: 4),
             borderRadius: BorderRadius.circular(8)),
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: AppColors.darkBlue,
               width: 4,
             ),

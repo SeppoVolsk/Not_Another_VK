@@ -12,7 +12,6 @@ import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 import 'package:vk_postman/presentation/widgets/main_screen/model/main_screen_model.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_page.dart';
 import 'package:vk_postman/simple_bloc_observer.dart';
-
 import 'initial_widget.dart';
 
 final keyForSnackBar = GlobalKey<ScaffoldMessengerState>();
@@ -56,8 +55,6 @@ class MyApp extends StatelessWidget {
             model: MainScreenModel(), child: const MainScreenPage()),
         routes: mainNavigation.routes,
       ),
-      //onGenerateRoute: mainNavigation.onGenerateRoute,
-      //initialRoute: mainNavigation.initialRoute,
     );
   }
 }

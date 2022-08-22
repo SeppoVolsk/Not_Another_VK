@@ -1,12 +1,11 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vk_postman/presentation/blocs/app_theme/app_theme_repository.dart';
 import 'package:vk_postman/presentation/blocs/app_theme/appthemeentity.dart';
-import 'package:vk_postman/presentation/blocs/app_theme/theme_type.dart';
+
 
 part 'app_theme_bloc.freezed.dart';
 

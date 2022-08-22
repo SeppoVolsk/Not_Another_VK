@@ -1,6 +1,4 @@
-//import 'dart:io';
 import 'package:flutter/material.dart';
-//import 'package:vk_postman/data/data_providers/posts_data_provider.dart';
 import 'package:vk_postman/data/files_manager.dart';
 
 class SavedMediaWarehouse extends StatefulWidget {
@@ -20,12 +18,6 @@ class _SavedMediaWarehouseState extends State<SavedMediaWarehouse> {
     _filesList = fileManager.getFilesInDirectory();
   }
 
-  // Future<void> getFilesNames() async {
-  //   _filesList = await PostsDataProvider().getFilesInDirectory();
-  //   print('Get Files Names   ');
-  //   print(_filesList);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -38,9 +30,7 @@ class _SavedMediaWarehouseState extends State<SavedMediaWarehouse> {
                 child: ListView.builder(
                   itemCount: (snapshot.data.length),
                   itemBuilder: (context, index) {
-                    return
-                        //for (int i = 0; i < snapshot.data.length; i++)
-                        Column(
+                    return Column(
                       children: [
                         Text(snapshot.data
                             .elementAt(filesAmountIndex - index)
@@ -54,7 +44,7 @@ class _SavedMediaWarehouseState extends State<SavedMediaWarehouse> {
                 ),
               );
             } else {
-              return Center(child: Text('Нет данных'));
+              return const Center(child: Text('Нет данных'));
             }
           }),
     ]);

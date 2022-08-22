@@ -36,8 +36,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                   setState(() {
                     currentWord = element;
                   });
-                  //setState(() => isSelected = v);
-
+                  
                   context
                       .read<MainScreenBLoC>()
                       .add(MainScreenEvent.load(element));

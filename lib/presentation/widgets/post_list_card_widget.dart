@@ -1,24 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vk_postman/domain/entities/post.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
-
-// class PostListWidget extends StatelessWidget {
-//   const PostListWidget({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView.builder(
-//       physics: const BouncingScrollPhysics(),
-//       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-//       itemBuilder: (BuildContext context, int index) {
-//         return PostCard(index: index);
-//       },
-//       itemCount: context
-//           .select((MainScreenBLoC bloc) => bloc.state.data.posts?.length ?? 0),
-//     );
-//   }
-// }
 
 class PostCard extends StatefulWidget {
   final int index;
