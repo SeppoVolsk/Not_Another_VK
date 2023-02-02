@@ -6,6 +6,7 @@ import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 import 'package:vk_postman/presentation/widgets/history_widget.dart';
 import 'post_list_card_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PostSliverList extends StatefulWidget {
   const PostSliverList({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class _PostSliverListState extends State<PostSliverList> {
           pinned: true,
           floating: true,
           stretch: true,
-          title: const Text('Новости'),
+          title: Text(AppLocalizations.of(context)!.news),
           flexibleSpace: FlexibleSpaceBar(
               stretchModes: const [
                 StretchMode.zoomBackground,
@@ -60,6 +61,7 @@ class _PostSliverListState extends State<PostSliverList> {
                 onPressed: () => context
                     .read<AppThemeBLoC>()
                     .add(const AppThemeEvent.change())),
+                     SelectLocaleWidget();
           ],
         ),
         SliverPersistentHeader(
@@ -77,6 +79,8 @@ class _PostSliverListState extends State<PostSliverList> {
     );
   }
 }
+
+
 
 class MainScreenPersistentDelegate extends SliverPersistentHeaderDelegate {
   @override
