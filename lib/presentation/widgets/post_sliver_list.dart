@@ -5,6 +5,7 @@ import 'package:vk_postman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 import 'package:vk_postman/presentation/widgets/history_widget.dart';
+import 'main_screen/select_locale_widget.dart';
 import 'post_list_card_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -61,7 +62,7 @@ class _PostSliverListState extends State<PostSliverList> {
                 onPressed: () => context
                     .read<AppThemeBLoC>()
                     .add(const AppThemeEvent.change())),
-                     SelectLocaleWidget();
+            const SelectLocaleWidget(),
           ],
         ),
         SliverPersistentHeader(
@@ -79,8 +80,6 @@ class _PostSliverListState extends State<PostSliverList> {
     );
   }
 }
-
-
 
 class MainScreenPersistentDelegate extends SliverPersistentHeaderDelegate {
   @override

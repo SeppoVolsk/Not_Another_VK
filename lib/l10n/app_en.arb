@@ -1,0 +1,8 @@
+{
+    "news": "News",
+    "@news":{
+        "description": "News bottom bar menu"
+    },
+    "saved": "Saved",
+    "navk": "No Another VK Client"
+}

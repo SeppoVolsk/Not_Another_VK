@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:vk_postman/data/persistent_storage.dart';
 import 'package:vk_postman/presentation/blocs/app_theme/app_theme_bloc.dart';
 import 'package:vk_postman/presentation/blocs/app_theme/app_theme_repository.dart';
@@ -12,6 +13,7 @@ import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 import 'package:vk_postman/presentation/widgets/main_screen/model/main_screen_model.dart';
 import 'package:vk_postman/presentation/widgets/main_screen_page.dart';
 import 'package:vk_postman/simple_bloc_observer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'initial_widget.dart';
 
 final keyForSnackBar = GlobalKey<ScaffoldMessengerState>();
@@ -23,9 +25,24 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
   static final mainNavigation = MainNavigation();
+  static _MyAppState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyAppState>();
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? _currentLocale;
+  void setUpLocale(Locale? newLocale) {
+    setState(() {
+      _currentLocale = newLocale;
+      print(newLocale);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +70,10 @@ class MyApp extends StatelessWidget {
         themeMode: context.watch<AppThemeBLoC>().state.data.appThemeMode,
         home: MainScreenProvider(
             model: MainScreenModel(), child: const MainScreenPage()),
-        routes: mainNavigation.routes,
+        routes: MyApp.mainNavigation.routes,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: _currentLocale,
       ),
     );
   }

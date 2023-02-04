@@ -1,0 +1,8 @@
+{
+    "news": "Новости",
+    "@news":{
+        "description": "News bottom bar menu"
+    },
+    "saved": "Сохранённые",
+    "navk": "Не очередной ВК клиент"
+}

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_postman/data/files_manager.dart';
 import 'package:vk_postman/presentation/blocs/app_theme/app_theme_bloc.dart';
 import 'package:vk_postman/presentation/blocs/app_theme/theme_type.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SavedPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   SavedPageAppBar() : super();
@@ -24,7 +25,7 @@ class SavedPageAppBar extends StatelessWidget implements PreferredSizeWidget {
                 lightTheme ? AppColors.blueGradient : AppColors.greyGradient,
           ),
           child: AppBar(
-            title: const Text('Сохранённые'),
+            title: Text(AppLocalizations.of(context)!.saved),
             centerTitle: true,
             actions: [
               IconButton(

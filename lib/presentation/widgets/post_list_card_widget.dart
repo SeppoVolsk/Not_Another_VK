@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:vk_postman/presentation/blocs/main_screen_bloc.dart';
 import 'package:vk_postman/presentation/navigation/main_navigation.dart';
 
@@ -30,7 +31,7 @@ class _PostCardState extends State<PostCard> {
                 title: Text(
                     '${state.data.posts?[widget.index].firstName} ${state.data.posts?[widget.index].surName}'),
                 subtitle: Text(
-                    'id: ${state.data.posts?[widget.index].userId}\n${state.data.posts?[widget.index].dateTime}'),
+                    'id: ${state.data.posts?[widget.index].userId}\n${DateFormat.yMMMMd(Localizations.localeOf(context).toLanguageTag()).format(DateTime.parse(state.data.posts?[widget.index].dateTime ?? ''))}'),
               ),
               Wrap(
                 children: [

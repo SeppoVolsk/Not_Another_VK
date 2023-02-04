@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vk_postman/data/api_clients/vk_api_client.dart';
+import 'package:vk_postman/data/api_clients/vk_api_client_methods.dart';
 import 'package:vk_postman/data/persistent_storage.dart';
 import 'package:vk_postman/domain/entities/full_original_post/full_original_post.dart';
 import 'package:vk_postman/domain/entities/full_original_post/image.dart';

@@ -1,0 +1,8 @@
+{
+    "news": "Uutiset",
+    "@news":{
+        "description": "News bottom bar menu"
+    },
+    "saved": "Tallennettu",
+    "navk": "Ei toinen VK asiakas"
+}
