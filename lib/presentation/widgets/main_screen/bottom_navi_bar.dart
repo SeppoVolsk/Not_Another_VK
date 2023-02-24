@@ -15,6 +15,7 @@ class BottomNaviBar extends StatefulWidget {
 class _BottomNaviBarState extends State<BottomNaviBar> {
   @override
   Widget build(BuildContext context) {
+   
     final lightTheme =
         context.watch<AppThemeBLoC>().state is LightAppThemeState;
     final model = MainScreenProvider.of(context)?.model;

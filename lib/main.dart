@@ -19,6 +19,7 @@ import 'initial_widget.dart';
 final keyForSnackBar = GlobalKey<ScaffoldMessengerState>();
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   BlocOverrides.runZoned(
     () => runApp(const InitialWidget()),
     blocObserver: SimpleBlocObserver(),
